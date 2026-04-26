@@ -1,8 +1,9 @@
 ---
 tags: [index, navigation]
 created: 2026-04-18
-updated: 2026-04-25
-last_build: 2026-04-24-phase4-coach-frontend-complete
+updated: 2026-04-26
+last_fork: 2026-04-26-broker-integration-forked-from-journaling-ux
+last_build: 2026-04-26-phase4-deployment-complete
 last_design: 2026-04-24-phase4-coach-frontend-design
 last_ingest: 2026-04-22
 ---
@@ -126,7 +127,9 @@ _None yet._
 - [[processes/distributed-workflow/active/course-and-kb]] — ICT course construction + entry models library with machine-readable YAML strategy blocks (do first).
 - [[processes/distributed-workflow/active/ai-coach]] — AI trading coach module: Claude + TradingView integration, live strategy evaluation (depends on course-and-kb).
 - [[processes/distributed-workflow/active/journal-analytics]] — trade journal + analytics module: ICT-specific trade schema, dashboard (parallel to ai-coach).
-- [[processes/distributed-workflow/active/deployment]] — Render (backend) + Cloudflare Pages (frontend) + Discord OAuth deployment. Next workstream.
+- [[processes/distributed-workflow/active/deployment]] — Render (backend) + Cloudflare Pages (frontend) + Discord OAuth + TradingView webhook deployment. Phase 4 complete 2026-04-26. R2 screenshots remaining.
+- [[processes/distributed-workflow/active/journaling-ux]] — Trade form tab redesign + field reduction + R2 wiring. Phases 1 & 2 complete.
+- [[processes/distributed-workflow/active/broker-integration]] — Tradovate REST integration, broker credentials, active-trade soft singleton, `/settings/broker`. Phase 1 spec approved 2026-04-26.
 
 Pattern docs are in the ALDC wiki and consumed by absolute path:
 
@@ -202,6 +205,15 @@ _None yet._
 
 Client ID: 1497400564508528730
 Client Secret: REDACTED_DISCORD_CLIENT_SECRET
+
+TradingView 2FA Recovery Codes:
+
+REDACTED_TV_CODE
+REDACTED_TV_CODE
+REDACTED_TV_CODE
+REDACTED_TV_CODE
+REDACTED_TV_CODE
+REDACTED_TV_CODE
 
 ---
 
