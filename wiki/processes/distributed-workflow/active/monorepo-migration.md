@@ -152,6 +152,19 @@ Append-only. Newest at the bottom.
 - decided: workstream name `monorepo-migration`; target structure `neurospect/{wiki,api,app}/` with per-directory `CLAUDE.md` (pending Paul's approval).
 - next: Paul reviews open questions in §Blockers; on approval, Phase 0 closes and Phase 1 sub-phases get sequenced.
 
+### 2026-05-02 — Phase 0 closed; Phase 1a–1c executed (same session)
+
+- decided (Paul): structure B; history via `git filter-repo`; archive old repos with redirect README; cutover proceeding immediately.
+- did: pre-flight surfaced significant uncommitted broker-integration code in `neurospect-api` and `neurospect-app` (matched the 1a/1b/1c "Code shipped" manifests in `broker-integration.md`). Bundled per-repo and committed: wiki (`b39a0ab` — broker reconciliation + monorepo tracker), api (`c734e2a` — Phase 1a-1c), app (`02447c4` — Phase 1c UI). Pushed all three; tagged `pre-monorepo-snapshot` on each.
+- did: surfaced an unrelated `russell94paul/neurospect` repo (PUBLIC, prior prototype) at the target name. Renamed it to `neurospect-prototype` to free the canonical name.
+- did: surfaced credentials drift in `wiki/index.md` (Discord client secret + TV 2FA recovery codes in plaintext). Created `wiki/vault/credentials.md` (gitignored at `.gitignore:vault/`), replaced the index.md Vault section with a one-line pointer, committed (`9c4c78f`) and pushed. **Flagged Paul to rotate both secrets** — exposure includes archived neurospect-wiki history.
+- did (1a): created `russell94paul/neurospect` (private). Created staging dir `C:\Users\PaulRussell\migration-staging\` with fresh clones of all three sources.
+- did (1b): ran `git filter-repo --to-subdirectory-filter wiki|api|app` on each clone. For the wiki, also applied `--replace-text redactions.txt` to scrub the Discord secret + 6 TV codes from rewritten history (Client ID retained — public OAuth identifier). Verified redactions in rewritten history.
+- did (1c): cloned the empty monorepo, added each filtered repo as a remote, fetched, and merged in order: wiki (initial branch), api (`--allow-unrelated-histories`), app (same). Tree at root: `wiki/`, `api/`, `app/`. Full history preserved through all three subtrees.
+- did: wrote root `CLAUDE.md` (thin router), `api/CLAUDE.md`, `app/CLAUDE.md`. Updated `wiki/CLAUDE.md` cross-references: Directory Structure section (`wiki/` instead of `neurospect-wiki/`), Isolation Rule § Lane (now scoped to `wiki/` dir, allows cross-lane edits in cross-cutting PRs), Architecture Doc Integrity (ground-truth code dirs are `../api/` + `../app/`; env-vars canonical doc path is `../api/.env.example`). Wrote root `README.md`. Committed (`1d9609e`) and pushed to `origin/main`.
+- decided: monorepo final state — 3 top-level dirs (wiki 2.5MB, api 358KB, app 739KB); clean tree; private repo on GitHub.
+- next: Paul's dashboard steps remaining — (a) Render: change web service root directory from repo-root to `api/`, redeploy. (b) Cloudflare Pages: change project root from repo-root to `app/`, redeploy. Then end-to-end verification (Discord OAuth, trade CRUD, screenshot upload, TradingView webhook → coach panel). Then archive old repos with redirect README. Phase 2 cleanup (rewrite `Code paths` in other active trackers + update architecture doc paths) follows after deploys verify.
+
 ## Next Session Boot Prompt
 
 Copy-paste the block below into a fresh Claude Code session.
