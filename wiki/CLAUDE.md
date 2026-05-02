@@ -8,7 +8,7 @@ This wiki is **fully decoupled** from Paul's ALDC / Analytic Labs work wiki at `
 
 - **No outbound references to ALDC business logic, architecture, client information, or concepts.** Do not link to ALDC client pages, tools, deployment runbooks, or business rules from anywhere in this wiki.
 - **The single allowed inbound reference is ALDC research → Neurospect.** AI / app design research from the ALDC wiki may be reused here. Currently this manifests as: the distributed-workflow pattern docs at `C:\Users\PaulRussell\repos\wiki\processes\distributed-workflow\` are referenced by absolute path (never by `[[wikilink]]`) from this wiki's tracker(s).
-- **Do not write into the ALDC wiki from any Neurospect session.** Lane is `C:\Users\PaulRussell\repos\neurospect-wiki\` and nothing else.
+- **Do not write into the ALDC wiki from any Neurospect session.** Lane is the `wiki/` directory of the `neurospect` monorepo. Cross-lane edits to `../api/` or `../app/` are allowed in cross-cutting PRs (e.g., the Architecture Doc Integrity rule below), but other workstreams' code-only changes are out-of-lane.
 
 If you find Neurospect content sitting inside the ALDC wiki (legacy: `C:\Users\PaulRussell\repos\wiki\entities\projects\neurospect.md`), it should be migrated here and removed from the ALDC wiki — that's the kickoff workstream's first task.
 
@@ -25,8 +25,10 @@ This wiki exists so any Claude Code session pointed at this directory can immedi
 
 ## Directory Structure
 
+This wiki lives at `wiki/` inside the `neurospect` monorepo. Sibling dirs `../api/` (FastAPI backend) and `../app/` (React frontend) hold the code; the wiki holds the docs, decisions, transcripts, and trackers.
+
 ```
-neurospect-wiki/
+wiki/
 ├── CLAUDE.md              # THIS FILE — read first, always
 ├── index.md               # Master catalog
 ├── log.md                 # Append-only operation log
@@ -128,7 +130,7 @@ Trackers for this wiki live at `processes/distributed-workflow/active/`.
 
 ### Source-of-truth hierarchy
 
-Once code exists in `neurospect-api`, the **code is the ground truth**. Architecture docs in this wiki describe the design **as implemented** — not as originally planned.
+Once code exists in `../api/` or `../app/`, the **code is the ground truth**. Architecture docs in this wiki describe the design **as implemented** — not as originally planned.
 
 If an implementation session makes a better decision than what the wiki says, the session MUST update the relevant wiki doc(s) before marking the workstream phase as complete. Tracker session logs are not a substitute for updating the architecture doc itself.
 
@@ -141,14 +143,14 @@ Each architectural topic has ONE canonical doc. Other docs may link to it but mu
 | Trade data model (DDL, ENUMs, indexes, API surface) | `concepts/architecture/trade-schema.md` | |
 | Backend project layout, deps, auth flow | `concepts/architecture/phase2-project-structure.md` | Supersedes `tech-stack.md` §2-4 |
 | AI Coach pipeline (webhook, Claude, polling) | `concepts/architecture/tradingview-connector.md` | Supersedes `tech-stack.md` §5 |
-| Env vars | `.env.example` in `neurospect-api` | Wiki docs should reference, not duplicate |
+| Env vars | `../api/.env.example` | Wiki docs should reference, not duplicate |
 | R2 storage key pattern | `concepts/architecture/phase2-project-structure.md` | Supersedes `tech-stack.md` §6 |
 
 When the canonical doc is a code file (e.g. `.env.example`), wiki docs should reference it rather than duplicating its content.
 
 ### Post-implementation reconciliation (mandatory)
 
-Any session that writes code in `neurospect-api` must, before signing off:
+Any session that writes code in `../api/` or `../app/` must, before signing off:
 
 1. Re-read every wiki page listed in the active tracker's "See Also" section.
 2. Diff claims in those pages against the actual code.
