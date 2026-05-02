@@ -1,6 +1,6 @@
 ---
 tags: [architecture, backend, fastapi, neurospect, journal, analytics]
-aliases: [Phase 2 Project Structure, neurospect-api Layout]
+aliases: [Phase 2 Project Structure, api Layout, neurospect-api Layout]
 sources: [processes/distributed-workflow/active/journal-analytics.md]
 created: 2026-04-22
 updated: 2026-04-26 (1c)
@@ -8,7 +8,7 @@ updated: 2026-04-26 (1c)
 
 # Phase 2 — Backend Project Structure (APPROVED)
 
-Canonical reference for the `neurospect-api` backend layout. This document captures the approved design from the Phase 2 planning session. Implementation sessions read this instead of re-planning.
+Canonical reference for the FastAPI backend layout at `api/` (formerly the `neurospect-api` repo). This document captures the approved design from the Phase 2 planning session. Implementation sessions read this instead of re-planning.
 
 ## Repository
 
@@ -30,7 +30,7 @@ Canonical reference for the `neurospect-api` backend layout. This document captu
 ## Directory Layout
 
 ```
-neurospect-api/
+api/
 ├── pyproject.toml           # Poetry — deps + metadata
 ├── .env.example             # Env var template (no real values)
 ├── .gitignore

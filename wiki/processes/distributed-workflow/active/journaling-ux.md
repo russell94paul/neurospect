@@ -24,7 +24,7 @@ By end of Phase 1:
 2. **Tab-based trade form** — Pre-Trade / Entry / Post-Trade as tabs, not collapsible sections
 3. **Reduced pre-trade fields** — 6 prominent fields + Advanced accordion for optional detail
 4. **Sensible defaults** — date = today, instrument = NQ
-5. **`public/neurospect-coach.pine` synced** — the static mirror in `neurospect-app/public/` must reflect the updated wiki Pine script (changed during Phase 4 deployment)
+5. **`public/neurospect-coach.pine` synced** — the static mirror in `app/public/` must reflect the updated wiki Pine script (changed during Phase 4 deployment)
 
 ## Current form state (as of 2026-04-26)
 
@@ -53,10 +53,10 @@ Manual setup required before code:
 
 ### Step 2 — Sync `neurospect-coach.pine` static mirror
 
-File: `neurospect-app/public/neurospect-coach.pine`
+File: `app/public/neurospect-coach.pine`
 
 This is a static mirror of the wiki canonical Pine script. It was updated significantly during the Phase 4 deployment session. Sync it:
-- Copy `neurospect-wiki/assets/pine/neurospect-coach.pine` → `neurospect-app/public/neurospect-coach.pine`
+- Copy `neurospect-wiki/assets/pine/neurospect-coach.pine` → `app/public/neurospect-coach.pine`
 - The `PineScriptCard` component in `coach-setup` serves this file as a download.
 
 ### Step 3 — Tab-based trade form refactor

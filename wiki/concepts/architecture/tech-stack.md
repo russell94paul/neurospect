@@ -61,7 +61,7 @@ Both module trackers — [[processes/distributed-workflow/active/ai-coach]] and 
 
 ## 2. Python Libraries — pinned recommendations
 
-> **Canonical source:** `pyproject.toml` in `neurospect-api`. This list summarises what's installed.
+> **Canonical source:** `api/pyproject.toml`. This list summarises what's installed.
 
 Runtime (in `pyproject.toml`):
 
@@ -260,7 +260,7 @@ databases:
 
 ### Full env var surface
 
-> **Canonical source:** `.env.example` in `neurospect-api`. The table below is a summary — if it conflicts with `.env.example`, the file wins.
+> **Canonical source:** `api/.env.example`. The table below is a summary — if it conflicts with `.env.example`, the file wins.
 
 | Var | Source | Used by |
 |---|---|---|
@@ -333,7 +333,7 @@ Tradeoff accepted: one extra provider account, one extra set of credentials. Wor
 
 ### Key layout
 
-> **Canonical source:** `app/services/r2.py` in `neurospect-api`.
+> **Canonical source:** `api/app/services/r2.py`.
 
 ```
 <bucket>/
@@ -351,9 +351,9 @@ If Cloudflare R2 becomes friction, the escape hatch is **AWS S3**, not Render Di
 
 ## 7. Cross-module Notes
 
-- **Journal Phase 2** (see [[processes/distributed-workflow/active/journal-analytics]]) — implemented. CRUD, screenshots, analytics all live in `neurospect-api`.
-- **AI Coach Phase 3** (see [[processes/distributed-workflow/active/ai-coach]]) — implemented. TradingView webhook, Claude call, polling endpoints all live in `neurospect-api`.
-- **Repo:** both modules share one FastAPI project at `C:\Users\PaulRussell\repos\neurospect-api`.
+- **Journal Phase 2** (see [[processes/distributed-workflow/active/journal-analytics]]) — implemented. CRUD, screenshots, analytics all live in `api/`.
+- **AI Coach Phase 3** (see [[processes/distributed-workflow/active/ai-coach]]) — implemented. TradingView webhook, Claude call, polling endpoints all live in `api/`.
+- **Repo:** both modules share one FastAPI project at `api/` (formerly the `neurospect-api` repo; merged into the `neurospect` monorepo on 2026-05-02).
 
 ## 8. Open Questions (not blocking)
 

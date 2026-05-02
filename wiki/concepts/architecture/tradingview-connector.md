@@ -298,15 +298,15 @@ Because the token is in the URL path, it appears in Render logs — treat it as 
 | Artefact | Location |
 |---|---|
 | Pine Script indicator | `neurospect-wiki/assets/pine/neurospect-coach.pine` |
-| Alembic migration | `neurospect-api/alembic/versions/0002_coach_tables.py` |
-| ORM — TradingView token | `neurospect-api/app/models/tv_token.py` |
-| ORM — coaching event | `neurospect-api/app/models/coaching_event.py` |
-| Coach internals | `neurospect-api/app/coach/prompt_loader.py`, `validation.py`, `claude_client.py` |
-| Coach router | `neurospect-api/app/coach/router.py` (replaces the Phase 2 501 stub) |
-| TV-token router | `neurospect-api/app/routers/tv_tokens.py` |
-| Schemas | `neurospect-api/app/schemas/coach.py` |
-| Config additions | `neurospect-api/app/config.py` (env vars), `pyproject.toml` (`anthropic`) |
-| Tests | `neurospect-api/tests/test_coach_pine_payload.py`, `test_coach_prompt_loader.py`, `test_coach_validation.py` |
+| Alembic migration | `api/alembic/versions/0002_coach_tables.py` |
+| ORM — TradingView token | `api/app/models/tv_token.py` |
+| ORM — coaching event | `api/app/models/coaching_event.py` |
+| Coach internals | `api/app/coach/prompt_loader.py`, `validation.py`, `claude_client.py` |
+| Coach router | `api/app/coach/router.py` (replaces the Phase 2 501 stub) |
+| TV-token router | `api/app/routers/tv_tokens.py` |
+| Schemas | `api/app/schemas/coach.py` |
+| Config additions | `api/app/config.py` (env vars), `pyproject.toml` (`anthropic`) |
+| Tests | `api/tests/test_coach_pine_payload.py`, `test_coach_prompt_loader.py`, `test_coach_validation.py` |
 
 ## See Also
 

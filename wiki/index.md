@@ -58,7 +58,7 @@ Forward-looking product roadmap (horizons: Now / Next / Later / Strategic / Rese
 
 - [[concepts/architecture/tech-stack]] — canonical backend stack decision (FastAPI + SQLAlchemy async + Postgres on Render + Discord OAuth2 + TradingView webhooks + Cloudflare R2); shared by AI Coach and Journal modules
 - [[concepts/architecture/trade-schema]] — ICT trade data model: field definitions, Postgres DDL, indexes, REST API surface (Phase 1 of Journal & Analytics)
-- [[concepts/architecture/phase2-project-structure]] — APPROVED project layout for `neurospect-api`: directory structure, Poetry deps, auth flow, analytics SQL approach, file creation order (Phase 2)
+- [[concepts/architecture/phase2-project-structure]] — APPROVED project layout for `api/` (formerly the `neurospect-api` repo): directory structure, Poetry deps, auth flow, analytics SQL approach, file creation order (Phase 2)
 - [[concepts/architecture/tradingview-connector]] — AI Coach Phase 3 end-to-end design: Pine Script indicator, `/webhooks/tradingview/{user_token}` validation stack, `coaching_events` table, Claude prompt-cached call, polling endpoint
 - [[concepts/architecture/transcript-pipeline]] — transcript ingestion decision doc (manual + Whisper)
 - [[concepts/architecture/phase3-frontend-structure]] — **canonical frontend doc**: React 19 + TS + Vite project layout, route map, key patterns (auth, trade form, screenshot upload, analytics hooks), env vars
@@ -131,7 +131,7 @@ _None yet._
 - [[processes/distributed-workflow/active/deployment]] — Render (backend) + Cloudflare Pages (frontend) + Discord OAuth + TradingView webhook deployment. Phase 4 complete 2026-04-26. R2 screenshots remaining.
 - [[processes/distributed-workflow/active/journaling-ux]] — Trade form tab redesign + field reduction + R2 wiring. Phases 1 & 2 complete.
 - [[processes/distributed-workflow/active/broker-integration]] — Tradovate REST integration, broker credentials, active-trade soft singleton, `/settings/broker`. Phase 1 spec approved 2026-04-26.
-- [[processes/distributed-workflow/active/monorepo-migration]] — consolidate `neurospect-wiki` + `neurospect-api` + `neurospect-app` into one `neurospect` monorepo. Phase 0 (scoping).
+- [[processes/distributed-workflow/active/monorepo-migration]] — consolidated `neurospect-wiki` + `neurospect-api` + `neurospect-app` into one `neurospect` monorepo (2026-05-02). Phases 0 + 1a-1c complete; Phase 2 cleanup ongoing; pending: Render + Cloudflare dashboard reconfig, prod E2E verify, archive old repos.
 
 Pattern docs are in the ALDC wiki and consumed by absolute path:
 

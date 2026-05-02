@@ -33,10 +33,10 @@ Owned paths (this workstream may write here):
 - `concepts/architecture/phase2-project-structure.md` — extends with new backend modules
 
 Code paths (in repos, outside the wiki):
-- `neurospect-api/app/services/tradovate.py`, `app/services/crypto.py`, `app/routers/tradovate.py`, `app/models/broker_credential.py`, `app/schemas/broker.py`, `alembic/versions/0003_broker_credentials.py`
-- `neurospect-api/app/routers/trades.py` — active-trade guard logic
-- `neurospect-app/src/pages/settings.tsx`, `src/pages/settings-broker.tsx`, `src/components/settings/*`, `src/components/trade/tradovate-*`, `src/components/trade/active-trade-guard-dialog.tsx`, `src/components/layout/active-trade-badge.tsx`, `src/components/layout/broker-disconnected-banner.tsx`, `src/hooks/use-tradovate.ts`, `src/hooks/use-active-trade.ts`
-- `neurospect-app/src/components/trade/entry-fields.tsx`, `post-trade-fields.tsx`, `src/pages/new-trade.tsx`, `src/components/coach/coaching-panel.tsx`, `src/components/layout/app-shell.tsx`, `src/App.tsx` — modifications
+- `api/app/services/tradovate.py`, `app/services/crypto.py`, `app/routers/tradovate.py`, `app/models/broker_credential.py`, `app/schemas/broker.py`, `alembic/versions/0003_broker_credentials.py`
+- `api/app/routers/trades.py` — active-trade guard logic
+- `app/src/pages/settings.tsx`, `src/pages/settings-broker.tsx`, `src/components/settings/*`, `src/components/trade/tradovate-*`, `src/components/trade/active-trade-guard-dialog.tsx`, `src/components/layout/active-trade-badge.tsx`, `src/components/layout/broker-disconnected-banner.tsx`, `src/hooks/use-tradovate.ts`, `src/hooks/use-active-trade.ts`
+- `app/src/components/trade/entry-fields.tsx`, `post-trade-fields.tsx`, `src/pages/new-trade.tsx`, `src/components/coach/coaching-panel.tsx`, `src/components/layout/app-shell.tsx`, `src/App.tsx` — modifications
 
 ## Required Context
 
@@ -47,10 +47,10 @@ Every session must read at boot:
 - [[concepts/architecture/phase2-project-structure]] — canonical backend layout (will extend)
 
 For sub-phase 3a/equivalent specifically:
-- `neurospect-api/app/main.py` (router mounting)
-- `neurospect-api/app/models/tv_token.py` + `app/routers/tv_tokens.py` (per-user-credential reference pattern)
-- `neurospect-api/app/database.py`, `app/deps.py`, `app/config.py`
-- `neurospect-api/alembic/versions/0002_coach_tables.py` (latest migration for parent revision)
+- `api/app/main.py` (router mounting)
+- `api/app/models/tv_token.py` + `app/routers/tv_tokens.py` (per-user-credential reference pattern)
+- `api/app/database.py`, `app/deps.py`, `app/config.py`
+- `api/alembic/versions/0002_coach_tables.py` (latest migration for parent revision)
 
 ## Plan-Mode Rule
 
@@ -351,7 +351,7 @@ Append-only. Newest at the bottom.
 Fill/order field names in `app/services/tradovate.py` have never been confirmed against real data because the account had no fills during the 1a and 1c probes. All field name mappings (`id`, `orderId`, `contractId`, `tradeTime`, `price`, `qty`, `action`) are based on the Tradovate v1 API reference docs only.
 
 **What Paul needs to do to unblock 1d:**
-1. Start the backend: `poetry run uvicorn app.main:app --reload` (from `neurospect-api/`)
+1. Start the backend: `poetry run uvicorn app.main:app --reload` (from `api/`)
 2. Log in at `trader.tradovate.com`; open DevTools → Network; copy the Bearer token from any request to `demo.tradovateapi.com`
 3. Paste it via `POST /api/tradovate/credentials/token` — use the Swagger UI at `http://localhost:8000/docs`
 4. Place a small test trade on the Tradovate demo platform (any size, any instrument — just needs to fill)

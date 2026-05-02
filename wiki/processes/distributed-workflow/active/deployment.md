@@ -84,13 +84,13 @@ These changes must land in the repo before Render can deploy successfully.
 
 `AI_COACH_PROMPT_DIR` currently points to the local wiki path (`C:/Users/PaulRussell/repos/neurospect-wiki/concepts/ai-coach`). This path doesn't exist on Render. Fix: copy the two prompt files into the API repo and update the default.
 
-- Copy `neurospect-wiki/concepts/ai-coach/system-prompt-template.md` → `neurospect-api/app/coach/prompts/system-prompt-template.md`
-- Copy `neurospect-wiki/concepts/ai-coach/strategies.json` → `neurospect-api/app/coach/prompts/strategies.json`
+- Copy `neurospect-wiki/concepts/ai-coach/system-prompt-template.md` → `api/app/coach/prompts/system-prompt-template.md`
+- Copy `neurospect-wiki/concepts/ai-coach/strategies.json` → `api/app/coach/prompts/strategies.json`
 - Update `app/config.py` to default `AI_COACH_PROMPT_DIR` to `Path(__file__).parent / "coach" / "prompts"` so it works without setting the env var
 - On local dev, override with the wiki path via `.env` (keeps the wiki as canonical for editing)
 - The `app/coach/prompt_loader.py` uses `lru_cache` — no changes needed there
 
-**Sync rule:** When the wiki prompt files change, manually re-copy them to `app/coach/prompts/` and commit. A note in `neurospect-api/README.md` records this requirement.
+**Sync rule:** When the wiki prompt files change, manually re-copy them to `app/coach/prompts/` and commit. A note in `api/README.md` records this requirement.
 
 **1b. Add `gunicorn` dependency**
 
@@ -277,7 +277,7 @@ TradingView's webhook source IPs (as of 2026): `52.89.214.238`, `34.212.75.30`, 
 ### 2026-04-24 — Phase 1 backend prep complete
 
 - did: implemented all Phase 1 code changes required before Render can deploy.
-  - Copied wiki prompt files into `neurospect-api/app/coach/prompts/` (system-prompt-template.md + strategies.json)
+  - Copied wiki prompt files into `api/app/coach/prompts/` (system-prompt-template.md + strategies.json)
   - Updated `app/config.py`: `ai_coach_prompt_dir` default now points to bundled `app/coach/prompts/`; added `async_database_url` and `sync_database_url` properties with `postgres://` → `postgresql+asyncpg://` / `postgresql+psycopg2://` shims; made `database_url_sync` optional with empty-string default (derives from `DATABASE_URL` on Render if not set explicitly)
   - Updated `app/database.py`: uses `settings.async_database_url` instead of raw `settings.database_url`
   - Updated `alembic/env.py`: uses `settings.sync_database_url` instead of raw `os.environ.get("DATABASE_URL_SYNC")`; removed now-unused `import os`
@@ -394,10 +394,10 @@ Context:
 
 Implementation order:
 1. Read app/config.py and app/coach/prompt_loader.py to understand the current prompt dir handling, then:
-   - Copy neurospect-wiki/concepts/ai-coach/system-prompt-template.md → neurospect-api/app/coach/prompts/system-prompt-template.md
-   - Copy neurospect-wiki/concepts/ai-coach/strategies.json → neurospect-api/app/coach/prompts/strategies.json
+   - Copy neurospect-wiki/concepts/ai-coach/system-prompt-template.md → api/app/coach/prompts/system-prompt-template.md
+   - Copy neurospect-wiki/concepts/ai-coach/strategies.json → api/app/coach/prompts/strategies.json
    - Update app/config.py: set AI_COACH_PROMPT_DIR default to Path(__file__).parent / "coach" / "prompts"
-   - Add a note to neurospect-api/README.md under "Prompt Files" explaining the sync requirement
+   - Add a note to api/README.md under "Prompt Files" explaining the sync requirement
 2. Add gunicorn to pyproject.toml. Run: poetry export -f requirements.txt --without-hashes --output requirements.txt
 3. Reconcile health check path: verify main.py and set render.yaml to match (use /health)
 4. Add the DATABASE_URL shim properties to app/config.py (async_database_url + sync_database_url). Update app/database.py and alembic/env.py to use the new properties.

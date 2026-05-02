@@ -184,7 +184,7 @@ Repo: `C:\Users\PaulRussell\repos\neurospect-app` (separate from backend).
 
 ### Phase 3 Session 1 — Scaffold + Infrastructure + Auth + Layout
 
-**Recommended model:** Sonnet. **Working directory:** `C:\Users\PaulRussell\repos` (creates `neurospect-app/`).
+**Recommended model:** Sonnet. **Working directory:** `C:\Users\PaulRussell\repos` (creates `app/`).
 
 ````
 You are implementing Phase 3 Session 1 of the Neurospect frontend. This session covers project
@@ -639,7 +639,7 @@ Paul handles git commits — never run git commit.
 - fix: `login.tsx` was missing `useNavigate` — after `debugLogin()` resolved, nothing redirected to `/dashboard`. Added `navigate('/dashboard', { replace: true })` after the await.
 - fix: `app/services/r2.py` instantiated `R2Client()` at module load time, crashing startup when `R2_ENDPOINT_URL` is empty (local dev has no R2). Changed singleton to `R2Client() if settings.r2_endpoint_url else None`. Added `get_r2()` FastAPI dependency to `app/routers/screenshots.py` that returns 503 when R2 is not configured — all three screenshot endpoints now use it. Screenshot upload/list/delete will 503 locally until R2 is wired up (deferred to deployment phase).
 - fix: `alembic/env.py` was reading `DATABASE_URL_SYNC` from `os.environ` directly, but pydantic-settings `.env` loading only runs when `Settings()` is instantiated (not before alembic's env.py runs). Added `from dotenv import load_dotenv; load_dotenv()` at the top of `alembic/env.py`. python-dotenv is already a pydantic-settings dep so no new install needed.
-- local dev setup: Postgres 16 running in Docker container `neurospect-db` (port 5432, user/pass/db all `neurospect`). `neurospect-api/.env` written with local connection strings + `DEBUG=true`. All deps installed into system Python 3.13 via pip (Poetry not installed).
+- local dev setup: Postgres 16 running in Docker container `neurospect-db` (port 5432, user/pass/db all `neurospect`). `api/.env` written with local connection strings + `DEBUG=true`. All deps installed into system Python 3.13 via pip (Poetry not installed).
 - checkpoint: debug login works e2e — JWT stored, redirected to /dashboard, user menu shows username, protected routes redirect to /login, logout clears token.
 - next: Session 2 — data hooks + trade CRUD form/list.
 

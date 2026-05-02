@@ -8,7 +8,7 @@ updated: 2026-04-24
 
 # Phase 4 — AI Coach Frontend Architecture
 
-Canonical architecture doc for the AI Coach frontend (Phase 4). Reconciled against shipped code in `neurospect-app/src/`. The companion backend doc is [[concepts/architecture/tradingview-connector]].
+Canonical architecture doc for the AI Coach frontend (Phase 4). Reconciled against shipped code in `app/src/`. The companion backend doc is [[concepts/architecture/tradingview-connector]].
 
 ## Routes
 
@@ -123,12 +123,12 @@ This means:
 
 ## Pine Script Static Asset
 
-`neurospect-app/public/neurospect-coach.pine` is a copy of the canonical file at:
+`app/public/neurospect-coach.pine` is a copy of the canonical file at:
 `neurospect-wiki/assets/pine/neurospect-coach.pine`
 
 This is served as a static file by Vite (and any static host). The setup page's Download button links to `/neurospect-coach.pine`. The `<PineScriptCard>` collapsible `fetch`es this URL at mount to display the script content.
 
-**Sync rule:** When the wiki Pine file is updated, manually re-copy it to `neurospect-app/public/`. A note in `neurospect-app/README.md` records this requirement.
+**Sync rule:** When the wiki Pine file is updated, manually re-copy it to `app/public/`. A note in `app/README.md` records this requirement.
 
 ## Status Rendering States
 

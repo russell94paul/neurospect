@@ -30,14 +30,14 @@ The strongest product framing is not "track trades" but:
 
 ## Current State
 
-**Phase 4 (AI Coach frontend) is implemented.** Both the backend (`neurospect-api`) and frontend (`neurospect-app`) are fully functional in local development with the complete AI Coach pipeline — TradingView webhook → Claude coaching → live panel with polling.
+**Phase 4 (AI Coach frontend) is implemented.** Both the backend (`api/`) and frontend (`app/`) are fully functional in local development with the complete AI Coach pipeline — TradingView webhook → Claude coaching → live panel with polling. (As of 2026-05-02, all three modules — wiki, api, app — live in a single `neurospect` monorepo; see [[processes/distributed-workflow/active/monorepo-migration]].)
 
 What's built:
 - FastAPI backend with Discord OAuth2 (JWT-based SPA pattern) + debug login for local dev
 - ICT-specific trade journal: CRUD, screenshots (Cloudflare R2), 7 analytics endpoints
 - AI Coach: TradingView webhook ingestion, Claude API coaching calls, polling endpoints, TV token management
 - Postgres schema: 12 ENUMs, 5 tables, full Alembic migration chain
-- React 19 + TypeScript frontend (`neurospect-app`): auth flow, trade CRUD UI, analytics dashboard
+- React 19 + TypeScript frontend (`app/`): auth flow, trade CRUD UI, analytics dashboard
 - Screenshot upload (per-phase drag-and-drop), thumbnail grid, lightbox viewer
 - Analytics dashboard: summary cards, breakdown tables, day-of-week chart, mistake chart, R-distribution histogram
 - **AI Coach frontend:** `/coach` live panel (bias badge, narrative, strategy cards with checklist, invalid strategies, alerts, freshness pill, dynamic 2s/10s polling) + `/coach/setup` (token management with rotate/revoke Dialogs, Pine script download + preview, TradingView setup instructions)
@@ -134,7 +134,7 @@ The platform's data model and AI layer are built around ICT / Smart Money Concep
 - ~~Phase 3 (frontend)~~ — **complete.** See [[concepts/architecture/phase3-frontend-structure]].
 - ~~Phase 4 (AI Coach frontend)~~ — **complete.** See [[concepts/architecture/phase4-coach-frontend]].
 - **Deployment — live, fully operational (2026-04-26).** Backend on Render (Python 3.13, gunicorn + UvicornWorker, Alembic migrations in startCommand), frontend on Cloudflare Pages. Discord OAuth working. Trade journal saving. TradingView webhook → Claude → coach panel verified end-to-end. R2 screenshots working. `TRADINGVIEW_IP_ALLOWLIST` enabled. Webhook secret and user token rotated.
-- **Journaling UX Phase 1 — in progress (2026-04-26).** Tab-based trade form (Pre-Trade / Entry / Post-Trade) implemented in `neurospect-app`. Pre-Trade fields split into 6 prominent + Advanced collapsible (6 optional fields). Defaults: trade_date = today, instrument = NQ. Pine script static mirror synced v5→v6. Awaiting Paul to push to main for Cloudflare auto-deploy.
+- **Journaling UX Phase 1 — in progress (2026-04-26).** Tab-based trade form (Pre-Trade / Entry / Post-Trade) implemented in `app/`. Pre-Trade fields split into 6 prominent + Advanced collapsible (6 optional fields). Defaults: trade_date = today, instrument = NQ. Pine script static mirror synced v5→v6. Pushed to monorepo `main` 2026-05-02 (was awaiting push at the time of the merge).
 - Broker API integration strategy (which brokers first, auth flows, rate limiting)
 - Discord bot integration for community features
 - Data pipeline for market context snapshots at trade entry time

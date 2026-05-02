@@ -209,13 +209,13 @@ What TradingView sends per alert:
   - `src/pages/coach-setup.tsx` — "Coach Setup" + Back to Coach; stacks TokenCard / PineScriptCard / TvSetupInstructions.
   - `src/App.tsx` — added `/coach` and `/coach/setup` routes under `ProtectedLayout`.
   - `src/components/layout/sidebar.tsx` — appended `{ to: '/coach', label: 'AI Coach', icon: Sparkles }`.
-- **Static asset:** copied `neurospect-wiki/assets/pine/neurospect-coach.pine` → `neurospect-app/public/neurospect-coach.pine`. Added Static Assets note to `neurospect-app/README.md`.
+- **Static asset:** copied `neurospect-wiki/assets/pine/neurospect-coach.pine` → `app/public/neurospect-coach.pine`. Added Static Assets note to `app/README.md`.
 - **Checkpoint:** `tsc -b` clean. Vite dev server starts on localhost:5173 with no errors.
 - **Wiki docs:** created `concepts/architecture/phase4-coach-frontend.md` (canonical frontend-coach architecture doc). Updated `entities/projects/neurospect.md` (Phase 4 implemented). Updated `index.md` and `log.md`.
 
 ### 2026-04-24 — Phase 4 design (APPROVED)
 
-- did: Opus plan-mode design session. Read backend contracts (`app/schemas/coach.py`, `app/coach/router.py`, `app/routers/tv_tokens.py`, `app/models/coaching_event.py`, `app/models/enums.py`) and existing frontend patterns in `neurospect-app/src/` (routing in `App.tsx`, auth in `lib/auth.ts`, ky client in `lib/api.ts`, hook conventions in `hooks/use-trades.ts` + `hooks/use-analytics.ts`, Card/Dialog/Chart patterns in journal components). Verified no coach code exists in the frontend yet.
+- did: Opus plan-mode design session. Read backend contracts (`app/schemas/coach.py`, `app/coach/router.py`, `app/routers/tv_tokens.py`, `app/models/coaching_event.py`, `app/models/enums.py`) and existing frontend patterns in `app/src/` (routing in `App.tsx`, auth in `lib/auth.ts`, ky client in `lib/api.ts`, hook conventions in `hooks/use-trades.ts` + `hooks/use-analytics.ts`, Card/Dialog/Chart patterns in journal components). Verified no coach code exists in the frontend yet.
 - decided: **Scope** — Phase 4 v1 is coaching panel + TV token setup page. **History deferred.** A history page would require a new backend list endpoint (`GET /api/coach/events?page=…` with user filter + pagination); revisit post-MVP if traders ask.
 - decided: **Routes** — `/coach` (live coaching panel) and `/coach/setup` (TV token management + Pine script). Both under `ProtectedLayout`.
 - decided: **Sidebar nav** — single new item `AI Coach` → `/coach` (Sparkles icon). Setup reached via a button in the coach page header, not a separate sidebar entry. Keeps the nav lean.
@@ -224,7 +224,7 @@ What TradingView sends per alert:
 - decided: **Status rendering** — `pending` → skeleton + "Claude is thinking…"; `complete` → full panel; `error` → red card with `error_message` + hint to fire another alert; 404 → empty state CTA pointing at `/coach/setup`.
 - decided: **Layer 3 component breakdown** — `BiasBadge`, `ConfidencePill`, `ChecklistRow` (CheckCircle2 / Circle icons), `StrategyCard` (one per `valid_strategy`), `InvalidStrategies` (shadcn Collapsible), `AlertsBanner` (amber Card), `EventMeta` (instrument · relative time · freshness · Claude latency), `FreshnessPill`, `CoachingPanel` (composer).
 - decided: **Strategy ID labels** — hardcoded `STRATEGY_LABELS` map in `lib/constants.ts` covering all 7 entry models from `concepts/ai-coach/strategies.json` (`consolidation-model` → "Consolidation Model" etc.). Handles both `valid_strategies[].strategy_id` and `invalid_strategies[]` strings.
-- decided: **Pine script distribution** — copy `assets/pine/neurospect-coach.pine` from this wiki into `neurospect-app/public/neurospect-coach.pine`. Setup page shows a Download button + collapsible `<pre>` with copy-to-clipboard. Deliberate minor duplication; wiki file remains canonical. A README note in the frontend repo records the sync requirement.
+- decided: **Pine script distribution** — copy `assets/pine/neurospect-coach.pine` from this wiki into `app/public/neurospect-coach.pine`. Setup page shows a Download button + collapsible `<pre>` with copy-to-clipboard. Deliberate minor duplication; wiki file remains canonical. A README note in the frontend repo records the sync requirement.
 - decided: **Backend unchanged** — existing 6 coach endpoints cover all Phase 4 v1 UI.
 - decided: **Session split** — one Sonnet session (~4–5h). Scope is smaller than journal Session 2 or 3 and lives entirely in a self-contained `coach/` feature slice.
 - decided: **Canonical frontend-coach architecture doc** — not pre-written. Per wiki Architecture Doc Integrity rules, the implementation session creates `concepts/architecture/phase4-coach-frontend.md` reconciled against actual code.
@@ -329,7 +329,7 @@ Boot procedure:
    - `components/analytics/summary-cards.tsx`, `components/trade/trade-form.tsx` — Card, Dialog,
      skeleton, and empty-state patterns (reuse the delete-confirmation Dialog pattern)
 6. Read `C:\Users\PaulRussell\repos\neurospect-wiki\assets\pine\neurospect-coach.pine` — this file
-   gets copied into `neurospect-app/public/` as a static asset. Read the alert-firing section so
+   gets copied into `app/public/` as a static asset. Read the alert-firing section so
    the setup instructions describe the Pine `Request coaching` toggle accurately.
 7. Read `C:\Users\PaulRussell\repos\neurospect-wiki\concepts\ai-coach\strategies.json` — confirm
    the 7 strategy IDs for the `STRATEGY_LABELS` map.
@@ -452,7 +452,7 @@ Implementation (in order):
 **Phase F — Static asset & repo hygiene:**
 21. Copy `C:\Users\PaulRussell\repos\neurospect-wiki\assets\pine\neurospect-coach.pine` to
     `C:\Users\PaulRussell\repos\neurospect-app\public\neurospect-coach.pine`.
-22. Add a note to `neurospect-app/README.md` (create if missing) under a "Static Assets" heading:
+22. Add a note to `app/README.md` (create if missing) under a "Static Assets" heading:
     `public/neurospect-coach.pine` is a mirror of the wiki's canonical file at
     `C:\Users\PaulRussell\repos\neurospect-wiki\assets\pine\neurospect-coach.pine`. Re-sync
     manually when the wiki version bumps.

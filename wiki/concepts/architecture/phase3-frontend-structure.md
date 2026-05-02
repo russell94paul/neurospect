@@ -8,7 +8,7 @@ updated: 2026-04-26 (1c)
 
 # Phase 3 — Frontend Architecture
 
-Canonical doc for the `neurospect-app` frontend. The code in `C:\Users\PaulRussell\repos\neurospect-app` is the source of truth; this doc describes the architecture as implemented after Phase 3 Session 3.
+Canonical doc for the React frontend at `app/` (formerly the `neurospect-app` repo). The code in `app/` is the source of truth; this doc describes the architecture as implemented after Phase 3 Session 3.
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@ Canonical doc for the `neurospect-app` frontend. The code in `C:\Users\PaulRusse
 ## Project Layout
 
 ```
-neurospect-app/
+app/
 ├── src/
 │   ├── components/
 │   │   ├── layout/
@@ -159,7 +159,7 @@ Defined in `.env.example`:
 ## Development Setup
 
 ```bash
-cd neurospect-app
+cd app
 npm install
 cp .env.example .env   # fill in as needed
 npm run dev            # Vite dev server at localhost:5173
