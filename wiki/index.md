@@ -203,19 +203,7 @@ _None yet._
 
 ## Vault
 
-### Discord Neurospect App
-
-Client ID: 1497400564508528730
-Client Secret: REDACTED_DISCORD_CLIENT_SECRET
-
-TradingView 2FA Recovery Codes:
-
-REDACTED_TV_CODE
-REDACTED_TV_CODE
-REDACTED_TV_CODE
-REDACTED_TV_CODE
-REDACTED_TV_CODE
-REDACTED_TV_CODE
+Credentials live in `vault/credentials.md` (gitignored — see `.gitignore:vault/`). Never commit values here in `index.md` or any other tracked file. See [[CLAUDE]] § *Rules* #2.
 
 ---
 
