@@ -7,9 +7,7 @@ Single source of truth for project state: phases, status, boot prompts, deviatio
 ```
 roadmap/
 ├── CLAUDE.md                        # This file
-├── plan.md                          # Active master plan (latest version)
-├── plan-versions/                   # Historical plan versions (read-only archive)
-│   └── v1-neurollm-plan.md
+├── plan.md                          # Active master plan (v2 — EdgeLab architecture)
 ├── status.md                        # Dashboard: all phases, current status, blockers
 └── phases/
     └── phase-N-name/
@@ -19,6 +17,8 @@ roadmap/
             ├── planning.md          # Boot prompt for planning/design sessions
             └── execution.md         # Boot prompt for implementation sessions
 ```
+
+Plan version history lives in `initial-plan/` (read-only archive). See `initial-plan/CLAUDE.md` for the version table.
 
 ## Phase README Convention
 
