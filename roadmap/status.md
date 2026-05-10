@@ -7,11 +7,11 @@ updated: 2026-05-10
 
 | Phase | Name | Status | Assigned | Tickets | Started | Completed |
 |---|---|---|---|---|---|---|
-| 0 | Research & Validation | not_started | — | 0/5 | — | — |
-| 1 | Knowledge Base & RAG MVP | not_started | — | 0/8 | — | — |
-| 2 | Market Context & Trade Integration | not_started | — | 0/2 | — | — |
-| 3 | Product MVP | not_started | — | 0/6 | — | — |
-| 4 | Evaluation & Reliability | not_started | — | 0/1 | — | — |
+| 0 | Research & Validation | not_started | Paul | 0/5 | — | — |
+| 1 | Knowledge Base & RAG MVP | not_started | Paul | 0/8 | — | — |
+| 2 | Market Context & Trade Integration | not_started | Paul | 0/2 | — | — |
+| 3 | Product MVP | not_started | Paul | 0/6 | — | — |
+| 4 | Evaluation & Reliability | not_started | Paul | 0/1 | — | — |
 | 5 | Private Beta | not_started | — | 0/0 | — | — |
 | 6 | V1 Launch | not_started | — | 0/0 | — | — |
 | 7 | NeuroSpect EdgeLab Foundation | not_started | — | 0/0 | — | — |
@@ -27,8 +27,8 @@ _No phase active yet. Next up: Phase 0 — assign tickets and begin research._
 
 - **Workspace:** NeuroSpect-Platform (NEU)
 - **Total tickets:** 22 (+ 4 onboarding)
-- **All tickets:** Backlog, unassigned
-- **Last synced:** 2026-05-10
+- **All tickets:** Backlog, assigned to Paul
+- **Last synced:** 2026-05-10 (v2 roadmap sync)
 
 ## Blockers
 
