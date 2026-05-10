@@ -1,0 +1,10 @@
+# Claude Code local config (contains API keys, permissions)
+.claude/settings.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Personal wiki scratch (gitignored per-wiki too, belt-and-suspenders)
+*/scratch/
