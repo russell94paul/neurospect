@@ -6,10 +6,10 @@ track: "A (Coaching)"
 assigned: []
 started: null
 completed: null
-tickets_total: 0
+tickets_total: 2
 tickets_done: 0
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 ---
 
 # Phase 2: Market Context & Trade Integration

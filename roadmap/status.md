@@ -1,17 +1,17 @@
 ---
 tags: [roadmap, status, dashboard]
-updated: 2026-05-09
+updated: 2026-05-10
 ---
 
 # NeuroSpect Roadmap Status
 
 | Phase | Name | Status | Assigned | Tickets | Started | Completed |
 |---|---|---|---|---|---|---|
-| 0 | Research & Validation | not_started | — | 0/0 | — | — |
-| 1 | Knowledge Base & RAG MVP | not_started | — | 0/0 | — | — |
-| 2 | Market Context & Trade Integration | not_started | — | 0/0 | — | — |
-| 3 | Product MVP | not_started | — | 0/0 | — | — |
-| 4 | Evaluation & Reliability | not_started | — | 0/0 | — | — |
+| 0 | Research & Validation | not_started | — | 0/5 | — | — |
+| 1 | Knowledge Base & RAG MVP | not_started | — | 0/8 | — | — |
+| 2 | Market Context & Trade Integration | not_started | — | 0/2 | — | — |
+| 3 | Product MVP | not_started | — | 0/6 | — | — |
+| 4 | Evaluation & Reliability | not_started | — | 0/1 | — | — |
 | 5 | Private Beta | not_started | — | 0/0 | — | — |
 | 6 | V1 Launch | not_started | — | 0/0 | — | — |
 | 7 | Backtesting Platform | not_started | — | 0/0 | — | — |
@@ -21,7 +21,14 @@ updated: 2026-05-09
 
 ## Current Focus
 
-_No phase active yet._
+_No phase active yet. Next up: Phase 0 — assign tickets and begin research._
+
+## Linear Integration
+
+- **Workspace:** NeuroSpect-Platform (NEU)
+- **Total tickets:** 22 (+ 4 onboarding)
+- **All tickets:** Backlog, unassigned
+- **Last synced:** 2026-05-10
 
 ## Blockers
 
