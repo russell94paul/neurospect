@@ -6,21 +6,23 @@ Single repository for the NeuroSpect AI trading platform. Evolving from an ICT t
 
 ```
 NeuroSpect (company / product brand)
-├── NeuroSpect Coach    — AI coaching product (consumer-facing)
-├── NeuroCortex         — Knowledge/retrieval layer
-├── NeuroQuant          — Hybrid LLM + quant system
-├── NeuroTrader         — Automated trading agent
-└── NeuroLLM            — Underlying LLM/AI platform powering all components
+├── NeuroSpect Mentor   — Consumer-facing AI coaching product
+├── NeuroCore          — Knowledge/retrieval layer
+├── NSLM                — NeuroSpect Language Model (ICT-aware model family)
+├── NeuroSpect EdgeLab  — Research, backtesting, and model experimentation engine
+├── NeuroQuant          — Production model layer
+└── NeuroTrader Agent   — Automated trading agent
 ```
 
 | Component | Description |
 |---|---|
-| **NeuroSpect** | Company and product brand. AI trading platform for traders and educators. |
-| **NeuroSpect Coach** | Consumer-facing AI coaching product (RAG + ICT knowledge + trade journal). |
-| **NeuroCortex** | Knowledge/retrieval layer. Hybrid 3-signal search (keyword + semantic + entity) across all knowledge sources. Powers coaching RAG, cross-wiki intelligence, and agent reasoning. |
-| **NeuroQuant** | Hybrid LLM + traditional quant system. ICT feature engineering, market regime detection (HMM), ML model ensemble (LightGBM), LLM narrative reasoning. Confluence scorer combines all signals. |
-| **NeuroTrader** | Automated trading agent. Shadow → Paper → Live progression. 5-layer safety architecture. Learns from its mistakes via post-trade LLM analysis and model retraining. |
-| **NeuroLLM** | The underlying LLM/AI technology layer powering all NeuroSpect components. RAG, fine-tuning, agent orchestration, prompt management. |
+| **NeuroSpect** | Company and product brand. AI trading research and coaching platform for traders and educators. |
+| **NeuroSpect Mentor** | Consumer-facing AI coaching product. RAG + ICT knowledge + trade journal + personalized coaching with source-grounded citations and deterministic rule validation. |
+| **NeuroCore** | Knowledge/retrieval layer. Hybrid 3-signal search (keyword + semantic + entity) across all knowledge sources. Powers coaching RAG, cross-wiki intelligence, and agent reasoning. Source-grounded ICT memory. |
+| **NSLM** | NeuroSpect Language Model. ICT-aware LLM/model family trained and adapted from private mentorship content, wiki content, structured ICT playbooks, and evaluation feedback. Prompt-versioned, model-versioned, evaluated through EdgeLab. |
+| **NeuroSpect EdgeLab** | Event-driven research, backtesting, quant feature engineering, NSLM prompt/model experimentation, and hybrid model evaluation engine. Tests strategies, evaluates NSLM versions, ranks features, promotes validated models to NeuroQuant. |
+| **NeuroQuant** | Production model layer. Consumes validated features and models promoted from EdgeLab. Regime-aware scoring, model ensembles, confluence decisions. |
+| **NeuroTrader Agent** | Automated trading agent. Shadow → Paper → Live progression. 5-layer safety architecture. Gated by EdgeLab evidence and NeuroQuant scoring. |
 
 ## Directory Structure
 
@@ -71,8 +73,8 @@ They are **personal working memory** — drafts, research-in-progress, daily not
 | 4 | Evaluation & Reliability | A |
 | 5 | Private Beta | A |
 | 6 | V1 Launch | A |
-| 7 | Backtesting Platform | B (Trading Intelligence) |
-| 8 | NeuroQuant | B |
+| 7 | NeuroSpect EdgeLab Foundation | B (Trading Intelligence) |
+| 8 | Hybrid Model Research + NeuroQuant Promotion | B |
 | 9 | NeuroTrader Agent | B |
 | 10 | Advanced Features | — |
 
@@ -130,9 +132,9 @@ All three wikis (`wiki/`, `vlad-wiki/`, `paul-wiki/`) follow the same convention
 2. A lint/skill catches promoted pages and suggests moving them to `wiki/`
 3. After promotion, the personal wiki page becomes a stub linking to the canonical `wiki/` page
 
-## NeuroCortex — Knowledge Layer
+## NeuroCore — Knowledge Layer
 
-NeuroCortex is the hybrid retrieval/intelligence layer that indexes all knowledge sources:
+NeuroCore is the hybrid retrieval/intelligence layer that indexes all knowledge sources:
 
 | Source | Indexed For |
 |---|---|
@@ -141,7 +143,7 @@ NeuroCortex is the hybrid retrieval/intelligence layer that indexes all knowledg
 | `paul-wiki/`, `vlad-wiki/` | Cross-engineer intelligence |
 | `initial-plan/` | Project context |
 | Trade journal (PostgreSQL) | Personalized coaching |
-| Backtest results (PostgreSQL) | Strategy evaluation |
+| EdgeLab experiments (PostgreSQL) | Strategy evaluation, NSLM evaluation |
 | Market data context | Real-time coaching enrichment |
 | Agent signals (PostgreSQL) | Agent self-improvement |
 
@@ -150,7 +152,7 @@ Search uses 3 signals fused via Reciprocal Rank Fusion:
 2. **Semantic** (pgvector embeddings) — catches conceptual similarity
 3. **Entity/Tag** — catches instrument, session, strategy references
 
-Cross-wiki intelligence: when an engineer is working on a component, NeuroCortex can surface relevant content from the other engineer's wiki or the team wiki.
+Cross-wiki intelligence: when an engineer is working on a component, NeuroCore can surface relevant content from the other engineer's wiki or the team wiki.
 
 ## Architecture Patterns
 

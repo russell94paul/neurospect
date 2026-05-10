@@ -80,7 +80,7 @@ The kickoff workstream (Apr 18-22) completed significant Phase 0 groundwork:
 - `wiki/processes/distributed-workflow/active/kickoff.md` — Kickoff session history
 - `wiki/processes/distributed-workflow/active/course-and-kb.md` — Active KB workstream
 - `roadmap/plan.md` §20 — Initial GitHub issues (5 are Phase 0)
-- `roadmap/plan.md` §22 — NeuroCortex architecture (3-signal hybrid search)
+- `roadmap/plan.md` §27 — NeuroCore architecture (3-signal hybrid search)
 
 ## Cross-Wiki Notes
 

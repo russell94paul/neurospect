@@ -1,8 +1,8 @@
 ---
 phase: 7
-name: "Backtesting Platform"
+name: "NeuroSpect EdgeLab Foundation"
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 ---
 
 # Phase 7 Deviations

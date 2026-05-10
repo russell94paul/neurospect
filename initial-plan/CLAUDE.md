@@ -7,6 +7,7 @@ This directory contains versioned product and technical plans for the NeuroLLM p
 | Version | Date | Description |
 |---|---|---|
 | v1 | 2026-05-09 | Initial comprehensive plan covering coaching MVP, backtesting platform, NeuroQuant, NeuroTrader Agent (Phases 0-10) |
+| v2 | 2026-05-10 | EdgeLab architecture pivot: Backtesting Platform → NeuroSpect EdgeLab (research/experimentation engine), NeuroCortex → NeuroCore, NeuroSpect Coach → NeuroSpect Mentor, new NSLM component, bidirectional NSLM↔EdgeLab evaluation loop, rewritten Phases 7-8, new pricing tiers, 14 EdgeLab database tables |
 
 ## Conventions
 

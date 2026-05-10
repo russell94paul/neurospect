@@ -14,8 +14,8 @@ updated: 2026-05-10
 | 4 | Evaluation & Reliability | not_started | — | 0/1 | — | — |
 | 5 | Private Beta | not_started | — | 0/0 | — | — |
 | 6 | V1 Launch | not_started | — | 0/0 | — | — |
-| 7 | Backtesting Platform | not_started | — | 0/0 | — | — |
-| 8 | NeuroQuant | not_started | — | 0/0 | — | — |
+| 7 | NeuroSpect EdgeLab Foundation | not_started | — | 0/0 | — | — |
+| 8 | Hybrid Model Research + NeuroQuant Promotion | not_started | — | 0/0 | — | — |
 | 9 | NeuroTrader Agent | not_started | — | 0/0 | — | — |
 | 10 | Advanced Features | not_started | — | 0/0 | — | — |
 

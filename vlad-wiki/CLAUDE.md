@@ -38,7 +38,7 @@ vlad-wiki/
 
 ## Cross-Wiki Intelligence
 
-NeuroCortex indexes this wiki alongside Paul's wiki and the team wiki. When working on a component, relevant content from other wikis may be surfaced automatically. Content tagged `promote: true` is prioritized for cross-wiki visibility.
+NeuroCore indexes this wiki alongside Paul's wiki and the team wiki. When working on a component, relevant content from other wikis may be surfaced automatically. Content tagged `promote: true` is prioritized for cross-wiki visibility.
 
 ## End-of-Session Rule
 

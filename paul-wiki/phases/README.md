@@ -17,8 +17,8 @@ _Phase status synced from `roadmap/status.md` by `/sync`._
 | 4 | Evaluation & Reliability | not_started | — | — |
 | 5 | Private Beta | not_started | — | — |
 | 6 | V1 Launch | not_started | — | — |
-| 7 | Backtesting Platform | not_started | — | — |
-| 8 | NeuroQuant | not_started | — | — |
+| 7 | NeuroSpect EdgeLab Foundation | not_started | — | — |
+| 8 | Hybrid Model Research + NeuroQuant Promotion | not_started | — | — |
 | 9 | NeuroTrader Agent | not_started | — | — |
 | 10 | Advanced Features | not_started | — | — |
 
