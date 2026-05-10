@@ -64,14 +64,25 @@ If available, extract:
 - Tickets in progress
 - Blocked tickets with blocker descriptions
 
-### 6. Check Git State
+### 6. Check Git State and Create Feature Branch (exec mode)
 
 Run:
 - `git log --oneline -20` — recent commits relevant to this phase
-- `git branch --list "feat/NEU-*"` — active feature branches
+- `git branch --list "feat/NEU-*" "feat/phase-*"` — active feature branches
 - `git status` — uncommitted changes
 
 Identify any commits or branches that relate to Phase N based on ticket IDs or phase keywords.
+
+**For execution mode only:** If not already on a phase or ticket feature branch, offer to create one:
+
+1. `git fetch origin`
+2. `git checkout development && git pull origin development`
+3. Create the branch:
+   - If a specific ticket was requested (e.g., `/phase 0 exec NEU-5`): `git checkout -b feat/NEU-5-pgvector`
+   - Otherwise use the phase branch: `git checkout -b feat/phase-{N}-{slug}`
+4. If a matching branch already exists (e.g., `feat/phase-0-research`), check it out instead of creating a new one.
+
+Ask the user to confirm before creating the branch. Skip this step for `plan` and `status` modes.
 
 ### 7. Read Relevant Code State (for execution mode)
 
