@@ -43,14 +43,18 @@ updated: 2026-05-10
 
 ## Current Focus
 
-**Phase 0 — Research & Validation** is active. Marketing site built with 6 pages (landing, compare, performance, workflows, architecture, pricing). Next: begin technical validation (RAG prototype, vector DB, embedding model).
+**Phase 0 — Research & Validation** is active. Marketing site built with 6 pages + design handoff package. NEU-27 (live trading simulator) is In Progress. Next: technical validation (RAG prototype, vector DB, embedding model).
+
+**⚠ Gate Warning:** Phase 11 (Content Licensing) is `not_started` but gates Phase 1 (RAG MVP). Content licensing work should begin before Phase 0 completes.
 
 ## Linear Integration
 
 - **Workspace:** NeuroSpect-Platform (NEU)
 - **Total tickets:** 23 (+ 4 onboarding)
-- **All tickets:** Backlog, assigned to Paul
-- **Last synced:** 2026-05-10
+- **Phase 0:** 5 Todo + 1 In Progress (NEU-27), all assigned to Paul
+- **Phase 1-4:** 17 tickets in Backlog, all assigned to Paul
+- **Phase 5-16:** No tickets yet
+- **Last synced:** 2026-05-10 (Track C phases added, NEU-27 → In Progress, Phase 0 tickets → Todo)
 
 ## Blockers
 
@@ -58,8 +62,10 @@ _None._
 
 ## Notes
 
-- NEU-27: Live trading simulator (`/simulator`) — major marketing site feature, Phase 0
+- NEU-27: Live trading simulator (`/simulator`) — design handoff delivered, build in progress
 - NEU-23 ("Build landing page") is Phase 3 product app landing page, not the marketing site
+- Marketing site build (commit `0cdc3c3`) has no dedicated Linear ticket — tracked as Phase 0 deliverable in README
+- Track C phases (11-16) added 2026-05-10 — business/operations track running parallel to engineering
 
 ---
 

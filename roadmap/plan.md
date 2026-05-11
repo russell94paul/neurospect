@@ -1155,11 +1155,11 @@ The product must use **educational and research language** throughout:
 
 **Exit criteria:** A user can sign up, subscribe, and get coaching. Tiers enforced.
 
-### Phase 4: Evaluation & Reliability (Weeks 22-24)
+### Phase 4: Evaluation, Reliability & Prompt Infrastructure (Weeks 22-26)
 
-**Goals:** Harden for real users. Instructor review. Load testing.
+**Goals:** Harden for real users. Instructor review. Load testing. Build the prompt versioning module that coaching uses immediately and EdgeLab depends on later.
 
-**Deliverables:**
+**Deliverables (4A — Evaluation & Reliability):**
 - Automated nightly evaluation
 - Load testing (50 concurrent users)
 - Security audit
@@ -1167,7 +1167,17 @@ The product must use **educational and research language** throughout:
 - User feedback mechanism (thumbs up/down)
 - Monitoring and cost alerting
 
-**Exit criteria:** Hallucination < 10%. Latency < 5s (p95) under load. Instructor approves 85%+.
+**Deliverables (4B — Prompt Versioning Module):**
+- Prompt registry — catalog all prompts with version, status, and lineage metadata
+- Version tracking — immutable versions with predecessor links
+- A/B testing framework — compare prompt variants against same inputs, measure quality vs trade outcomes and coaching ratings
+- Regression detection — automated comparison on model version changes
+- Per-strategy prompt tuning — version and specialize by ICT strategy
+- Audit trail — coaching response → exact prompt version, model, inputs
+- Rollback — one-step revert to last known good version
+- Multi-model routing — same logical prompt, optimized variants per model, runtime selection
+
+**Exit criteria:** Hallucination < 10%. Latency < 5s (p95) under load. Instructor approves 85%+. All prompts registered and versioned. A/B test pipeline functional. Audit trail queryable. Module API ready for EdgeLab integration.
 
 ### Phase 5: Private Beta (Weeks 25-28)
 

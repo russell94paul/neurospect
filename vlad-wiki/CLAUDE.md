@@ -42,7 +42,10 @@ NeuroCore indexes this wiki alongside Paul's wiki and the team wiki. When workin
 
 ## End-of-Session Rule
 
-Before ending any session that modifies this wiki, code, or tickets, offer to run `/sync`. This regenerates boot prompts, updates phase READMEs with implementation context, syncs Linear ticket status, and flags cross-wiki relevant content for the other engineer.
+Before ending any session that modifies this wiki, code, or tickets, offer to run both `/sync` and `/lint`:
+
+1. **`/sync`** — Updates tickets, boot prompts, phase status, and flags cross-wiki content from this session's work.
+2. **`/lint`** — Checks that all roadmap artifacts are consistent. As you add ideas, rename components, and reorganize phases, changes touch multiple files but not always all of them at once. `/lint` catches that drift before the next session inherits stale or conflicting context.
 
 ## What Does NOT Belong Here
 

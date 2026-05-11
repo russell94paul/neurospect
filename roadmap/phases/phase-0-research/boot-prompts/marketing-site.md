@@ -83,13 +83,17 @@ site/                              # New top-level dir in monorepo
 
 ### Section 1: Hero
 
-**Slogan concept:**
+**Tagline:**
 
-> **The Only Platform an ICT Trader Will Ever Need.**
->
-> From your first Fair Value Gap to your first automated strategy — NeuroSpect is the AI-native platform built exclusively for ICT and Smart Money Concepts traders. Learn, journal, research, backtest, and trade — all in one place, powered by an LLM that actually understands ICT.
+> **Not a wrapper. A trading research stack.**
+
+**Subtitle:**
+
+> ICT-native AI. Event-driven backtesting. Evidence-gated execution. The first platform where your setups are computable, your edge is provable, and your automation is earned — not toggled.
 
 CTA: **Join the Waitlist** (email input + submit)
+
+**Design note:** The tagline hits the "we actually built something" angle hard. It immediately differentiates from the ChatGPT-wrapper ICT bots flooding the market. The subtitle gives the three technical pillars without dumbing them down — this audience respects technical specificity.
 
 ### Section 2: The Problem — What Every ICT Trader Faces
 
@@ -104,7 +108,42 @@ Grid of 6 pain points with icons. Each has a headline, 1-2 sentence description,
 | **"I blow prop firm accounts on tilt"** | Emotional trading after losses is the #1 account killer. No tool stops you in the moment. | **Risk Limit Engine** — Daily loss limits, max trade caps, cooldown timers, drawdown awareness. Prop-firm rule presets (Topstep, Apex, etc.). The guardrail between you and your worst impulses. |
 | **"Generic AI tools don't understand ICT"** | ChatGPT doesn't know what a CISD is. It can't validate an OTE entry. It hallucinates ICT concepts. | **NSLM — NeuroSpect Language Model** — A bespoke ICT-aware model family built on 36K+ lines of curated ICT content, 7 machine-readable entry models, and 5 course modules. It speaks ICT natively. |
 
-### Section 3: Platform Features (8 cards)
+### Section 3: What No One Else Does — USP Split
+
+Two-column layout (or tabbed on mobile). Discretionary traders on the left, quant traders on the right. Each column highlights capabilities that literally do not exist anywhere else.
+
+#### For Discretionary ICT Traders
+
+**Headline:** *"The only AI coach that can actually validate your ICT setup — not just talk about it."*
+
+| USP | What exists today | What NeuroSpect does |
+|---|---|---|
+| **Deterministic rule validation** | ChatGPT hallucinates about OTE validity. TraderSync doesn't know what an OTE is. | NSLM runs the actual entry model checklist — kill zone active? Price in discount? HTF FVG present? Displacement confirmed? — deterministically, then explains the result with ICT reasoning. It doesn't guess. It checks. |
+| **Knowledge-grounded coaching** | ICT GPTs are thin prompt wrappers with no corpus. They can't cite sources. They drift. | NeuroCore retrieves from 36K lines of curated, structured ICT content with source traceability. Every answer cites the specific wiki section, course module, or entry model checklist. |
+| **Journal-aware memory** | Generic journals store data. Generic AI has no access to it. Disconnected systems. | Your trade history, mistake patterns, and psychology profile feed directly into every coaching response. The AI knows you revenge-traded twice this week before you ask your next question. |
+| **Mistake → intervention pipeline** | Edgewonk tracks mistakes. Nobody acts on them automatically. | Recurring mistake tags trigger concrete action items and coaching interventions. Three "traded outside kill zone" entries → the coach proactively addresses it next session. |
+
+#### For Quant Traders
+
+**Headline:** *"The first backtesting engine where ICT concepts are features, not drawings."*
+
+| USP | What exists today | What NeuroSpect does |
+|---|---|---|
+| **ICT concepts as computable primitives** | No backtesting platform has FVG, Order Block, MSS, SMT, or displacement as built-in detectable objects. You code them from scratch or draw them manually. | EdgeLab ships ICT detectors as first-class event-driven components: `SwingDetector`, `FVGDetector`, `OrderBlockDetector`, `MarketStructureDetector`, `SessionDetector`, `SMTDetector`, `BiasDetector`, `ConsolidationDetector`. Testable, rankable, composable. |
+| **LLM-derived features in quant models** | No backtesting platform uses LLM reasoning as a feature input. Quant and AI are separate worlds. | NSLM produces structured outputs — setup classification confidence, reasoning coherence scores, displacement quality ratings — that become features in your LightGBM model alongside traditional quant features. Then you walk-forward validate the hybrid. |
+| **NSLM ↔ EdgeLab research loop** | Doesn't exist anywhere. | EdgeLab evaluates NSLM prompt versions against historical outcomes. Prompt v12 classifies setups better than v11? Prove it statistically. The LLM improves because the backtester evaluates it. Bidirectional. |
+| **Null test as a hard gate** | Backtesting platforms let you deploy anything. No one forces you to prove edge over baseline. | EdgeLab's null test compares your ICT strategy against random-entry baseline. If it doesn't pass (p < 0.05), you don't promote to NeuroQuant. No shortcuts. |
+| **ICT + quant feature fusion** | You can't combine "proximity to nearest unfilled FVG" with "Parkinson volatility" in any existing platform. | EdgeLab's feature store computes, snapshots, and ranks ICT-derived features alongside traditional quant features. Feature importance tells you which world — ICT, quant, or NSLM — contributes most to your edge. |
+
+#### The Bridge (both audiences)
+
+> **No other platform connects these worlds.** Your journal entries become training data. Your ICT concepts become computable features. Your AI coach gets statistically evaluated. Your discretionary intuition gets walk-forward validated. Your automation is gated by evidence you generated yourself.
+>
+> The pipeline: **learn → journal → research → validate → automate** — and every stage feeds the next.
+
+---
+
+### Section 4: Platform Features (8 cards)
 
 Each card: icon, title, 2-3 line description, and a "tier badge" showing which plan includes it.
 
@@ -119,9 +158,9 @@ Each card: icon, title, 2-3 line description, and a "tier badge" showing which p
 | **Risk Limit Engine** | Daily loss limits, max trades per session, cooldown after consecutive losses, drawdown circuit breakers. Prop-firm preset rule packs. Hard blocks or friction-based interventions. Stop tilting before it costs you. | `wiki/concepts/roadmap/ideas/overtrading-risk-limits.md` |
 | **Psychology Profiler** | Built from your own journal data — not a quiz. Identifies whether you're a revenge trader, hesitation trader, or overtrader. Feeds coaching personalization so the AI coach addresses your specific weaknesses. | `wiki/concepts/roadmap/ideas/trader-psychology-profiler.md` |
 
-### Section 4: Waitlist CTA (repeat)
+### Section 5: Waitlist CTA (repeat)
 
-> **Be the first to trade with an AI that thinks in ICT.**
+> **Your setups, compiled to features. Your edge, validated by Monte Carlo. Your execution, gated by evidence.**
 >
 > Early access. Limited spots. No credit card required.
 
@@ -130,6 +169,8 @@ Email input + "Join Waitlist" button.
 ---
 
 ## Page 2: Trader Workflows (`/workflows`)
+
+_This page turns the USP split into a full narrative. The landing page says "we're different." This page says "here's how it works for you specifically."_
 
 Show how NeuroSpect serves four distinct trader profiles, from beginner to fully automated. Each tier gets a section with: profile description, workflow diagram (text/visual), which NeuroSpect components they use, and a progression arrow to the next tier.
 

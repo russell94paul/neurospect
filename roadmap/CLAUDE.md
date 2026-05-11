@@ -20,6 +20,25 @@ roadmap/
 
 Plan version history lives in `initial-plan/` (read-only archive). See `initial-plan/CLAUDE.md` for the version table.
 
+## Tracks
+
+| Track | Phases | Description |
+|---|---|---|
+| A (Coaching) | 0-6 | Core coaching product: RAG, chat, billing, beta, launch |
+| B (Trading Intelligence) | 7-10 | EdgeLab, NeuroQuant, NeuroTrader, advanced features |
+| C (Business & Operations) | 11-16 | Content licensing, regulatory, GTM, retention, competitive, team scaling |
+
+Track C phases run **parallel** to engineering tracks A and B. They have cross-track gates:
+
+| Business Phase | Gates Engineering Phase | Parallel With |
+|---|---|---|
+| 11 (Content Licensing) | 1 (RAG MVP — can't ingest without content rights) | 0-1 |
+| 12 (Regulatory) | 3 (Product MVP — needs ToS/Privacy), 9 (NeuroTrader — needs RIA determination) | 2-3 |
+| 13 (Go-to-Market) | 6 (V1 Launch — needs GTM readiness) | 4-6 |
+| 14 (Retention) | — (no hard gate, but feeds Phase 8 NSLM eval) | 4-6 |
+| 15 (Competitive) | — (informational, not blocking) | 5-7 |
+| 16 (Team Scaling) | — (informational, not blocking) | 6-8 |
+
 ## Phase README Convention
 
 ```yaml

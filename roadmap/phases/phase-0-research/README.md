@@ -6,7 +6,7 @@ track: "A (Coaching)"
 assigned: [paul]
 started: 2026-05-10
 completed: null
-tickets_total: 5
+tickets_total: 6
 tickets_done: 0
 created: 2026-05-09
 updated: 2026-05-10

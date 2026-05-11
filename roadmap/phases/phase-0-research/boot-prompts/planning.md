@@ -1,12 +1,13 @@
 # Phase 0: Research & Validation — Planning Boot Prompt
 
-_Generated 2026-05-10 by `/phase 0 plan`. Do not edit manually._
+_Generated 2026-05-10 by `/sync`. Do not edit manually._
 
 ## Phase Context
 
 **Phase:** 0 — Research & Validation
 **Track:** A (Coaching)
-**Status:** not_started
+**Status:** in_progress
+**Engineer:** Paul Russell
 **Estimated effort:** 2 engineers x 3 weeks = 6 engineer-weeks
 
 ## Goals
@@ -15,17 +16,19 @@ Validate first customer, prototype RAG, select tech stack, confirm editorial cur
 
 ## Deliverables
 
-| # | Deliverable | Priority |
-|---|---|---|
-| 1 | Instructor content access agreement | Gate |
-| 2 | RAG prototype with wiki content (retrieval quality benchmarked) | P0 |
-| 3 | Vector DB selected (pgvector recommended in plan) | P0 |
-| 4 | Embedding model selected (text-embedding-3-small recommended) | P0 |
-| 5 | 50 Q&A evaluation pairs | P0 |
-| 6 | Competitive teardown (Price Action Lover, ICT GPTs) | P1 |
-| 7 | Linear workspace set up | P1 |
-| 8 | CI/CD pipeline (GitHub Actions) | P1 |
-| 9 | Sentry error monitoring | P1 |
+| # | Deliverable | Priority | Status |
+|---|---|---|---|
+| 1 | Instructor content access agreement | Gate | Unresolved |
+| 2 | RAG prototype with wiki content | P0 | Not started |
+| 3 | Vector DB selected (pgvector recommended) | P0 | Not started |
+| 4 | Embedding model selected | P0 | Not started |
+| 5 | 50 Q&A evaluation pairs | P0 | Not started |
+| 6 | Competitive teardown | P1 | Not started |
+| 7 | Linear workspace set up | P1 | Done (23 tickets) |
+| 8 | CI/CD pipeline (GitHub Actions) | P1 | Not started |
+| 9 | Sentry error monitoring | P1 | Not started |
+| 10 | Marketing site (6 pages) | P1 | Done |
+| 11 | Live Trading Simulator | P1 | In Progress (NEU-27) |
 
 ## Exit Criteria
 
@@ -33,31 +36,36 @@ RAG prototype returns relevant passages for **80%+ of test questions**.
 
 ## Upstream Deviations
 
-No upstream deviations — Phase 0 is the first phase. Plan assumptions are current.
+No upstream deviations — Phase 0 is the first phase.
 
 ## Current Phase Deviations
 
-None captured yet.
+1. **Marketing site added** (2026-05-10) — Originally not in Phase 0 scope. Built 6 pages. Phase 3 "landing page" clarified as product app.
+2. **Live Trading Simulator added** (2026-05-10) — `/simulator` page. Design spec at `design-handoff/08-live-simulator.md`.
+3. **Track C phases added** (2026-05-10) — Phases 11-16 (Business & Operations). Phase 11 gates Phase 1.
 
-## What Already Exists (head start from kickoff workstream)
+## ⚠ Track C Gate Warning
 
-The kickoff workstream (Apr 18-22) completed significant Phase 0 groundwork:
+**Phase 11 (Content Licensing)** is `not_started` but gates **Phase 1 (RAG MVP)**. Content licensing work should begin before Phase 0 completes.
 
-| Asset | Status | Location |
-|---|---|---|
-| ICT knowledge base (5 concept pages + 7 entry models + 5 course modules) | Populated | `wiki/concepts/business-logic/`, `wiki/concepts/entry-models/`, `wiki/concepts/course/` |
-| Transcript pipeline architecture | Decided (manual + Whisper) | `wiki/concepts/architecture/transcript-pipeline.md` |
-| Source transcripts (20+ files) | Ingested | `wiki/sources/neurospect/` |
-| Live commentary concepts | Captured | `wiki/concepts/business-logic/ict-live-commentary.md` |
-| Monorepo structure (api + app + wiki) | Merged | Root directory |
-| AI coach system prompt template | Drafted | `wiki/concepts/ai-coach/system-prompt-template.md` |
+## What Already Exists
+
+| Asset | Location |
+|---|---|
+| ICT knowledge base (5 concepts + 7 entry models + 5 course modules) | `wiki/concepts/business-logic/`, `wiki/concepts/entry-models/`, `wiki/concepts/course/` |
+| Transcript pipeline architecture | `wiki/concepts/architecture/transcript-pipeline.md` |
+| Source transcripts (20+ files) | `wiki/sources/neurospect/` |
+| AI coach system prompt template | `wiki/concepts/ai-coach/system-prompt-template.md` |
+| Linear workspace (23 tickets, Phase 0-4) | NeuroSpect-Platform (NEU) |
+| Marketing site (6 pages) | `site/` |
+| Design handoff package | `design-handoff/` |
 
 ## Open Questions & Decisions to Make
 
 ### Critical (gates)
 
 1. **Instructor content access commitment** — Single gate for the entire project.
-2. **IP / content license agreement** — Needed before ingesting content into a product.
+2. **IP / content license agreement** — Needed before ingesting content. Now tracked as Phase 11 deliverable.
 
 ### Technical (Phase 0 scope)
 
@@ -69,32 +77,19 @@ The kickoff workstream (Apr 18-22) completed significant Phase 0 groundwork:
 
 6. **Auth provider** — Discord-only or add email/password?
 7. **Billing model** — Per-instructor or platform-wide?
-8. **Existing journal preservation** — Coaching augments or replaces the journal?
-9. **Compliance posture** — Legal counsel before beta?
+8. **Compliance posture** — Legal counsel before beta? (Now tracked as Phase 12)
 
 ## Relevant Wiki Content
 
 - `wiki/concepts/architecture/transcript-pipeline.md` — Transcript processing
 - `wiki/concepts/ai-coach/system-prompt-template.md` — Draft coaching prompt
-- `wiki/concepts/ai-coach/chart-analysis-boot-prompt.md` — Chart analysis approach
-- `wiki/processes/distributed-workflow/active/kickoff.md` — Kickoff session history
-- `wiki/processes/distributed-workflow/active/course-and-kb.md` — Active KB workstream
-- `roadmap/plan.md` §20 — Initial GitHub issues (5 are Phase 0)
+- `roadmap/plan.md` §20 — Phase 0 tickets
 - `roadmap/plan.md` §27 — NeuroCore architecture (3-signal hybrid search)
 
 ## Cross-Wiki Notes
 
-- **Vlad's wiki:** Phase 0 page exists but empty — no personal research notes yet.
-- **Paul's wiki:** Phase 0 page exists but empty — no personal research notes yet.
-
-## Suggested Planning Agenda
-
-1. Resolve gate questions (instructor commitment, IP agreement)
-2. Set up Linear workspace and import Phase 0 tickets
-3. Assign work lanes (Paul vs Vlad)
-4. Validate pgvector decision
-5. Define eval pair format and start building 50-pair dataset
-6. Competitive teardown of existing ICT AI tools
+- **Vlad's wiki:** Phase 0 page scaffolded but empty.
+- **Paul's wiki:** Phase 0 in_progress. Prompt-versioning module spec at `paul-wiki/components/prompt-versioning-module.md`.
 
 ---
 

@@ -1,8 +1,8 @@
 ---
-tags: [prompts, versioning, architecture, neuro-llm]
+tags: [prompts, versioning, architecture, neuro-llm, nslm]
 component: prompt-engine
-status: research
-phase: 3+
+status: planned
+phase: 4
 promote: false
 created: 2026-05-10
 updated: 2026-05-10

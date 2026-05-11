@@ -70,13 +70,21 @@ They are **personal working memory** — drafts, research-in-progress, daily not
 | 1 | Knowledge Base & RAG MVP | A |
 | 2 | Market Context & Trade Integration | A |
 | 3 | Product MVP | A |
-| 4 | Evaluation & Reliability | A |
+| 4 | Evaluation, Reliability & Prompt Infrastructure | A |
 | 5 | Private Beta | A |
 | 6 | V1 Launch | A |
 | 7 | NeuroSpect EdgeLab Foundation | B (Trading Intelligence) |
 | 8 | Hybrid Model Research + NeuroQuant Promotion | B |
 | 9 | NeuroTrader Agent | B |
 | 10 | Advanced Features | — |
+| 11 | Content Licensing & IP Strategy | C (Business & Operations) |
+| 12 | Regulatory & Compliance Framework | C |
+| 13 | Go-to-Market & User Acquisition | C |
+| 14 | Retention, Analytics & Coaching Quality | C |
+| 15 | Competitive Intelligence & Moat Strategy | C |
+| 16 | Team Scaling & Org Design | C |
+
+Track C phases run **parallel** to engineering tracks and have cross-track gates (e.g., Phase 11 gates Phase 1; Phase 12 gates Phases 3 and 9).
 
 ### Where Phase Information Lives
 
@@ -160,12 +168,13 @@ Several patterns proven in production elsewhere should be replicated independent
 
 ## Skills (Slash Commands)
 
-Three skills power the project workflow. Skills generate context at runtime — they read live state, not cached instructions.
+Four skills power the project workflow. Skills generate context at runtime — they read live state, not cached instructions.
 
 | Skill | Purpose |
 |---|---|
 | `/phase N [plan\|exec]` | Load Phase N boot prompt. Generated from roadmap definition + upstream deviations + Linear tickets + git state + cross-wiki content. Default mode is `exec`. Use `/phase status` to see all phases. |
-| `/sync` | End-of-session sync. Updates Linear tickets, regenerates boot prompts, captures deviations, flags cross-wiki content, suggests which `/phase` to run next. **Must be offered before every session ends.** |
+| `/sync` | End-of-session sync. Updates Linear tickets, regenerates boot prompts, captures deviations, flags cross-wiki content, checks Track C gates, suggests which `/phase` to run next. **Must be offered before every session ends.** |
+| `/lint` | Cross-artifact consistency check. Detects drift between CLAUDE.md files, roadmap phases, status dashboard, plan.md, skill mappings, and product naming. **Must be offered before every session ends.** |
 | `/crossref [query]` | Search across all wikis for content relevant to current work or a specific topic. Surfaces notes from the other engineer, canonical wiki definitions, and roadmap deviations. |
 
 ### How Boot Prompts Work
@@ -184,22 +193,40 @@ Cached copies are written to `roadmap/phases/phase-N/boot-prompts/` so they're b
 
 ### End-of-Session Behavior
 
-**Before ending any session that modifies code, wiki, or tickets, offer to run `/sync`.** This is mandatory — documented here, in both personal wiki CLAUDE.mds, and in the `/sync` skill itself.
+**Before ending any session that modifies code, wiki, or tickets, offer to run both `/sync` and `/lint`.** This is mandatory.
+
+```
+Before ending this session:
+1. /sync  — Update tickets, boot prompts, and phase status from this session's work
+2. /lint  — Check that all roadmap artifacts are consistent
+```
+
+**Why both?** As you work, you add ideas, rename components, and reorganize phases. These changes touch `CLAUDE.md`, `status.md`, phase READMEs, and skill definitions — but not always all of them at once. `/sync` captures *what you did this session*. `/lint` catches *drift between artifacts* that accumulated while you worked. Running both ensures the next session inherits clean, consistent context.
 
 `/sync` will:
 1. Sync Linear ticket status against git
 2. Regenerate boot prompts for active phases
 3. Update `roadmap/status.md`
 4. Capture any deviations from this session
-5. Flag cross-wiki content
-6. Suggest which `/phase` to run next
+5. Check Track C cross-track gates
+6. Flag cross-wiki content
+7. Suggest which `/phase` to run next
+
+`/lint` will:
+1. Verify phase tables match across all CLAUDE.md files and status.md
+2. Check phase directories are complete (README, deviations, boot-prompts)
+3. Detect product/component naming drift across documents
+4. Validate frontmatter on all phase READMEs
+5. Verify cross-track gate declarations are consistent
+6. Check file references and wikilinks resolve
+7. Flag stale artifacts that may need updating
 
 ## Cross-Cutting Rules
 
 - Cross-cutting changes (touching `wiki/` + `api/` + `app/`) ride in a single PR
 - See `wiki/CLAUDE.md` § *Architecture Doc Integrity* for the reconciliation rule
 - When in doubt, start in `wiki/` — it's the index and source of truth
-- **Always offer `/sync` before ending a session**
+- **Always offer `/sync` + `/lint` before ending a session**
 
 ## History
 

@@ -7,7 +7,7 @@ _Generated 2026-05-10 by `/sync`. Do not edit manually._
 **Phase:** 0 — Research & Validation
 **Track:** A (Coaching)
 **Status:** in_progress
-**Engineer:** Paul Russell — working on marketing site + Phase 0 research
+**Engineer:** Paul Russell — working on NEU-27 (live simulator) + Phase 0 research
 **Assigned:** Paul
 **Exit Criteria:** RAG prototype returns relevant passages for **80%+ of test questions**.
 
@@ -25,25 +25,26 @@ Validate first customer, prototype RAG, select tech stack, confirm editorial cur
 | 4 | Embedding model selected (text-embedding-3-small recommended) | P0 | Not started |
 | 5 | 50 Q&A evaluation pairs | P0 | Not started |
 | 6 | Competitive teardown (Price Action Lover, ICT GPTs) | P1 | Not started |
-| 7 | Linear workspace set up | P1 | Done (22 tickets created) |
+| 7 | Linear workspace set up | P1 | Done (23 tickets created) |
 | 8 | CI/CD pipeline (GitHub Actions) | P1 | Not started |
 | 9 | Sentry error monitoring | P1 | Not started |
 | 10 | Marketing site (Astro + Tailwind + Chart.js) | P1 | Done (6 pages built) |
-| 11 | Live Trading Simulator (`/simulator`) | P1 | Not started — design spec in `design-handoff/08-live-simulator.md` |
+| 11 | Live Trading Simulator (`/simulator`) | P1 | In Progress (NEU-27) — design spec in `design-handoff/08-live-simulator.md` |
 
 ## Active Linear Tickets
 
-All Phase 0 tickets are in **Backlog**, assigned to **Paul**:
+Phase 0 tickets — 5 Todo + 1 In Progress, all assigned to **Paul**:
 
-| Ticket | Priority | Title |
-|---|---|---|
-| NEU-5 | P1 Urgent | Set up pgvector on existing PostgreSQL |
-| NEU-6 | P1 Urgent | Evaluate embedding models (OpenAI 3-small vs BGE-M3) |
-| NEU-7 | P2 High | Research chunking strategies for ICT content |
-| NEU-8 | P2 High | Set up CI/CD pipeline (GitHub Actions) |
-| NEU-9 | P2 High | Set up Sentry error monitoring |
+| Ticket | State | Priority | Title |
+|---|---|---|---|
+| **NEU-27** | **In Progress** | High | Build live trading simulator page (/simulator) |
+| NEU-5 | Todo | Urgent | Set up pgvector on existing PostgreSQL |
+| NEU-6 | Todo | Urgent | Evaluate embedding models (OpenAI 3-small vs BGE-M3) |
+| NEU-7 | Todo | High | Research chunking strategies for ICT content |
+| NEU-8 | Todo | High | Set up CI/CD pipeline (GitHub Actions) |
+| NEU-9 | Todo | High | Set up Sentry error monitoring |
 
-**Suggested execution order:** NEU-5 → NEU-6 → NEU-7 → (NEU-5+6+7 feed the RAG prototype) → NEU-8 → NEU-9
+**Suggested execution order:** NEU-27 (in progress) → NEU-5 → NEU-6 → NEU-7 → (NEU-5+6+7 feed the RAG prototype) → NEU-8 → NEU-9
 
 ## Key Files to Create or Modify
 
@@ -83,7 +84,9 @@ All Phase 0 tickets are in **Backlog**, assigned to **Paul**:
 | Source transcripts (20+ files) | `wiki/sources/neurospect/` |
 | Live commentary concepts | `wiki/concepts/business-logic/ict-live-commentary.md` |
 | AI coach system prompt template | `wiki/concepts/ai-coach/system-prompt-template.md` |
-| Linear workspace (22 tickets, Phase 0-4) | NeuroSpect-Platform (NEU) |
+| Linear workspace (23 tickets, Phase 0-4) | NeuroSpect-Platform (NEU) |
+| Marketing site (6 pages) | `site/` |
+| Design handoff package (8 docs) | `design-handoff/` |
 
 ## Upstream Deviations
 
@@ -91,15 +94,29 @@ No upstream deviations — Phase 0 is the first phase. Plan assumptions are curr
 
 ## Current Phase Deviations
 
-### Marketing site scope expansion (2026-05-10)
+### 1. Marketing site scope expansion (2026-05-10)
 - **Planned:** Marketing-site boot prompt existed but was explicitly "NOT part of the Phase 0-10 roadmap"
-- **Actual:** Marketing site formally added as Phase 0 deliverable. Built 6 pages including `/compare` (competitive intelligence) and `/performance` (illustrative trader performance analytics with Chart.js). Added Chart.js as the only JS dependency.
-- **Impact:** Phase 0 now has two work streams: (1) technical validation (RAG, pgvector, embeddings) and (2) marketing site (waitlist capture, product positioning). Both can proceed in parallel.
+- **Actual:** Marketing site formally added as Phase 0 deliverable. Built 6 pages including `/compare` (competitive intelligence) and `/performance` (illustrative trader performance analytics with Chart.js).
+- **Impact:** Phase 0 now has two work streams: (1) technical validation and (2) marketing site. Phase 3 "landing page" clarified as product app landing page.
+
+### 2. Live Trading Simulator added (2026-05-10)
+- **Planned:** Marketing site was a static 6-page waitlist site.
+- **Actual:** Live Trading Simulator (`/simulator`) added. Runs 4 trader tiers simultaneously against pre-scripted market events. Design spec at `design-handoff/08-live-simulator.md`.
+- **Impact:** No impact on Phase 1+ technical work. Simulator data model may inform EdgeLab event schema (Phase 7) but they are independent.
+
+### 3. Track C phases added (2026-05-10)
+- **Planned:** Phases 0-10 only.
+- **Actual:** Track C (Business & Operations) phases 11-16 added: Content Licensing, Regulatory, Go-to-Market, Retention, Competitive Intelligence, Team Scaling.
+- **Impact:** Phase 11 (Content Licensing) gates Phase 1. Should start in parallel with Phase 0.
 
 ## Cross-Wiki Notes
 
 - **Vlad's wiki:** Phase 0 page scaffolded but empty — no personal research notes yet.
-- **Paul's wiki:** Phase 0 in_progress. Marketing site notes added (2026-05-10). Has a prompt-versioning research note (`paul-wiki/components/prompt-versioning-module.md`) tagged phase 3+ — not directly relevant to Phase 0.
+- **Paul's wiki:** Phase 0 in_progress. Has a prompt-versioning module design spec (`paul-wiki/components/prompt-versioning-module.md`). `prompts/` directory scaffolded at repo root.
+
+## ⚠ Track C Gate Warning
+
+**Phase 11 (Content Licensing)** is `not_started` but gates **Phase 1 (RAG MVP)**. The instructor content access agreement is also the single gate for Phase 0. Content licensing work should begin before Phase 0 technical validation completes.
 
 ## Critical Gate
 
