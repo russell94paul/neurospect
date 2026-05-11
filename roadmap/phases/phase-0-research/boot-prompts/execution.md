@@ -29,6 +29,7 @@ Validate first customer, prototype RAG, select tech stack, confirm editorial cur
 | 8 | CI/CD pipeline (GitHub Actions) | P1 | Not started |
 | 9 | Sentry error monitoring | P1 | Not started |
 | 10 | Marketing site (Astro + Tailwind + Chart.js) | P1 | Done (6 pages built) |
+| 11 | Live Trading Simulator (`/simulator`) | P1 | Not started — design spec in `design-handoff/08-live-simulator.md` |
 
 ## Active Linear Tickets
 
