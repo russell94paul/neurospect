@@ -1,14 +1,14 @@
 ---
 phase: 0
 name: "Research & Validation"
-status: not_started
+status: in_progress
 vlad_status: not_started
-paul_status: not_started
-assigned: []
-tickets_total: 0
+paul_status: in_progress
+assigned: [paul]
+tickets_total: 5
 tickets_done: 0
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 ---
 
 # Phase 0: Research & Validation

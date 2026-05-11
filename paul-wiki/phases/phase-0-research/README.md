@@ -1,14 +1,14 @@
 ---
 phase: 0
 name: "Research & Validation"
-status: not_started
-paul_status: not_started
+status: in_progress
+paul_status: in_progress
 vlad_status: not_started
-assigned: []
-tickets_total: 0
+assigned: [paul]
+tickets_total: 5
 tickets_done: 0
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 ---
 
 # Phase 0: Research & Validation
@@ -22,7 +22,14 @@ _No tickets assigned yet. Create ticket folders in `tickets/NEU-NNN-short-title/
 
 ## Notes
 
-_Personal implementation notes for this phase._
+### Marketing Site (2026-05-10)
+
+Built Compare + Performance Lab pages as part of Phase 0 marketing site work.
+- `/compare` — competitive intelligence (capability matrix, subscription stack, workflow friction)
+- `/performance` — illustrative trader performance analytics (equity curves, KPIs, trade markers)
+- Added Chart.js for interactive charts on performance page
+- All data is synthetic/illustrative — clearly labeled as demo data
+- See `roadmap/phases/phase-0-research/boot-prompts/marketing-site.md` for full site scope
 
 ---
 

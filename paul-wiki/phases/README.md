@@ -10,7 +10,7 @@ _Phase status synced from `roadmap/status.md` by `/sync`._
 
 | Phase | Name | Status | Paul | Vlad |
 |---|---|---|---|---|
-| 0 | Research & Validation | not_started | — | — |
+| 0 | Research & Validation | in_progress | marketing site | — |
 | 1 | Knowledge Base & RAG MVP | not_started | — | — |
 | 2 | Market Context & Trade Integration | not_started | — | — |
 | 3 | Product MVP | not_started | — | — |

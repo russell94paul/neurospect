@@ -7,7 +7,7 @@ updated: 2026-05-10
 
 | Phase | Name | Status | Assigned | Tickets | Started | Completed |
 |---|---|---|---|---|---|---|
-| 0 | Research & Validation | not_started | Paul | 0/5 | — | — |
+| 0 | Research & Validation | in_progress | Paul | 0/5 | 2026-05-10 | — |
 | 1 | Knowledge Base & RAG MVP | not_started | Paul | 0/8 | — | — |
 | 2 | Market Context & Trade Integration | not_started | Paul | 0/2 | — | — |
 | 3 | Product MVP | not_started | Paul | 0/6 | — | — |
@@ -21,18 +21,23 @@ updated: 2026-05-10
 
 ## Current Focus
 
-_No phase active yet. Next up: Phase 0 — assign tickets and begin research._
+**Phase 0 — Research & Validation** is active. Marketing site built with 6 pages (landing, compare, performance, workflows, architecture, pricing). Next: begin technical validation (RAG prototype, vector DB, embedding model).
 
 ## Linear Integration
 
 - **Workspace:** NeuroSpect-Platform (NEU)
 - **Total tickets:** 22 (+ 4 onboarding)
 - **All tickets:** Backlog, assigned to Paul
-- **Last synced:** 2026-05-10 (v2 roadmap sync)
+- **Last synced:** 2026-05-10 (marketing site session)
 
 ## Blockers
 
 _None._
+
+## Notes
+
+- Marketing site work has no dedicated Linear ticket — consider creating NEU-27 for site build tracking
+- NEU-23 ("Build landing page") is Phase 3 product app landing page, not the marketing site
 
 ---
 

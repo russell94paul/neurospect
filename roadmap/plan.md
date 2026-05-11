@@ -1102,8 +1102,15 @@ The product must use **educational and research language** throughout:
 - 50 Q&A evaluation pairs
 - Competitive teardown
 - Linear workspace set up
+- Marketing site (Astro + Tailwind, deployed to Cloudflare Pages)
+  - Landing page with waitlist capture (`/`)
+  - Compare page — competitive differentiation (`/compare`)
+  - Performance Lab — illustrative trader performance data (`/performance`)
+  - Workflows page — trader tier profiles (`/workflows`)
+  - Architecture page — system diagram (`/architecture`)
+  - Pricing page — tier comparison (`/pricing`)
 
-**Exit criteria:** RAG prototype returns relevant passages for 80%+ of test questions.
+**Exit criteria:** RAG prototype returns relevant passages for 80%+ of test questions. Marketing site live with waitlist capturing signups.
 
 ### Phase 1: Knowledge Base & RAG MVP (Weeks 4-9)
 
@@ -1141,7 +1148,7 @@ The product must use **educational and research language** throughout:
 - Stripe integration (Free / Mentor $29 / Trader $99)
 - Usage limiting (free tier: 5 questions/day)
 - Conversation history
-- Landing page
+- Landing page (product app — distinct from marketing site in `site/`)
 - Discord coaching bot (MVP)
 - ToS + Privacy Policy
 - Roadmap dashboard
