@@ -9,7 +9,7 @@ completed: null
 tickets_total: 0
 tickets_done: 0
 parallel_with: [2, 3]
-gates: [9]
+gates: [3, 9]
 created: 2026-05-10
 updated: 2026-05-10
 ---

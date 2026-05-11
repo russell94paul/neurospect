@@ -31,8 +31,9 @@ NeuroSpect (company / product brand)
 - `api/` — FastAPI backend. Read `api/CLAUDE.md`.
 - `app/` — React 19 + TS frontend. Read `app/CLAUDE.md`.
 
-### Roadmap
+### Roadmap & Research
 - `roadmap/` — **Single source of truth for project state.** Phase definitions, boot prompts, deviations, status dashboard, and the master plan. Read `roadmap/CLAUDE.md`.
+- `research/` — Engineering research artifacts (benchmarks, evaluations, prototype findings). Organized by phase. NOT product content — that goes in `wiki/`. Read `research/README.md`.
 - `initial-plan/` — Historical archive of original plan versions (read-only).
 
 ### Personal Wikis (Obsidian Vaults)

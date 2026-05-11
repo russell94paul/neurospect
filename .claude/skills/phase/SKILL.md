@@ -31,7 +31,7 @@ Read `roadmap/phases/phase-{N}-{slug}/README.md` for the canonical phase definit
 
 The slug mapping:
 - 0=research, 1=rag-mvp, 2=market-context, 3=product-mvp, 4=evaluation
-- 5=beta, 6=launch, 7=backtesting, 8=neuroquant, 9=neurotrader, 10=advanced
+- 5=beta, 6=launch, 7=edgelab, 8=neuroquant, 9=neurotrader, 10=advanced
 - 11=content-licensing, 12=regulatory, 13=go-to-market, 14=retention, 15=competitive, 16=team-scaling
 
 Phases 11-16 are **Track C (Business & Operations)** — they run parallel to engineering tracks A/B and have cross-track gates documented in their READMEs.
@@ -67,23 +67,37 @@ If available, extract:
 - Tickets in progress
 - Blocked tickets with blocker descriptions
 
-### 6. Check Git State and Create Feature Branch (exec mode)
+### 6. Check Git State and Create Branch (exec mode)
 
 Run:
 - `git log --oneline -20` — recent commits relevant to this phase
-- `git branch --list "feat/NEU-*" "feat/phase-*"` — active feature branches
+- `git branch --list "feat/NEU-*" "feat/phase-*" "research/NEU-*" "research/phase-*"` — active branches
 - `git status` — uncommitted changes
 
 Identify any commits or branches that relate to Phase N based on ticket IDs or phase keywords.
 
-**For execution mode only:** If not already on a phase or ticket feature branch, offer to create one:
+**For execution mode only:** If not already on a phase or ticket branch, offer to create one.
+
+**Branch prefix depends on phase type:**
+
+| Phase Type | Branch Prefix | Example |
+|---|---|---|
+| Research phases (Phase 0, or any phase with `research` label tickets) | `research/` | `research/phase-0-research`, `research/NEU-6-embedding-eval` |
+| Implementation phases (Phases 1-10) | `feat/` | `feat/phase-1-rag-mvp`, `feat/NEU-10-ingestion-pipeline` |
+| Business/operations phases (Phases 11-16, Track C) | `docs/` | `docs/phase-11-content-licensing` |
+
+**Steps:**
 
 1. `git fetch origin`
 2. `git checkout development && git pull origin development`
 3. Create the branch:
-   - If a specific ticket was requested (e.g., `/phase 0 exec NEU-5`): `git checkout -b feat/NEU-5-pgvector`
-   - Otherwise use the phase branch: `git checkout -b feat/phase-{N}-{slug}`
-4. If a matching branch already exists (e.g., `feat/phase-0-research`), check it out instead of creating a new one.
+   - If a specific ticket was requested (e.g., `/phase 0 exec NEU-5`): `git checkout -b research/NEU-5-pgvector`
+   - Otherwise use the phase branch: `git checkout -b {prefix}/phase-{N}-{slug}`
+4. If a matching branch already exists, check it out instead of creating a new one.
+
+**Research branches also scaffold a research folder:**
+- Create `research/phase-{N}-{slug}/` if it doesn't exist
+- Create `research/phase-{N}-{slug}/{ticket-slug}/` if a specific ticket was requested
 
 Ask the user to confirm before creating the branch. Skip this step for `plan` and `status` modes.
 
@@ -91,7 +105,7 @@ Ask the user to confirm before creating the branch. Skip this step for `plan` an
 
 Based on the phase, identify key files that should exist or have been modified:
 
-- Phase 0: `roadmap/`, wiki content files
+- Phase 0: `roadmap/`, `research/phase-0-research/`, `site/`, wiki content files
 - Phase 1: `api/app/coach/rag/`, `api/app/models/wiki_chunk.py`, `app/src/pages/chat.tsx`
 - Phase 2: `api/app/coach/tools/`, economic calendar integration
 - Phase 3: `api/app/routers/billing.py`, Stripe integration, landing page
