@@ -5,7 +5,7 @@ status: in_progress
 paul_status: in_progress
 vlad_status: not_started
 assigned: [paul]
-tickets_total: 5
+tickets_total: 6
 tickets_done: 0
 created: 2026-05-09
 updated: 2026-05-10
@@ -18,7 +18,14 @@ _Boot prompts: `roadmap/phases/phase-0-research/boot-prompts/`_
 
 ## My Tickets
 
-_No tickets assigned yet. Create ticket folders in `tickets/NEU-NNN-short-title/`._
+| Ticket | Status | Title |
+|---|---|---|
+| NEU-5 | Todo | Set up pgvector on existing PostgreSQL |
+| NEU-6 | Todo | Evaluate embedding models |
+| NEU-7 | Todo | Research chunking strategies |
+| NEU-8 | Todo | Set up CI/CD pipeline |
+| NEU-9 | Todo | Set up Sentry monitoring |
+| NEU-27 | In Progress | Build live trading simulator page |
 
 ## Notes
 
@@ -30,6 +37,10 @@ Built Compare + Performance Lab pages as part of Phase 0 marketing site work.
 - Added Chart.js for interactive charts on performance page
 - All data is synthetic/illustrative — clearly labeled as demo data
 - See `roadmap/phases/phase-0-research/boot-prompts/marketing-site.md` for full site scope
+
+### NEU-27: Live Simulator (2026-05-10)
+
+Design handoff package delivered (`design-handoff/`). Next: implement `/simulator` page with interactive trading simulation.
 
 ---
 

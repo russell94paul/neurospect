@@ -1,6 +1,6 @@
 ---
 phase: 4
-name: "Evaluation & Reliability"
+name: "Evaluation, Reliability & Prompt Infrastructure"
 status: not_started
 vlad_status: not_started
 paul_status: not_started
@@ -11,7 +11,7 @@ created: 2026-05-09
 updated: 2026-05-09
 ---
 
-# Phase 4: Evaluation & Reliability
+# Phase 4: Evaluation, Reliability & Prompt Infrastructure
 
 _Canonical phase definition: `roadmap/phases/phase-4-evaluation/README.md`_
 _Boot prompts: `roadmap/phases/phase-4-evaluation/boot-prompts/`_

@@ -33,6 +33,7 @@ NeuroSpect (company / product brand)
 
 ### Roadmap & Research
 - `roadmap/` — **Single source of truth for project state.** Phase definitions, boot prompts, deviations, status dashboard, and the master plan. Read `roadmap/CLAUDE.md`.
+- `prompts/` — Engineering, product, and meta-prompts used to build and operate NeuroSpect. Organized by phase and ad-hoc. Graduates to a versioning module in Phase 4. Read `prompts/CLAUDE.md`.
 - `research/` — Engineering research artifacts (benchmarks, evaluations, prototype findings). Organized by phase. NOT product content — that goes in `wiki/`. Read `research/README.md`.
 - `initial-plan/` — Historical archive of original plan versions (read-only).
 
@@ -77,7 +78,7 @@ They are **personal working memory** — drafts, research-in-progress, daily not
 | 7 | NeuroSpect EdgeLab Foundation | B (Trading Intelligence) |
 | 8 | Hybrid Model Research + NeuroQuant Promotion | B |
 | 9 | NeuroTrader Agent | B |
-| 10 | Advanced Features | — |
+| 10 | Advanced Features | B |
 | 11 | Content Licensing & IP Strategy | C (Business & Operations) |
 | 12 | Regulatory & Compliance Framework | C |
 | 13 | Go-to-Market & User Acquisition | C |

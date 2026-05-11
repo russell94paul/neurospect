@@ -2,7 +2,7 @@
 phase: 10
 name: "Advanced Features"
 status: not_started
-track: "—"
+track: "B (Trading Intelligence)"
 assigned: []
 started: null
 completed: null
