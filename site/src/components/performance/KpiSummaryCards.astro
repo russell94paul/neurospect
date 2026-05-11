@@ -1,0 +1,101 @@
+---
+import { TIER_COLORS, TIER_ORDER } from "../../data/tier-colors";
+import { TIER_KPIS } from "../../data/tier-kpis";
+
+const fmt = (n: number) =>
+  n >= 0 ? "+$" + n.toLocaleString() : "-$" + Math.abs(n).toLocaleString();
+
+const pct = (n: number) => Math.round(n * 100) + "%";
+
+type MetricRow = {
+  label: string;
+  value: string;
+  positive: boolean | null;
+};
+
+function buildMetrics(kpi: typeof TIER_KPIS.tier1): MetricRow[] {
+  return [
+    { label: "Net PnL", value: fmt(kpi.netPnl), positive: kpi.netPnl >= 0 },
+    { label: "Win Rate", value: pct(kpi.winRate), positive: kpi.winRate >= 0.5 },
+    { label: "Total Trades", value: String(kpi.totalTrades), positive: null },
+    { label: "Profit Factor", value: kpi.profitFactor.toFixed(2), positive: kpi.profitFactor >= 1.5 },
+    { label: "Sharpe Ratio", value: kpi.sharpeRatio.toFixed(2), positive: kpi.sharpeRatio >= 1.0 },
+    { label: "Max Drawdown", value: "-$" + kpi.maxDrawdown.toLocaleString(), positive: false },
+    { label: "Expectancy", value: "$" + kpi.expectancy.toFixed(0), positive: kpi.expectancy > 0 },
+    { label: "Avg R", value: kpi.averageR.toFixed(2), positive: kpi.averageR >= 0.5 },
+    { label: "Best Setup", value: kpi.bestSetup.length > 20 ? kpi.bestSetup.slice(0, 18) + "..." : kpi.bestSetup, positive: null },
+    { label: "Rule Adherence", value: pct(kpi.ruleAdherence), positive: kpi.ruleAdherence >= 0.7 },
+    { label: "Mistakes", value: String(kpi.mistakesCount), positive: kpi.mistakesCount <= 5 },
+    { label: "Exec Grade", value: kpi.executionGrade, positive: null },
+  ];
+}
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden" id="kpi-summary">
+  <!-- Background effects -->
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-950/20 via-black to-black"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-brand-500/[0.04] rounded-full blur-[120px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Key Metrics</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Performance Summary by Tier</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Same market, same month, same setups &mdash; four very different outcomes.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+      {TIER_ORDER.map((id) => {
+        const tier = TIER_COLORS[id];
+        const kpi = TIER_KPIS[id];
+        const metrics = buildMetrics(kpi);
+        const neonClass = tier.neon || "";
+
+        return (
+          <div class={`animate-on-scroll neon-card ${neonClass} rounded-2xl p-5 sm:p-6`}>
+            {/* Header */}
+            <div class="flex items-center gap-2 mb-4 pb-3 border-b border-white/[0.06]">
+              <span
+                class="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                style={`background: ${tier.color};`}
+              ></span>
+              <span class="text-sm font-semibold text-white">{tier.short}</span>
+              <span class="ml-auto text-xs text-slate-600">{kpi.label}</span>
+            </div>
+
+            {/* Metrics grid */}
+            <div class="grid grid-cols-2 gap-x-3 gap-y-2.5">
+              {metrics.map((m) => {
+                let valueClass = "text-slate-300";
+                if (m.positive === true) valueClass = "text-emerald-400";
+                if (m.positive === false) valueClass = "text-red-400";
+
+                // Special styling for execution grade
+                let gradeClass = "";
+                if (m.label === "Exec Grade") {
+                  if (m.value.startsWith("A")) gradeClass = "text-emerald-400";
+                  else if (m.value.startsWith("B")) gradeClass = "text-brand-400";
+                  else if (m.value.startsWith("C")) gradeClass = "text-amber-400";
+                  else gradeClass = "text-red-400";
+                  valueClass = gradeClass;
+                }
+
+                const isMono = m.label !== "Best Setup" && m.label !== "Exec Grade";
+
+                return (
+                  <div>
+                    <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-0.5">{m.label}</div>
+                    <div class={`text-sm font-medium ${valueClass} ${isMono ? "font-mono" : ""}`}>
+                      {m.value}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

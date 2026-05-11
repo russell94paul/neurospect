@@ -1,0 +1,118 @@
+---
+import { SUBSCRIPTION_STACK } from "../../data/competitors";
+---
+
+<section id="subscription-stack" class="py-24 sm:py-32 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/30 to-black"></div>
+  <div class="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-purple-500/[0.03] rounded-full blur-[100px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Subscription Stack</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Your Monthly Tool Bill, Simplified</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Add up what you're paying for fragmented tools. Then see what one integrated platform costs.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8 items-start">
+      <!-- Before column -->
+      <div class="animate-on-scroll">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Before NeuroSpect</h3>
+        </div>
+
+        <div class="space-y-2 stagger-children">
+          {SUBSCRIPTION_STACK.before.map((tool) => (
+            <div class="animate-on-scroll flex items-center justify-between rounded-xl neon-card p-4">
+              <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-red-400/60"></div>
+                <span class="text-sm text-slate-300">{tool.name}</span>
+              </div>
+              <span class="text-sm font-mono text-slate-500">{tool.costRange}</span>
+            </div>
+          ))}
+
+          <!-- Total -->
+          <div class="animate-on-scroll flex items-center justify-between rounded-xl neon-card neon-card-red p-4 mt-4">
+            <span class="text-sm font-semibold text-white">Estimated total</span>
+            <span class="text-sm font-mono font-bold text-red-400">{SUBSCRIPTION_STACK.totalBeforeRange}</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 mt-3">
+          Approximate ranges based on typical retail subscriptions. Your actual costs may vary.
+        </p>
+      </div>
+
+      <!-- Divider (mobile: horizontal, desktop: hidden — the grid gap handles it) -->
+      <div class="lg:hidden flex items-center gap-4 py-4">
+        <div class="flex-1 h-px bg-white/[0.06]"></div>
+        <div class="w-10 h-10 rounded-full border border-white/[0.08] bg-white/[0.03] flex items-center justify-center">
+          <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        </div>
+        <div class="flex-1 h-px bg-white/[0.06]"></div>
+      </div>
+
+      <!-- After column -->
+      <div class="animate-on-scroll">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">With NeuroSpect</h3>
+        </div>
+
+        <div class="rounded-2xl neon-card neon-card-cyan p-6 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 bg-brand-500/[0.04] rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2"></div>
+
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white font-bold text-sm">N</div>
+              <div>
+                <h4 class="text-base font-bold text-white">{SUBSCRIPTION_STACK.after.name}</h4>
+                <p class="text-xs text-slate-500">All-in-one ICT platform</p>
+              </div>
+            </div>
+
+            <div class="flex items-baseline gap-2 mb-4">
+              <span class="text-2xl font-extrabold text-brand-400">{SUBSCRIPTION_STACK.after.costRange}</span>
+            </div>
+
+            <p class="text-sm text-slate-400 mb-6">{SUBSCRIPTION_STACK.after.note}</p>
+
+            <div class="space-y-3">
+              <div class="flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-sm text-slate-400">Less context switching between disconnected apps</span>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-sm text-slate-400">Shared context across coaching, journal, backtesting, and research</span>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-sm text-slate-400">Memory that compounds across every feature and session</span>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-sm text-slate-400">ICT-native intelligence, not generic tools adapted for trading</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow on desktop -->
+        <div class="hidden lg:flex items-center gap-4 mt-6 justify-center">
+          <div class="w-10 h-10 rounded-full border border-brand-500/20 bg-brand-500/5 flex items-center justify-center">
+            <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </div>
+          <span class="text-sm text-slate-500">One subscription. Full coverage.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

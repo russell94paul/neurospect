@@ -1,0 +1,78 @@
+---
+const problems = [
+  {
+    pain: "I watch hours of mentorship content but can't apply it live",
+    description: "Video content is passive. When the chart is live, you're alone with your notes.",
+    solution: "AI Coach (NeuroSpect Mentor)",
+    solutionDetail: "An ICT-fluent AI trained on your mentor's actual content. Ask questions mid-session, get cited answers with checklist validation.",
+    icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+  },
+  {
+    pain: "I know my mistakes but I keep making them",
+    description: "Traders journal inconsistently, and when they do, nobody holds them accountable to the patterns.",
+    solution: "Mistake-Driven Coaching",
+    solutionDetail: "Your journal data feeds the AI. Recurring mistakes trigger targeted interventions before your next session.",
+    icon: "M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3",
+  },
+  {
+    pain: "I can't tell if my strategy actually has edge",
+    description: "No way to statistically validate whether your ICT setups work or if you're curve-fitting from memory.",
+    solution: "EdgeLab Backtesting",
+    solutionDetail: "Event-driven backtester with ICT-native detectors. Monte Carlo simulation, walk-forward validation, and null testing.",
+    icon: "M3 3v18h18M7 16l4-8 4 4 4-6",
+  },
+  {
+    pain: "Journaling takes too long so I skip it",
+    description: "Manual entry of 20+ fields after every trade kills consistency. No data means no improvement loop.",
+    solution: "Frictionless Journal",
+    solutionDetail: "Smart defaults, voice input, broker auto-fill, AI pre-fill. Your journal becomes a 30-second habit.",
+    icon: "M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z",
+  },
+  {
+    pain: "I blow prop firm accounts on tilt",
+    description: "Emotional trading after losses is the #1 account killer. No tool stops you in the moment.",
+    solution: "Risk Limit Engine",
+    solutionDetail: "Daily loss limits, cooldown timers, drawdown circuit breakers. Prop-firm rule presets. The guardrail between you and your worst impulses.",
+    icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z",
+  },
+  {
+    pain: "Generic AI tools don't understand ICT",
+    description: "ChatGPT doesn't know what a CISD is. It can't validate an OTE entry. It hallucinates ICT concepts.",
+    solution: "NSLM",
+    solutionDetail: "A bespoke ICT-aware model family built on 36K+ lines of curated content, 7 machine-readable entry models, and 5 course modules.",
+    icon: "M6 2h12v20H6zM2 6h4M2 10h4M2 14h4M2 18h4M18 6h4M18 10h4M18 14h4M18 18h4",
+  },
+];
+---
+
+<section class="py-24 sm:py-32 relative">
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/50 to-black"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">The Problem</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">What Every ICT Trader Faces</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Real problems. Real solutions. Not another generic trading app.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
+      {problems.map((p) => (
+        <div class="animate-on-scroll group relative rounded-2xl neon-card p-6 overflow-hidden">
+          <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center mb-4 group-hover:bg-brand-500/20 transition-colors">
+            <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d={p.icon} />
+            </svg>
+          </div>
+          <p class="text-sm text-brand-300/80 font-medium mb-2">&ldquo;{p.pain}&rdquo;</p>
+          <p class="text-sm text-slate-600 mb-4">{p.description}</p>
+          <div class="pt-3 border-t border-white/[0.06]">
+            <p class="text-sm font-semibold text-white mb-1">{p.solution}</p>
+            <p class="text-sm text-slate-400">{p.solutionDetail}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

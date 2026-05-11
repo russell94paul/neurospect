@@ -1,0 +1,62 @@
+---
+interface Props {
+  tier: number;
+  name: string;
+  profile: string;
+  workflow: string[];
+  components: string[];
+  value: string;
+  safety?: string;
+}
+
+const { tier, name, profile, workflow, components, value, safety } = Astro.props;
+
+const tierColors: Record<number, { neon: string; badge: string; accent: string; border: string }> = {
+  1: { neon: "", badge: "bg-slate-700 text-slate-200", accent: "text-slate-300", border: "border-slate-600/30" },
+  2: { neon: "neon-card-purple", badge: "bg-blue-900/40 text-blue-300", accent: "text-blue-300", border: "border-blue-500/20" },
+  3: { neon: "neon-card-purple", badge: "bg-purple-900/40 text-purple-300", accent: "text-purple-300", border: "border-purple-500/20" },
+  4: { neon: "neon-card-cyan", badge: "bg-brand-900/40 text-brand-300", accent: "text-brand-300", border: "border-brand-500/20" },
+};
+
+const colors = tierColors[tier] || tierColors[1];
+---
+
+<div class={`animate-on-scroll group rounded-2xl neon-card ${colors.neon} p-6 sm:p-8`}>
+  <div class="flex items-center gap-3 mb-4">
+    <span class={`text-xs font-semibold px-2.5 py-1 rounded-full ${colors.badge}`}>Tier {tier}</span>
+    <h3 class="text-xl font-bold text-white">{name}</h3>
+  </div>
+
+  <p class="text-sm text-slate-500 mb-6">{profile}</p>
+
+  <div class="mb-6">
+    <p class="text-xs font-medium text-slate-600 uppercase tracking-wider mb-3">Workflow</p>
+    <div class="flex flex-wrap gap-2">
+      {workflow.map((step, i) => (
+        <span class="inline-flex items-center gap-1.5">
+          <span class="text-xs text-slate-300 bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-lg font-mono group-hover:border-white/[0.15] transition-colors">{step}</span>
+          {i < workflow.length - 1 && <span class="text-slate-700">&rarr;</span>}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <p class="text-xs font-medium text-slate-600 uppercase tracking-wider mb-3">Components Used</p>
+    <div class="flex flex-wrap gap-1.5">
+      {components.map((c) => (
+        <span class="text-xs text-slate-400 bg-white/[0.03] border border-white/[0.06] px-2 py-0.5 rounded">{c}</span>
+      ))}
+    </div>
+  </div>
+
+  <blockquote class={`text-sm font-medium italic ${colors.accent} border-l-2 ${colors.border} pl-4`}>
+    &ldquo;{value}&rdquo;
+  </blockquote>
+
+  {safety && (
+    <div class="mt-5 p-3 rounded-lg bg-amber-950/20 border border-amber-800/20">
+      <p class="text-xs text-amber-300/70">{safety}</p>
+    </div>
+  )}
+</div>

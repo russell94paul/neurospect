@@ -1,0 +1,262 @@
+---
+import { TIER_COLORS, TIER_ORDER } from "../../data/tier-colors";
+
+const tiersJson = JSON.stringify(
+  Object.fromEntries(
+    TIER_ORDER.map((id) => [
+      id,
+      {
+        name: TIER_COLORS[id].name,
+        short: TIER_COLORS[id].short,
+        color: TIER_COLORS[id].color,
+      },
+    ])
+  )
+);
+---
+
+<!-- Backdrop overlay -->
+<div class="panel-backdrop" id="trade-panel-backdrop"></div>
+
+<!-- Slide panel -->
+<div class="slide-panel bg-[rgb(18,18,22)] border-l border-white/[0.06]" id="trade-detail-panel">
+  <!-- Close button -->
+  <button
+    class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] text-slate-400 hover:text-white transition-all z-10"
+    id="trade-panel-close"
+    aria-label="Close panel"
+  >
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
+  <div class="p-5 sm:p-6">
+    <!-- Trade header -->
+    <div class="mb-6">
+      <h3 class="text-lg font-bold text-white pr-10 mb-2" data-panel-title></h3>
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="text-xs px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20" data-panel-date></span>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20" data-panel-session></span>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20" data-panel-setup></span>
+      </div>
+      <p class="text-sm text-slate-500 leading-relaxed" data-panel-context></p>
+    </div>
+
+    <!-- Tier outcomes -->
+    <div class="space-y-4" id="tier-outcomes-container">
+      {TIER_ORDER.map((id) => (
+        <div
+          class="neon-card rounded-xl p-4"
+          data-tier-outcome={id}
+          style="display: none;"
+        >
+          {/* Tier header */}
+          <div class="flex items-center gap-2 mb-3">
+            <span
+              class="w-2 h-2 rounded-full flex-shrink-0"
+              style={`background: ${TIER_COLORS[id].color};`}
+            ></span>
+            <span class="text-sm font-semibold text-white">{TIER_COLORS[id].short}</span>
+            <span
+              class="ml-auto text-xs font-medium px-2 py-0.5 rounded-full"
+              data-tier-action={id}
+            ></span>
+          </div>
+
+          {/* Result + PnL */}
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs uppercase tracking-wider font-medium" data-tier-result={id}></span>
+            <span class="text-sm font-mono font-medium" data-tier-pnl={id}></span>
+          </div>
+
+          {/* Explanation bullets */}
+          <ul class="space-y-1 mb-2" data-tier-explanation={id}></ul>
+
+          {/* Mistakes (T1 only) */}
+          <div data-tier-mistakes={id} style="display: none;">
+            <div class="text-[10px] text-red-400 uppercase tracking-wider font-medium mt-2 mb-1">Mistakes</div>
+            <ul class="space-y-1" data-tier-mistakes-list={id}></ul>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Tier 1 Solution block -->
+    <div
+      class="mt-6 neon-card neon-card-amber rounded-xl p-4"
+      id="tier1-solution-block"
+      style="display: none;"
+    >
+      <div class="flex items-center gap-2 mb-3">
+        <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+        <span class="text-sm font-semibold text-amber-400">What Tier 1 Needed</span>
+      </div>
+      <ul class="space-y-1.5" id="tier1-solution-list"></ul>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="panel-tiers-data">
+  {tiersJson}
+</script>
+
+<script>
+  function initTradeDetailPanel() {
+    const panel = document.getElementById("trade-detail-panel");
+    const backdrop = document.getElementById("trade-panel-backdrop");
+    const closeBtn = document.getElementById("trade-panel-close");
+    if (!panel || !backdrop || !closeBtn) return;
+
+    function openPanel() {
+      panel!.classList.add("open");
+      backdrop!.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closePanel() {
+      panel!.classList.remove("open");
+      backdrop!.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    closeBtn.addEventListener("click", closePanel);
+    backdrop.addEventListener("click", closePanel);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && panel.classList.contains("open")) {
+        closePanel();
+      }
+    });
+
+    const resultColors: Record<string, { text: string; bg: string }> = {
+      win: { text: "text-emerald-400", bg: "bg-emerald-500/10" },
+      loss: { text: "text-red-400", bg: "bg-red-500/10" },
+      breakeven: { text: "text-amber-400", bg: "bg-amber-500/10" },
+      no_trade: { text: "text-slate-500", bg: "bg-slate-500/10" },
+    };
+
+    const actionColors: Record<string, { text: string; bg: string }> = {
+      entered: { text: "text-brand-400", bg: "bg-brand-500/10 border border-brand-500/20" },
+      skipped: { text: "text-slate-500", bg: "bg-slate-500/10 border border-slate-500/20" },
+    };
+
+    function formatPnl(n: number): string {
+      if (n === 0) return "$0";
+      return n >= 0 ? "+$" + n.toLocaleString() : "-$" + Math.abs(n).toLocaleString();
+    }
+
+    document.addEventListener("trade-marker-click", ((e: CustomEvent) => {
+      const marker = e.detail;
+      if (!marker) return;
+
+      // Populate header
+      const titleEl = panel.querySelector("[data-panel-title]");
+      const dateEl = panel.querySelector("[data-panel-date]");
+      const sessionEl = panel.querySelector("[data-panel-session]");
+      const setupEl = panel.querySelector("[data-panel-setup]");
+      const contextEl = panel.querySelector("[data-panel-context]");
+
+      if (titleEl) titleEl.textContent = marker.title;
+      if (dateEl) {
+        const d = new Date(marker.date + "T12:00:00");
+        dateEl.textContent = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+      if (sessionEl) sessionEl.textContent = marker.session;
+      if (setupEl) setupEl.textContent = marker.setupType;
+      if (contextEl) contextEl.textContent = marker.marketContext;
+
+      // Populate tier outcomes
+      const tierOrder = ["tier1", "tier2", "tier3", "tier4"];
+      tierOrder.forEach((id) => {
+        const outcome = marker.tierOutcomes[id];
+        if (!outcome) return;
+
+        const container = panel.querySelector(`[data-tier-outcome="${id}"]`) as HTMLElement;
+        if (!container) return;
+        container.style.display = "block";
+
+        // Action badge
+        const actionEl = container.querySelector(`[data-tier-action="${id}"]`) as HTMLElement;
+        if (actionEl) {
+          const ac = actionColors[outcome.action] || actionColors.skipped;
+          actionEl.textContent = outcome.action === "entered" ? "Entered" : "Skipped";
+          actionEl.className = `ml-auto text-xs font-medium px-2 py-0.5 rounded-full ${ac.text} ${ac.bg}`;
+        }
+
+        // Result
+        const resultEl = container.querySelector(`[data-tier-result="${id}"]`) as HTMLElement;
+        if (resultEl) {
+          const rc = resultColors[outcome.result] || resultColors.no_trade;
+          const resultLabel = outcome.result === "no_trade" ? "No Trade" : outcome.result.charAt(0).toUpperCase() + outcome.result.slice(1);
+          resultEl.textContent = resultLabel;
+          resultEl.className = `text-xs uppercase tracking-wider font-medium ${rc.text}`;
+        }
+
+        // PnL
+        const pnlEl = container.querySelector(`[data-tier-pnl="${id}"]`) as HTMLElement;
+        if (pnlEl) {
+          pnlEl.textContent = formatPnl(outcome.pnl);
+          pnlEl.className = `text-sm font-mono font-medium ${
+            outcome.pnl > 0 ? "text-emerald-400" : outcome.pnl < 0 ? "text-red-400" : "text-slate-500"
+          }`;
+        }
+
+        // Explanation bullets
+        const explanationEl = container.querySelector(`[data-tier-explanation="${id}"]`) as HTMLElement;
+        if (explanationEl) {
+          explanationEl.innerHTML = (outcome.explanation || [])
+            .map(
+              (line: string) =>
+                `<li class="text-xs text-slate-400 leading-relaxed pl-3 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1 before:h-1 before:rounded-full before:bg-slate-600">${line}</li>`
+            )
+            .join("");
+        }
+
+        // Mistakes (T1 only)
+        const mistakesContainer = container.querySelector(`[data-tier-mistakes="${id}"]`) as HTMLElement;
+        const mistakesList = container.querySelector(`[data-tier-mistakes-list="${id}"]`) as HTMLElement;
+        if (mistakesContainer && mistakesList) {
+          if (outcome.mistakes && outcome.mistakes.length > 0) {
+            mistakesContainer.style.display = "block";
+            mistakesList.innerHTML = outcome.mistakes
+              .map(
+                (line: string) =>
+                  `<li class="text-xs text-red-400/80 leading-relaxed pl-3 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1 before:h-1 before:rounded-full before:bg-red-500/50">${line}</li>`
+              )
+              .join("");
+          } else {
+            mistakesContainer.style.display = "none";
+            mistakesList.innerHTML = "";
+          }
+        }
+      });
+
+      // Tier 1 Solution block
+      const solutionBlock = document.getElementById("tier1-solution-block") as HTMLElement;
+      const solutionList = document.getElementById("tier1-solution-list") as HTMLElement;
+      if (solutionBlock && solutionList) {
+        if (marker.tier1Solution && marker.tier1Solution.length > 0) {
+          solutionBlock.style.display = "block";
+          solutionList.innerHTML = marker.tier1Solution
+            .map(
+              (line: string) =>
+                `<li class="text-xs text-amber-300/80 leading-relaxed pl-3 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-amber-500/40">${line}</li>`
+            )
+            .join("");
+        } else {
+          solutionBlock.style.display = "none";
+          solutionList.innerHTML = "";
+        }
+      }
+
+      openPanel();
+    }) as EventListener);
+  }
+
+  // Run on initial load and on Astro page transitions
+  initTradeDetailPanel();
+  document.addEventListener("astro:after-swap", initTradeDetailPanel);
+</script>

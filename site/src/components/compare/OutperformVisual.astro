@@ -1,0 +1,41 @@
+---
+import { OUTPERFORM_ITEMS } from "../../data/competitors";
+
+const iconPaths: Record<string, string> = {
+  "consolidate": "M4 6h16M4 12h16M4 18h16",
+  "memory": "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6v6l4 2",
+  "checklist": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 14l2 2 4-4",
+  "research": "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+  "compare": "M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5",
+  "hybrid": "M13 10V3L4 14h7v7l9-11h-7z",
+};
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/50 to-black"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Where NeuroSpect Outperforms</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Built Different. Built for ICT.</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Not another generic trading tool adapted for ICT. Purpose-built from the ground up.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
+      {OUTPERFORM_ITEMS.map((item) => (
+        <div class={`animate-on-scroll group relative rounded-2xl neon-card ${item.neon} p-6 overflow-hidden`}>
+          <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4 group-hover:bg-white/[0.08] transition-colors">
+            <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d={iconPaths[item.icon] || iconPaths["consolidate"]} />
+            </svg>
+          </div>
+          <h3 class="text-sm font-semibold text-white mb-2 group-hover:text-brand-300 transition-colors">{item.title}</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

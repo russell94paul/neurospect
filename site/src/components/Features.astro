@@ -1,0 +1,84 @@
+---
+const features = [
+  {
+    title: "ICT Course & Knowledge Base",
+    description: "5 structured modules, 18 lessons, from market structure to SMT divergence. Interactive, searchable, AI-queryable content.",
+    badge: "All Plans",
+    badgeColor: "text-slate-300 bg-slate-700/60",
+    neon: "",
+  },
+  {
+    title: "AI Coach (NeuroSpect Mentor)",
+    description: "Ask questions, get cited answers grounded in real ICT content. Checklist validation against 7 entry models. Personalized to your journal.",
+    badge: "Mentor+",
+    badgeColor: "text-brand-300 bg-brand-500/15",
+    neon: "neon-card-cyan",
+  },
+  {
+    title: "Bespoke LLM (NSLM)",
+    description: "Not a ChatGPT wrapper. A purpose-built ICT language model trained on private mentorship content and structured playbooks.",
+    badge: "All Plans",
+    badgeColor: "text-amber-300 bg-amber-500/15",
+    neon: "neon-card-amber",
+  },
+  {
+    title: "Trade Journal & Analytics",
+    description: "100+ ICT-specific fields, 17 specialized enums, 7 analytics views. R-distribution, mistake tracking, day-of-week analysis.",
+    badge: "All Plans",
+    badgeColor: "text-slate-300 bg-slate-700/60",
+    neon: "",
+  },
+  {
+    title: "Quant Backtesting (EdgeLab)",
+    description: "Event-driven backtester with ICT-native pattern detectors. Monte Carlo, walk-forward, deflated Sharpe ratio. NSLM prompt experiments.",
+    badge: "Research+",
+    badgeColor: "text-purple-300 bg-purple-500/15",
+    neon: "neon-card-purple",
+  },
+  {
+    title: "Prop Firm Integration",
+    description: "Tradovate broker integration for auto-fill. Import fills, positions, and account data. Map prop firm rules to risk limits automatically.",
+    badge: "Trader+",
+    badgeColor: "text-emerald-300 bg-emerald-500/15",
+    neon: "neon-card-emerald",
+  },
+  {
+    title: "Risk Limit Engine",
+    description: "Daily loss limits, max trades, cooldown timers, drawdown circuit breakers. Prop-firm preset rule packs. Hard blocks or friction-based interventions.",
+    badge: "Trader+",
+    badgeColor: "text-emerald-300 bg-emerald-500/15",
+    neon: "neon-card-emerald",
+  },
+  {
+    title: "Psychology Profiler",
+    description: "Built from your journal data. Identifies revenge trading, hesitation, or overtrading patterns. Feeds coaching personalization.",
+    badge: "Mentor+",
+    badgeColor: "text-brand-300 bg-brand-500/15",
+    neon: "neon-card-cyan",
+  },
+];
+---
+
+<section class="py-24 sm:py-32 relative">
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Platform</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Everything You Need. Nothing You Don't.</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        One platform. Every tool an ICT trader needs to learn, journal, research, backtest, and trade.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 stagger-children">
+      {features.map((f) => (
+        <div class={`animate-on-scroll group relative rounded-2xl neon-card ${f.neon} p-5 overflow-hidden`}>
+          <div class="flex items-center justify-between mb-3">
+            <span class={`text-[11px] font-medium px-2.5 py-1 rounded-full ${f.badgeColor}`}>{f.badge}</span>
+          </div>
+          <h3 class="text-sm font-semibold text-white mb-2 group-hover:text-brand-300 transition-colors">{f.title}</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">{f.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

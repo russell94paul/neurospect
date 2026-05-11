@@ -1,0 +1,58 @@
+---
+import { QUESTIONS } from "../../data/competitors";
+
+const iconPaths: Record<string, string> = {
+  "chart-up": "M3 3v18h18M7 16l4-8 4 4 4-6",
+  "filter": "M22 3H2l8 9.46V19l4 2v-8.54L22 3z",
+  "brain": "M12 2a7 7 0 0 0-4.6 12.3A4 4 0 0 0 6 18v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-1.4-3.7A7 7 0 0 0 12 2zM9 22v-1M15 22v-1M12 22v-1",
+  "book": "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
+  "clock": "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2",
+  "shield": "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  "split": "M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5",
+  "target": "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z",
+};
+
+const iconColors = [
+  "text-brand-400 bg-brand-500/10",
+  "text-purple-400 bg-purple-500/10",
+  "text-amber-400 bg-amber-500/10",
+  "text-emerald-400 bg-emerald-500/10",
+  "text-brand-400 bg-brand-500/10",
+  "text-rose-400 bg-rose-500/10",
+  "text-purple-400 bg-purple-500/10",
+  "text-amber-400 bg-amber-500/10",
+];
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/30 to-black"></div>
+  <div class="absolute top-1/2 right-1/3 -translate-y-1/2 w-[400px] h-[400px] bg-purple-500/[0.03] rounded-full blur-[100px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Questions Traders Ask</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">The Questions You Can't Answer Today</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Every serious ICT trader asks these. No combination of existing tools can answer them. NeuroSpect can.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4 stagger-children">
+      {QUESTIONS.map((q, i) => (
+        <div class="animate-on-scroll group rounded-2xl neon-card p-5 overflow-hidden relative">
+          <div class="flex items-start gap-4">
+            <div class={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconColors[i]} group-hover:scale-110 transition-transform`}>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d={iconPaths[q.icon] || iconPaths["chart-up"]} />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm text-brand-300/80 font-medium mb-2 leading-snug">&ldquo;{q.question}&rdquo;</p>
+              <p class="text-sm text-slate-500 leading-relaxed">{q.answer}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

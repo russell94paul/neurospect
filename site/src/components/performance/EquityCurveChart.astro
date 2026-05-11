@@ -1,0 +1,269 @@
+---
+import { TIER_COLORS, TIER_ORDER } from "../../data/tier-colors";
+import { EQUITY_CURVES, TRADE_MARKERS } from "../../data/equity-curves";
+
+const chartData = {
+  tiers: Object.fromEntries(
+    TIER_ORDER.map((id) => [
+      id,
+      {
+        name: TIER_COLORS[id].name,
+        short: TIER_COLORS[id].short,
+        color: TIER_COLORS[id].color,
+        chartColor: TIER_COLORS[id].chartColor,
+        chartColorFaded: TIER_COLORS[id].chartColorFaded,
+      },
+    ])
+  ),
+  curves: Object.fromEntries(
+    TIER_ORDER.map((id) => [id, EQUITY_CURVES[id]])
+  ),
+  markers: TRADE_MARKERS.map((m) => ({
+    id: m.id,
+    date: m.date,
+    title: m.title,
+    symbol: m.symbol,
+    session: m.session,
+    setupType: m.setupType,
+    marketContext: m.marketContext,
+    tierOutcomes: m.tierOutcomes,
+    tier1Solution: m.tier1Solution,
+  })),
+};
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden" id="equity-curve">
+  <!-- Background effects -->
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-950/20 via-black to-black"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-brand-500/[0.04] rounded-full blur-[120px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Models Performance</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">One-Month NQ Equity Curve Comparison</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Illustrative simulation comparing four trader workflows over 20 trading days.
+      </p>
+    </div>
+
+    <div class="animate-on-scroll">
+      <div class="neon-card neon-card-cyan rounded-2xl p-5 sm:p-6">
+        <!-- Tier toggle buttons -->
+        <div class="flex flex-wrap items-center gap-2 mb-6" id="tier-toggles">
+          {TIER_ORDER.map((id) => (
+            <button
+              class="tier-toggle flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] text-sm text-slate-300 transition-all"
+              data-tier={id}
+              data-active="true"
+            >
+              <span
+                class="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                style={`background: ${TIER_COLORS[id].color};`}
+              ></span>
+              {TIER_COLORS[id].short}
+            </button>
+          ))}
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-container">
+          <canvas id="equity-chart"></canvas>
+        </div>
+
+        <!-- Hint -->
+        <p class="text-xs text-slate-600 text-center mt-4">
+          Click trade markers on the chart to compare tier outcomes
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="equity-chart-data">
+  {JSON.stringify(chartData)}
+</script>
+
+<script>
+  function initEquityCurve() {
+    const canvas = document.getElementById("equity-chart") as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    let initialized = false;
+
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !initialized) {
+            initialized = true;
+            observer.disconnect();
+
+            // Wait for scroll animation to finish so canvas has proper dimensions
+            await new Promise((r) => setTimeout(r, 800));
+
+            const dataEl = document.getElementById("equity-chart-data");
+            if (!dataEl || !dataEl.textContent) return;
+            const data = JSON.parse(dataEl.textContent);
+
+            const { Chart, registerables } = await import("chart.js");
+            Chart.register(...registerables);
+
+            const tierOrder = ["tier1", "tier2", "tier3", "tier4"];
+            const markerDates = new Set(data.markers.map((m: any) => m.date));
+
+            // Format dates as "May 1", "May 4", etc.
+            function formatDate(iso: string): string {
+              const d = new Date(iso + "T12:00:00");
+              return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+            }
+
+            // Build labels from tier1 dates (all tiers share the same dates)
+            const labels = data.curves.tier1.map((p: any) => formatDate(p.date));
+            const rawDates = data.curves.tier1.map((p: any) => p.date);
+
+            // Build datasets
+            const datasets = tierOrder.map((id, tierIdx) => {
+              const points = data.curves[id].map((p: any) => p.equity);
+              const isFirstTier = tierIdx === 0;
+
+              return {
+                label: data.tiers[id].short,
+                data: points,
+                borderColor: data.tiers[id].chartColor,
+                backgroundColor: data.tiers[id].chartColorFaded,
+                borderWidth: 2,
+                tension: 0.3,
+                fill: false,
+                pointRadius: isFirstTier
+                  ? rawDates.map((d: string) => (markerDates.has(d) ? 7 : 3))
+                  : 3,
+                pointBackgroundColor: isFirstTier
+                  ? rawDates.map((d: string) =>
+                      markerDates.has(d) ? "#f59e0b" : data.tiers[id].chartColor
+                    )
+                  : data.tiers[id].chartColor,
+                pointBorderColor: isFirstTier
+                  ? rawDates.map((d: string) =>
+                      markerDates.has(d) ? "#f59e0b" : data.tiers[id].chartColor
+                    )
+                  : data.tiers[id].chartColor,
+                pointBorderWidth: isFirstTier
+                  ? rawDates.map((d: string) => (markerDates.has(d) ? 2 : 1))
+                  : 1,
+                pointHoverRadius: isFirstTier
+                  ? rawDates.map((d: string) => (markerDates.has(d) ? 9 : 5))
+                  : 5,
+              };
+            });
+
+            const chart = new Chart(canvas, {
+              type: "line",
+              data: { labels, datasets },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                  duration: 1400,
+                  easing: "easeOutQuart",
+                },
+                interaction: {
+                  mode: "index",
+                  intersect: false,
+                },
+                scales: {
+                  x: {
+                    grid: {
+                      color: "rgba(255, 255, 255, 0.06)",
+                    },
+                    ticks: {
+                      color: "rgba(100, 116, 139, 0.8)",
+                      font: { size: 11 },
+                      maxRotation: 45,
+                    },
+                  },
+                  y: {
+                    grid: {
+                      color: "rgba(255, 255, 255, 0.06)",
+                    },
+                    ticks: {
+                      color: "rgba(100, 116, 139, 0.8)",
+                      font: { size: 11 },
+                      callback: function (value: number | string) {
+                        return "$" + Number(value).toLocaleString();
+                      },
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  tooltip: {
+                    backgroundColor: "rgba(15, 15, 20, 0.95)",
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                    borderWidth: 1,
+                    titleColor: "#fff",
+                    bodyColor: "rgba(148, 163, 184, 0.9)",
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { weight: "600" },
+                    callbacks: {
+                      label: function (context: any) {
+                        const value = "$" + context.parsed.y.toLocaleString();
+                        return `${context.dataset.label}: ${value}`;
+                      },
+                      afterBody: function (tooltipItems: any[]) {
+                        if (!tooltipItems.length) return "";
+                        const idx = tooltipItems[0].dataIndex;
+                        const date = rawDates[idx];
+                        const marker = data.markers.find((m: any) => m.date === date);
+                        if (marker) {
+                          return ["\n" + marker.title];
+                        }
+                        return "";
+                      },
+                    },
+                  },
+                },
+                onClick: (_event: any, elements: any[]) => {
+                  if (!elements.length) return;
+                  const idx = elements[0].index;
+                  const date = rawDates[idx];
+                  const marker = data.markers.find((m: any) => m.date === date);
+                  if (marker) {
+                    document.dispatchEvent(
+                      new CustomEvent("trade-marker-click", { detail: marker })
+                    );
+                  }
+                },
+              },
+            });
+
+            // Tier toggle buttons
+            const toggles = document.querySelectorAll<HTMLButtonElement>(".tier-toggle");
+            toggles.forEach((btn) => {
+              btn.addEventListener("click", () => {
+                const tier = btn.dataset.tier;
+                if (!tier) return;
+                const idx = tierOrder.indexOf(tier);
+                if (idx === -1) return;
+
+                const isActive = btn.dataset.active === "true";
+                btn.dataset.active = isActive ? "false" : "true";
+                btn.style.opacity = isActive ? "0.35" : "1";
+                chart.data.datasets[idx].hidden = isActive;
+                chart.update();
+              });
+            });
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(canvas);
+  }
+
+  // Run on initial load and on Astro page transitions
+  initEquityCurve();
+  document.addEventListener("astro:after-swap", initEquityCurve);
+</script>

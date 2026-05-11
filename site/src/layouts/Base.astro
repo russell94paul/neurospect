@@ -1,0 +1,63 @@
+---
+import ScrollAnimator from "../components/ScrollAnimator.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "The AI-native platform built exclusively for ICT and Smart Money Concepts traders." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <nav class="fixed top-0 w-full z-50 border-b border-white/[0.06] bg-black/70 backdrop-blur-2xl">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-sm group-hover:glow-brand transition-shadow">N</div>
+          <span class="text-white font-semibold text-lg tracking-tight">NeuroSpect</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a href="/compare" class="text-sm text-slate-500 hover:text-white transition-colors">Compare</a>
+          <a href="/performance" class="text-sm text-slate-500 hover:text-white transition-colors">Performance</a>
+          <a href="/workflows" class="text-sm text-slate-500 hover:text-white transition-colors">Workflows</a>
+          <a href="/architecture" class="text-sm text-slate-500 hover:text-white transition-colors">Architecture</a>
+          <a href="/pricing" class="text-sm text-slate-500 hover:text-white transition-colors">Pricing</a>
+          <a href="#waitlist" class="text-sm font-medium text-black bg-brand-400 hover:bg-brand-300 px-4 py-2 rounded-lg transition-all hover:shadow-lg hover:shadow-brand-500/20">Join Waitlist</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-1 pt-16">
+      <slot />
+    </main>
+
+    <footer class="border-t border-white/[0.06] bg-black">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-6 h-6 rounded bg-brand-500 flex items-center justify-center text-white font-bold text-xs">N</div>
+            <span class="text-slate-600 text-sm">NeuroSpect</span>
+          </div>
+          <p class="text-slate-600 text-xs text-center max-w-xl">
+            NeuroSpect is an educational tool. Not financial advice. Past performance does not guarantee future results. Trading involves risk of loss.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <ScrollAnimator />
+  </body>
+</html>

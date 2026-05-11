@@ -1,0 +1,470 @@
+---
+import { TIER_COLORS, TIER_ORDER } from "../../data/tier-colors";
+import { DAY_OF_WEEK, SESSION_DATA, SETUP_PERFORMANCE, MISTAKES, RISK_DATA } from "../../data/performance-analytics";
+
+// Serialize data for client-side Chart.js
+const chartData = {
+  dayOfWeek: Object.fromEntries(
+    TIER_ORDER.map((id) => [id, DAY_OF_WEEK[id]])
+  ),
+  tiers: Object.fromEntries(
+    TIER_ORDER.map((id) => [
+      id,
+      {
+        name: TIER_COLORS[id].name,
+        short: TIER_COLORS[id].short,
+        color: TIER_COLORS[id].color,
+        chartColor: TIER_COLORS[id].chartColor,
+        chartColorFaded: TIER_COLORS[id].chartColorFaded,
+      },
+    ])
+  ),
+};
+
+const tabs = [
+  { id: "dow", label: "Day of Week" },
+  { id: "sessions", label: "Sessions" },
+  { id: "setups", label: "Setups" },
+  { id: "mistakes", label: "Mistakes" },
+  { id: "risk", label: "Risk" },
+];
+
+// Find best day per tier for DOW summary
+const bestDays = Object.fromEntries(
+  TIER_ORDER.map((id) => {
+    const best = DAY_OF_WEEK[id].reduce((a, b) => (b.pnl > a.pnl ? b : a));
+    return [id, best];
+  })
+);
+
+// Severity color mapping
+function severityClasses(severity: string): string {
+  if (severity === "high") return "bg-red-500/15 text-red-400 border-red-500/20";
+  if (severity === "medium") return "bg-amber-500/15 text-amber-400 border-amber-500/20";
+  return "bg-slate-500/15 text-slate-400 border-slate-500/20";
+}
+
+// Format currency
+function fmt(n: number): string {
+  const prefix = n >= 0 ? "+$" : "-$";
+  return prefix + Math.abs(n).toLocaleString();
+}
+
+function pnlColor(n: number): string {
+  return n >= 0 ? "text-emerald-400" : "text-red-400";
+}
+
+// All 7 setup names in order
+const SETUP_NAMES = [
+  "Liquidity Sweep + Displacement + FVG",
+  "Market Structure Shift",
+  "HTF Bias + LTF Entry",
+  "Order Block Continuation",
+  "Breaker Retest",
+  "Session Range Expansion",
+  "Failed FVG Continuation",
+];
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden" id="analytics-tabs">
+  <!-- Background effects -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/30 to-black"></div>
+  <div class="absolute top-1/3 right-1/4 w-[600px] h-[500px] bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+  <div class="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-purple-500/[0.03] rounded-full blur-[100px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Deep Dive Analytics</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Performance Breakdown</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Drill into day-of-week patterns, session performance, setup effectiveness, mistake tracking, and risk metrics across all four trader tiers.
+      </p>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="animate-on-scroll mb-8">
+      <div class="flex overflow-x-auto gap-1 pb-px border-b border-white/[0.06] -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center" id="analytics-tab-bar">
+        {tabs.map((tab, i) => (
+          <button
+            class={`tab-btn whitespace-nowrap px-4 py-3 text-sm font-medium ${i === 0 ? "tab-active" : ""}`}
+            data-tab={tab.id}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tab Panel: Day of Week -->
+    <div data-tab-panel="dow" class="animate-on-scroll">
+      <div class="neon-card rounded-2xl p-5 sm:p-6">
+        <div class="chart-container">
+          <canvas id="dow-chart"></canvas>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-4 pt-4 border-t border-white/[0.06]">
+          {TIER_ORDER.map((id) => (
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+              <span class="text-sm text-slate-400">{TIER_COLORS[id].short}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Best day summary -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4 stagger-children">
+        {TIER_ORDER.map((id) => (
+          <div class="animate-on-scroll neon-card rounded-2xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-2.5 h-2.5 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+              <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">{TIER_COLORS[id].short}</span>
+            </div>
+            <p class="text-sm text-slate-400">Best day</p>
+            <p class="text-white font-semibold">{bestDays[id].day}</p>
+            <p class={`font-mono text-sm ${pnlColor(bestDays[id].pnl)}`}>{fmt(bestDays[id].pnl)}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tab Panel: Sessions -->
+    <div data-tab-panel="sessions" class="hidden">
+      <!-- Callout -->
+      <div class="animate-on-scroll neon-card neon-card-cyan rounded-2xl p-4 mb-6 flex items-start gap-3">
+        <svg class="w-5 h-5 text-brand-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p class="text-sm font-semibold text-white">Best Performing Setup: NY AM liquidity sweep + displacement + FVG retrace</p>
+          <p class="text-xs text-slate-500 mt-1">Consistent across all tiers. Higher-tier traders filter more aggressively, resulting in fewer but higher-quality entries.</p>
+        </div>
+      </div>
+
+      <!-- Session table -->
+      <div class="animate-on-scroll overflow-x-auto -mx-4 sm:mx-0">
+        <div class="min-w-[800px] px-4 sm:px-0">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/[0.08]">
+                <th class="text-left text-xs font-medium text-slate-600 uppercase tracking-wider pb-3 pr-4 w-[120px]">Session</th>
+                {TIER_ORDER.map((id) => (
+                  <th class="text-center pb-3 px-2" colspan="1">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider" style={`color: ${TIER_COLORS[id].color};`}>
+                      <span class="w-2 h-2 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+                      {TIER_COLORS[id].short}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {SESSION_DATA.tier1.map((_, si) => {
+                const sessionName = SESSION_DATA.tier1[si].session;
+                return (
+                  <tr class={`border-t border-white/[0.04] ${si % 2 === 0 ? "bg-white/[0.01]" : ""}`}>
+                    <td class="py-3 pr-4 text-sm font-medium text-slate-300">{sessionName}</td>
+                    {TIER_ORDER.map((id) => {
+                      const s = SESSION_DATA[id][si];
+                      return (
+                        <td class="py-3 px-2 text-center">
+                          <div class={`font-mono text-sm font-semibold ${pnlColor(s.pnl)}`}>{fmt(s.pnl)}</div>
+                          <div class="text-xs text-slate-500 mt-0.5">
+                            {(s.winRate * 100).toFixed(0)}% WR &middot; {s.trades} trades
+                          </div>
+                          <div class="text-[10px] text-slate-600 mt-0.5 truncate max-w-[140px] mx-auto">{s.bestSetup}</div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Panel: Setups -->
+    <div data-tab-panel="setups" class="hidden">
+      <div class="animate-on-scroll overflow-x-auto -mx-4 sm:mx-0">
+        <div class="min-w-[900px] px-4 sm:px-0">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/[0.08]">
+                <th class="text-left text-xs font-medium text-slate-600 uppercase tracking-wider pb-3 pr-4 w-[220px]">Setup</th>
+                {TIER_ORDER.map((id) => (
+                  <th class="text-center pb-3 px-1">
+                    <span class="inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider" style={`color: ${TIER_COLORS[id].color};`}>
+                      <span class="w-2 h-2 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+                      {TIER_COLORS[id].short}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {SETUP_NAMES.map((setupName, si) => (
+                <tr class={`border-t border-white/[0.04] ${si % 2 === 0 ? "bg-white/[0.01]" : ""}`}>
+                  <td class="py-3 pr-4 text-sm font-medium text-slate-300">{setupName}</td>
+                  {TIER_ORDER.map((id) => {
+                    const setup = SETUP_PERFORMANCE[id].find((s) => s.setup === setupName);
+                    if (!setup) return <td class="py-3 px-1 text-center text-xs text-slate-700">&mdash;</td>;
+                    const expColor = setup.expectancy >= 0 ? "text-emerald-400" : "text-red-400";
+                    const avgRColor = setup.avgR >= 0 ? "text-emerald-400" : "text-red-400";
+                    return (
+                      <td class="py-3 px-1 text-center">
+                        <div class="font-mono text-xs">
+                          <span class="text-slate-400">{setup.trades}t</span>
+                          <span class="mx-1 text-slate-700">|</span>
+                          <span class="text-slate-300">{(setup.winRate * 100).toFixed(0)}%</span>
+                        </div>
+                        <div class="font-mono text-xs mt-0.5">
+                          <span class={avgRColor}>{setup.avgR >= 0 ? "+" : ""}{setup.avgR.toFixed(2)}R</span>
+                          <span class="mx-1 text-slate-700">|</span>
+                          <span class={expColor}>{fmt(setup.expectancy)}</span>
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 text-center mt-4">t = trades, WR = win rate, R = average R-multiple, $ = expectancy per trade. All figures illustrative.</p>
+    </div>
+
+    <!-- Tab Panel: Mistakes -->
+    <div data-tab-panel="mistakes" class="hidden">
+      <div class="grid sm:grid-cols-2 gap-4 stagger-children">
+        {TIER_ORDER.map((id) => {
+          const mistakes = MISTAKES[id];
+          const totalCount = mistakes.reduce((sum, m) => sum + m.count, 0);
+          return (
+            <div class="animate-on-scroll neon-card rounded-2xl p-5 sm:p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3 h-3 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+                  <span class="text-sm font-semibold text-white">{TIER_COLORS[id].name}</span>
+                </div>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-white/[0.04] text-slate-400">{totalCount} total</span>
+              </div>
+
+              <div class="space-y-2">
+                {mistakes.map((m) => (
+                  <div class="flex items-center justify-between py-1.5">
+                    <span class="text-sm text-slate-400 flex-1 pr-3">{m.name}</span>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                      <span class="font-mono text-xs text-slate-300">{m.count}x</span>
+                      <span class={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${severityClasses(m.severity)}`}>
+                        {m.severity}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Tab Panel: Risk -->
+    <div data-tab-panel="risk" class="hidden">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+        {TIER_ORDER.map((id) => {
+          const risk = RISK_DATA[id];
+          const metrics = [
+            { label: "Max Drawdown", value: `-$${risk.maxDrawdown.toLocaleString()}`, color: "text-red-400" },
+            { label: "Max DD Duration", value: risk.maxDrawdownDuration, color: "text-slate-300" },
+            { label: "Largest Win", value: `+$${risk.largestWin.toLocaleString()}`, color: "text-emerald-400" },
+            { label: "Largest Loss", value: `-$${risk.largestLoss.toLocaleString()}`, color: "text-red-400" },
+            { label: "Consecutive Losses", value: String(risk.consecutiveLosses), color: "text-slate-300" },
+            { label: "Consistency Score", value: `${risk.consistencyScore}/100`, color: risk.consistencyScore >= 70 ? "text-emerald-400" : risk.consistencyScore >= 50 ? "text-amber-400" : "text-red-400" },
+            { label: "Recovery Factor", value: risk.recoveryFactor.toFixed(2), color: risk.recoveryFactor >= 3 ? "text-emerald-400" : risk.recoveryFactor >= 1 ? "text-amber-400" : "text-red-400" },
+            { label: "Calmar Ratio", value: risk.calmarRatio.toFixed(2), color: risk.calmarRatio >= 3 ? "text-emerald-400" : risk.calmarRatio >= 1 ? "text-amber-400" : "text-red-400" },
+            { label: "Return Volatility", value: `$${risk.volatilityOfReturns}`, color: "text-slate-300" },
+          ];
+          return (
+            <div class="animate-on-scroll neon-card rounded-2xl p-5 sm:p-6">
+              <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/[0.06]">
+                <span class="w-3 h-3 rounded-full" style={`background: ${TIER_COLORS[id].color};`}></span>
+                <span class="text-sm font-semibold text-white">{TIER_COLORS[id].short}</span>
+              </div>
+
+              <div class="space-y-2.5">
+                {metrics.map((m) => (
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-500">{m.label}</span>
+                    <span class={`font-mono text-xs font-medium ${m.color}`}>{m.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Serialized chart data -->
+<script type="application/json" id="dow-chart-data">
+  {JSON.stringify(chartData)}
+</script>
+
+<script>
+  function initAnalyticsTabs() {
+    const tabBar = document.getElementById("analytics-tab-bar");
+    if (!tabBar) return;
+
+    const tabBtns = tabBar.querySelectorAll<HTMLButtonElement>("[data-tab]");
+    const section = tabBar.closest("section");
+    if (!section) return;
+
+    const panels = section.querySelectorAll<HTMLElement>("[data-tab-panel]");
+
+    // Track which charts have been initialized
+    const chartsInitialized: Record<string, boolean> = {};
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // Deactivate all tabs
+        tabBtns.forEach((b) => b.classList.remove("tab-active"));
+        btn.classList.add("tab-active");
+
+        // Hide all panels, show the matching one
+        const targetId = btn.dataset.tab;
+        panels.forEach((panel) => {
+          if (panel.dataset.tabPanel === targetId) {
+            panel.classList.remove("hidden");
+          } else {
+            panel.classList.add("hidden");
+          }
+        });
+
+        // Initialize charts in the newly visible panel
+        if (targetId === "dow" && !chartsInitialized["dow"]) {
+          initDowChart();
+        }
+      });
+    });
+
+    // Initialize DOW chart on scroll into view
+    const dowCanvas = document.getElementById("dow-chart") as HTMLCanvasElement | null;
+    if (dowCanvas) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting && !chartsInitialized["dow"]) {
+              initDowChart();
+              observer.disconnect();
+            }
+          }
+        },
+        { threshold: 0.2 }
+      );
+      observer.observe(dowCanvas);
+    }
+
+    async function initDowChart() {
+      if (chartsInitialized["dow"]) return;
+      chartsInitialized["dow"] = true;
+
+      const canvas = document.getElementById("dow-chart") as HTMLCanvasElement | null;
+      if (!canvas) return;
+
+      // Wait for scroll animation to finish so canvas has proper dimensions
+      await new Promise((r) => setTimeout(r, 800));
+
+      const dataEl = document.getElementById("dow-chart-data");
+      if (!dataEl || !dataEl.textContent) return;
+      const data = JSON.parse(dataEl.textContent);
+
+      const { Chart, registerables } = await import("chart.js");
+      Chart.register(...registerables);
+
+      const tierOrder = ["tier1", "tier2", "tier3", "tier4"];
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+      new Chart(canvas, {
+        type: "bar",
+        data: {
+          labels: days.map((d) => d.substring(0, 3)),
+          datasets: tierOrder.map((id) => ({
+            label: data.tiers[id].short,
+            data: days.map((day) => {
+              const stat = data.dayOfWeek[id].find((s: any) => s.day === day);
+              return stat ? stat.pnl : 0;
+            }),
+            backgroundColor: data.tiers[id].chartColor.replace("1)", "0.7)"),
+            borderColor: data.tiers[id].chartColor,
+            borderWidth: 1,
+            borderRadius: 4,
+          })),
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 1000,
+            easing: "easeOutQuart",
+          },
+          scales: {
+            x: {
+              grid: {
+                color: "rgba(255, 255, 255, 0.06)",
+              },
+              ticks: {
+                color: "rgba(148, 163, 184, 0.6)",
+                font: { size: 12, weight: "500" },
+              },
+            },
+            y: {
+              grid: {
+                color: "rgba(255, 255, 255, 0.06)",
+              },
+              ticks: {
+                color: "rgba(148, 163, 184, 0.5)",
+                font: { size: 11 },
+                callback: function(value: any) {
+                  return (value >= 0 ? "+$" : "-$") + Math.abs(value).toLocaleString();
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              backgroundColor: "rgba(15, 15, 20, 0.95)",
+              borderColor: "rgba(255, 255, 255, 0.1)",
+              borderWidth: 1,
+              titleColor: "#fff",
+              bodyColor: "rgba(148, 163, 184, 0.9)",
+              padding: 12,
+              cornerRadius: 8,
+              titleFont: { weight: "600" },
+              callbacks: {
+                label: function(ctx: any) {
+                  const val = ctx.parsed.y;
+                  const sign = val >= 0 ? "+$" : "-$";
+                  return `${ctx.dataset.label}: ${sign}${Math.abs(val).toLocaleString()}`;
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  // Run on initial load and on Astro page transitions
+  initAnalyticsTabs();
+  document.addEventListener("astro:after-swap", initAnalyticsTabs);
+</script>

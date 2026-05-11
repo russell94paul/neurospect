@@ -1,0 +1,77 @@
+---
+import Base from "../layouts/Base.astro";
+import WorkflowTier from "../components/WorkflowTier.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+---
+
+<Base title="Trader Workflows — NeuroSpect" description="Four trader profiles, from discretionary to fully automated. See how NeuroSpect serves every stage of your ICT trading journey.">
+  <section class="py-24 sm:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-950/20 via-black to-black"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-brand-500/[0.04] rounded-full blur-[120px]"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16 animate-on-scroll">
+        <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Workflows</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          Four Ways to Trade with NeuroSpect
+        </h1>
+        <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+          Whether you're a discretionary ICT trader or building automated strategies, NeuroSpect meets you where you are and grows with you.
+        </p>
+      </div>
+
+      <!-- Progression indicator -->
+      <div class="animate-on-scroll flex items-center justify-center gap-2 mb-12">
+        <span class="text-xs text-slate-500 font-mono">Beginner</span>
+        <div class="flex gap-1">
+          <div class="w-12 h-1 rounded-full bg-slate-700"></div>
+          <div class="w-12 h-1 rounded-full bg-blue-800/60"></div>
+          <div class="w-12 h-1 rounded-full bg-purple-800/60"></div>
+          <div class="w-12 h-1 rounded-full bg-brand-600/60"></div>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">Advanced</span>
+      </div>
+
+      <div class="flex flex-col gap-6 stagger-children">
+        <WorkflowTier
+          tier={1}
+          name="Discretionary ICT Trader"
+          profile="Traditional ICT trader. Learns from mentorship content, trades manually, journals manually. Wants to improve consistency and apply ICT concepts correctly."
+          workflow={["Study", "Prepare", "Execute", "Journal", "Review", "Improve"]}
+          components={["NeuroSpect Mentor", "NeuroCore", "Trade Journal", "Course KB", "Risk Limits"]}
+          value="Your mentor can't be on your shoulder for every session. NeuroSpect Mentor can."
+        />
+
+        <WorkflowTier
+          tier={2}
+          name="Quant Trader"
+          profile="Quantitative trader who wants to validate ICT strategies statistically. Doesn't care about narratives — wants data, backtests, and edge verification."
+          workflow={["Define Strategy", "Backtest", "Validate", "Null Test", "Feature Engineer", "Train Model", "Evaluate", "Deploy or Reject"]}
+          components={["EdgeLab", "Feature Store", "Model Registry", "NeuroQuant"]}
+          value="Stop guessing if ICT works. Prove it — or disprove it — with real data."
+        />
+
+        <WorkflowTier
+          tier={3}
+          name="Hybrid Trader"
+          profile="Discretionary trader who uses quantitative tools to support decision-making. Trades manually but wants regime detection, feature ranking, and model-assisted confluence scoring."
+          workflow={["Study", "Research", "Prepare", "Execute", "Journal", "Review", "Improve"]}
+          components={["NeuroSpect Mentor", "NeuroCore", "Trade Journal", "Course KB", "Risk Limits", "EdgeLab", "NeuroQuant", "NSLM"]}
+          value="The best of both worlds. Your intuition, backed by quantitative evidence."
+        />
+
+        <WorkflowTier
+          tier={4}
+          name="S-Tier Trader"
+          profile="The end state. Validated strategies through EdgeLab, promoted models to NeuroQuant, and trusts the system enough to let NeuroTrader Agent execute. Still supervises. Still has kill switches."
+          workflow={["Research", "Validate", "Promote", "Shadow", "Paper", "Limited Live", "Monitor", "Iterate"]}
+          components={["Everything from Tiers 1-3", "NeuroTrader Agent", "5-Layer Safety", "Kill Switch", "Post-Trade LLM Analysis"]}
+          value="Your strategy, running 24/5, with 5 layers of safety between it and your capital."
+          safety="NeuroTrader Agent is gated by EdgeLab evidence. Shadow mode must prove positive expectancy for 30+ days before paper. Paper must prove positive expectancy before limited live. The null test must pass (p < 0.05). You approve every escalation."
+        />
+      </div>
+    </div>
+  </section>
+
+  <WaitlistForm />
+</Base>
