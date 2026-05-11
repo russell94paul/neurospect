@@ -9,7 +9,7 @@ description: "End-of-session sync. Updates Linear tickets, regenerates boot prom
 ```
 /sync              # Full sync: Linear + boot prompts + phase status + cross-wiki + skill suggestions
 /sync tickets      # Only sync Linear ticket status
-/sync boot         # Only regenerate boot prompts for active phases
+/sync boot         # Regenerate boot prompts for active phases + stale completed phases
 /sync status       # Only update roadmap status dashboard
 ```
 
@@ -148,6 +148,8 @@ curl -s -X POST https://api.linear.app/graphql \
 ### 4. Update Phase Status
 
 For each phase in `roadmap/phases/`:
+
+**Track A & B phases (0-10):**
 - Count tickets (from Linear)
 - Calculate completion percentage
 - Determine status:
@@ -155,11 +157,25 @@ For each phase in `roadmap/phases/`:
   - Any ticket in progress → `in_progress`
   - Has assigned tickets but none started → `planning`
   - No tickets → `not_started`
+
+**Track C phases (11-16):**
+Track C phases may not have Linear tickets. Determine status from:
+- README frontmatter `status` field (manually maintained or updated via sync prompts)
+- Existence of gate deliverables (documents, agreements) referenced in the README
+- Whether the gated engineering phase is approaching
+
+For Track C phases with status `in_progress`, check deliverable completion from the README's deliverable table and prompt the user for progress updates.
+
+**All phases:**
 - Update `roadmap/phases/phase-{N}-{slug}/README.md` frontmatter (including `assigned` field with engineer names)
-- Update `roadmap/status.md` dashboard table (include Assigned column)
+- Update `roadmap/status.md` dashboard table (include Assigned column). Track C phases go in their own table section.
 - Update personal wiki phase READMEs with synced status fields
 
-### 5. Regenerate Boot Prompts for Active Phases
+### 5. Regenerate Boot Prompts
+
+Regenerates boot prompts for two categories of phases:
+
+#### 5A. Active Phases (`planning` or `in_progress`)
 
 For each phase with status `planning` or `in_progress`:
 - Read phase README (goals, scope, exit criteria)
@@ -175,7 +191,41 @@ Write updated boot prompts to:
 
 Boot prompts should include: "**Engineer:** {name} — working on {tickets}" at the top of the phase context section.
 
-Only regenerate for active phases.
+#### 5B. Stale Completed Phases
+
+For each phase with status `complete`:
+
+1. Read its boot prompt `_Generated YYYY-MM-DD` date
+2. Check if any of the following occurred **after** that date:
+   - A downstream phase added or expanded scope that depends on what this phase built
+   - A component was renamed (boot prompt uses old name)
+   - A new deviation in a peer or downstream phase changes assumptions about what this phase delivered
+   - A new phase was added that consumes or extends this phase's output
+   - A new Track C gate was added that retroactively applies
+
+3. If any condition is true, **regenerate the boot prompt** with current context. The regenerated boot prompt should include a `## Post-Completion Context` section at the bottom:
+
+```markdown
+## Post-Completion Context
+
+_Added by `/sync` — changes that occurred after this phase was completed._
+
+- **Phase 4 expanded (2026-05-10):** Prompt versioning module (4B) added. 
+  Phase 1's retrieval pipeline interfaces should support versioned prompts 
+  when Phase 4 is built.
+- **Component renamed (2026-05-10):** "NeuroSpect Coach" → "NeuroSpect Mentor"
+```
+
+This section is append-only — each re-sync adds new entries, preserving the history of downstream changes that affect the completed phase.
+
+**Report:**
+```
+Boot Prompt Regeneration:
+  ✓ Phase 0 (active) — regenerated
+  ✓ Phase 1 (complete, stale) — regenerated with 2 post-completion updates
+  · Phase 2 (complete) — up to date, skipped
+  · Phase 5 (not started) — skipped
+```
 
 ### 6. Capture Session Deviations
 
@@ -206,9 +256,48 @@ Cross-wiki: Vlad updated vlad-wiki/research/fvg-edge-cases.md
 2 days ago — may be relevant to your FVG detector work in Phase 7.
 ```
 
-### 8. Suggest Next Skills
+### 8. Cross-Track Gate Check (Track C)
 
-Based on everything above, suggest what to run in the next session:
+Track C phases (11-16) are business/operations phases that gate engineering phases. Check whether any upcoming engineering phase is blocked by an incomplete Track C gate.
+
+**Gate dependencies:**
+
+| Business Phase | Gate Condition | Blocks Engineering Phase |
+|---|---|---|
+| 11 (Content Licensing) | Signed content agreement exists | Phase 1 (RAG MVP) |
+| 12 (Regulatory) | ToS + Privacy Policy deployed | Phase 3 (Product MVP) |
+| 12 (Regulatory) | RIA determination made | Phase 9 (NeuroTrader) |
+| 13 (Go-to-Market) | Launch playbook documented | Phase 6 (V1 Launch) |
+
+**For each gate:**
+1. Check if the business phase has the required deliverable completed (look for documents in `wiki/`, `roadmap/`, or personal wikis; check Linear tickets labeled with the phase)
+2. Check if the gated engineering phase is approaching (status is `planning` or `in_progress`, or the previous phase is nearly complete)
+3. If an engineering phase is approaching but the gate is not cleared, emit a warning:
+
+```
+⚠ Gate Warning: Phase 1 (RAG MVP) requires a signed content agreement 
+  (Phase 11 deliverable), but Phase 11 is not_started.
+  Action needed: Start Phase 11 before Phase 1 ingestion begins.
+```
+
+**Track C status tracking:**
+
+Track C phases often don't have Linear tickets or code artifacts. Their status is tracked by:
+- Document existence (agreements, legal memos, playbooks in wiki/ or roadmap/)
+- Frontmatter fields in the phase README (`status`, `tickets_done`)
+- Manual updates via `/sync` prompts
+
+When syncing, for each Track C phase that is `in_progress`, ask:
+```
+Phase 11 (Content Licensing) — any progress on deliverables?
+Current: [list uncompleted deliverables from README]
+```
+
+Update the phase README frontmatter accordingly.
+
+### 9. Suggest Next Skills
+
+Based on everything above (including Track C gate warnings), suggest what to run in the next session:
 
 ```
 Next session suggestions:
@@ -218,17 +307,31 @@ Next session suggestions:
 ```
 
 Prioritize:
-1. Active phases with open tickets assigned to the current engineer
-2. Phases affected by upstream deviations that haven't been incorporated
-3. Cross-wiki content that hasn't been reviewed
+1. **Track C gate warnings** — if an engineering phase is approaching but a business gate is uncleared, suggest starting the business phase first
+2. Active phases with open tickets assigned to the current engineer
+3. Phases affected by upstream deviations that haven't been incorporated
+4. Cross-wiki content that hasn't been reviewed
+5. Track C phases that should start based on parallel-with timing
 
 ## Automatic Offer
 
 This skill should be offered at the end of every session that modifies code, wiki, or tickets. The CLAUDE.md files for the root, vlad-wiki, and paul-wiki all mandate this.
 
+**Always offer both `/sync` and `/lint` together.** They serve different purposes:
+- `/sync` = session-scoped (what changed this session → update tickets, boot prompts, status)
+- `/lint` = repo-scoped (do all artifacts agree with each other right now)
+
 Format:
 ```
-Before ending this session — would you like to run /sync?
+Before ending this session:
+
+1. /sync  — Update tickets, boot prompts, and phase status from this session's work
+2. /lint  — Check that all roadmap artifacts are consistent
+
+Why both? As you work, you add ideas, rename components, and reorganize 
+phases — but not always in every file at once. /sync captures what you did. 
+/lint catches drift between artifacts that accumulated while you worked.
+
 Engineer: {detected name}
 Changes detected: [brief summary of what changed]
 ```

@@ -32,6 +32,9 @@ Read `roadmap/phases/phase-{N}-{slug}/README.md` for the canonical phase definit
 The slug mapping:
 - 0=research, 1=rag-mvp, 2=market-context, 3=product-mvp, 4=evaluation
 - 5=beta, 6=launch, 7=backtesting, 8=neuroquant, 9=neurotrader, 10=advanced
+- 11=content-licensing, 12=regulatory, 13=go-to-market, 14=retention, 15=competitive, 16=team-scaling
+
+Phases 11-16 are **Track C (Business & Operations)** — they run parallel to engineering tracks A/B and have cross-track gates documented in their READMEs.
 
 ### 3. Read Upstream Deviations
 
@@ -97,6 +100,7 @@ Based on the phase, identify key files that should exist or have been modified:
 - Phase 7: `api/app/backtest/`, `api/app/models/backtest_run.py`
 - Phase 8: `api/app/neuroquant/`, `api/app/models/agent_performance.py`
 - Phase 9: `api/app/agent/`, `api/app/models/agent_config.py`
+- Phase 11-16 (Track C): No code artifacts — these are business/operations phases. Report document state: check if deliverable docs exist in wiki/ or roadmap/, and whether gate conditions for downstream engineering phases are met.
 
 Check which of these exist and report their state.
 
