@@ -1,6 +1,6 @@
 # Phase 0: Research & Validation — Execution Boot Prompt
 
-_Generated 2026-05-10 by `/sync`. Do not edit manually._
+_Generated 2026-05-12 by `/phase 0`. Do not edit manually._
 
 ## Phase Context
 
@@ -30,6 +30,8 @@ Validate first customer, prototype RAG, select tech stack, confirm editorial cur
 | 9 | Sentry error monitoring | P1 | Not started |
 | 10 | Marketing site (Astro + Tailwind + Chart.js) | P1 | Done (6 pages built) |
 | 11 | Live Trading Simulator (`/simulator`) | P1 | In Progress (NEU-27) — design spec in `design-handoff/08-live-simulator.md` |
+| 12 | Interactive ICT Course (`/course`) — 5 modules, 4 assessment types | P1 | Scoped, not built — `design-handoff/09-course.md`, `boot-prompts/course.md` |
+| 13 | EdgeLab Research Studio (`/research`) — 3 engines, interactive terminal | P1 | Scoped, not built — `design-handoff/10-edgelab-studio.md`, `boot-prompts/edgelab-studio.md` |
 
 ## Active Linear Tickets
 

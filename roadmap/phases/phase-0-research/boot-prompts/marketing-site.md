@@ -29,6 +29,15 @@ site/                              # New top-level dir in monorepo
 │   │   ├── index.astro            # Landing / home
 │   │   ├── compare.astro          # Competitive intelligence — "Why NeuroSpect?"
 │   │   ├── performance.astro      # Performance Lab — illustrative trader analytics
+│   │   ├── course.astro           # Course landing — curriculum overview + profile CTA
+│   │   ├── course/
+│   │   │   ├── profile.astro      # Trading profile questionnaire
+│   │   │   ├── module-1.astro     # Module 1: Foundations
+│   │   │   ├── module-2.astro     # Module 2: Price Delivery
+│   │   │   ├── module-3.astro     # Module 3: Session Context & Bias
+│   │   │   ├── module-4.astro     # Module 4: Market Structure
+│   │   │   ├── module-5.astro     # Module 5: Order Flow & SMT
+│   │   │   └── entry-models.astro # Capstone: Entry Models Library
 │   │   ├── workflows.astro        # Trader workflow tiers
 │   │   ├── architecture.astro     # System architecture diagram
 │   │   └── pricing.astro          # Pricing tiers
@@ -48,22 +57,42 @@ site/                              # New top-level dir in monorepo
 │   │   │   ├── QuestionsGrid.astro
 │   │   │   ├── OutperformVisual.astro
 │   │   │   └── CompareCTA.astro
-│   │   └── performance/           # /performance page components
-│   │       ├── PerformanceHero.astro
-│   │       ├── TraderMaturity.astro        # Chart.js radar
-│   │       ├── EquityCurveChart.astro      # Chart.js line (centerpiece)
-│   │       ├── KpiSummaryCards.astro
-│   │       ├── TradeDetailPanel.astro      # Slide-in panel
-│   │       ├── AnalyticsTabs.astro         # Tabbed analytics dashboard
-│   │       ├── TierAnalyticsPanel.astro    # Expandable tier details
-│   │       ├── TraderImprovementTable.astro
-│   │       └── PerformanceBottom.astro
+│   │   ├── performance/           # /performance page components
+│   │   │   ├── PerformanceHero.astro
+│   │   │   ├── TraderMaturity.astro        # Chart.js radar
+│   │   │   ├── EquityCurveChart.astro      # Chart.js line (centerpiece)
+│   │   │   ├── KpiSummaryCards.astro
+│   │   │   ├── TradeDetailPanel.astro      # Slide-in panel
+│   │   │   ├── AnalyticsTabs.astro         # Tabbed analytics dashboard
+│   │   │   ├── TierAnalyticsPanel.astro    # Expandable tier details
+│   │   │   ├── TraderImprovementTable.astro
+│   │   │   └── PerformanceBottom.astro
+│   │   └── course/                # /course page components
+│   │       ├── CourseHero.astro
+│   │       ├── ProfileForm.astro           # Trading profile questionnaire
+│   │       ├── PersonalizedPath.astro      # Recommended learning path
+│   │       ├── ModuleOverview.astro        # Module card with progress
+│   │       ├── LessonViewer.astro          # Lesson content renderer
+│   │       ├── ConceptQuiz.astro           # Multiple choice / true-false
+│   │       ├── ChartIdentification.astro   # Interactive candlestick exercise
+│   │       ├── ScenarioEngine.astro        # Branching scenario assessment
+│   │       ├── EngagementTest.astro        # Matching, sequencing exercises
+│   │       ├── GradingPanel.astro          # Score + pass/fail + study assignment
+│   │       ├── ProgressTracker.astro       # Module progress indicator
+│   │       ├── CandlestickChart.astro      # lightweight-charts wrapper
+│   │       ├── CourseNav.astro             # Module/lesson navigation
+│   │       └── CourseCTA.astro             # Upgrade prompts for paid tiers
 │   ├── data/
 │   │   ├── tier-colors.ts         # Shared tier color/name mappings
 │   │   ├── competitors.ts         # Capability matrix, subscription stack
 │   │   ├── equity-curves.ts       # 1-month NQ equity curves + trade markers
 │   │   ├── tier-kpis.ts           # KPIs, maturity dimensions, improvement plans
-│   │   └── performance-analytics.ts # Day-of-week, session, mistake, setup, risk data
+│   │   ├── performance-analytics.ts # Day-of-week, session, mistake, setup, risk data
+│   │   ├── course-modules.ts      # Module/lesson structure + content
+│   │   ├── quiz-data.ts           # Question banks for concept quizzes
+│   │   ├── chart-scenarios.ts     # OHLC data + correct answer regions
+│   │   ├── scenario-trees.ts      # Branching scenario data
+│   │   └── candlestick-data.ts    # Reusable OHLC chart datasets
 │   ├── layouts/
 │   │   └── Base.astro
 │   └── styles/

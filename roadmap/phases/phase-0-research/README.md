@@ -41,12 +41,49 @@ Pages:
 - `/` — Landing (hero, pain points, features, waitlist)
 - `/compare` — Competitive Intelligence (capability matrix, subscription stack, workflow friction)
 - `/performance` — Performance Lab (illustrative equity curves, KPI analytics, trade marker analysis)
+- `/course` — Interactive ICT Course (5 modules, 18 lessons, 4 assessment types, candlestick charts)
+- `/course/profile` — Trading profile questionnaire (experience, goals, struggles)
+- `/course/module-1` through `/course/module-5` — Module pages with lessons + assessments
+- `/course/entry-models` — Capstone: Entry Models Library (unlocked after 5 modules)
+- `/research` — EdgeLab Research Studio (interactive feature injection, regime optimization, NSLM feature studio)
 - `/workflows` — Trader tier profiles
 - `/architecture` — System diagram
 - `/pricing` — Pricing tiers
 
-Tech: Astro 5.8 + Tailwind 3.4 + Chart.js (performance page only)
+Tech: Astro 5.8 + Tailwind 3.4 + Chart.js (performance + research) + lightweight-charts (course + research candlestick charts)
 Deploy: Cloudflare Pages (TBD)
+
+### Interactive ICT Course (`/course`)
+
+Free-tier course accessible after waitlist signup. Content sourced from `wiki/concepts/course/` (5 modules, 18 lessons) and `wiki/concepts/entry-models/` (7 strategies).
+
+Key features:
+- Trading profile questionnaire → personalized learning path
+- 4 assessment types per module: concept quiz, interactive chart identification, scenario engine, engagement tests
+- Interactive candlestick charts (lightweight-charts) for chart identification exercises
+- Grading: pass (advance) / fail (study assignment based on mistakes)
+- Progress tracked in localStorage
+- Tier-specific course sections showing what each pricing tier unlocks
+
+Boot prompt: `boot-prompts/course.md`
+
+### EdgeLab Research Studio (`/research`)
+
+Interactive demo of EdgeLab's three research engines — the technical credibility page for quant-curious traders.
+
+Three engines:
+1. **Feature Discovery Engine** — analyzes trade outcomes, discovers features that separate wins from losses, auto-engineers new features
+2. **Regime-Adaptive Optimization** — classifies 6 market regimes, auto-tunes parameters per regime, applies dynamic condition modifiers
+3. **NSLM Feature Studio** — injects features into NSLM prompts, runs simulations, sweeps parameters, generates bespoke feature suggestions
+
+Key features:
+- Interactive research terminal: add features → run simulation → compare results
+- Parameter sweep with optimal zone visualization
+- Dynamic condition selectors (regime, day, news, SMT, liquidity swept, price cycle)
+- Feature Library with 20+ features, searchable/filterable
+- NSLM reasoning samples with feature-by-feature gate checks
+
+Boot prompt: `boot-prompts/edgelab-studio.md`
 
 ## Deviations
 

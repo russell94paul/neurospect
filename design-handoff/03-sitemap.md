@@ -4,7 +4,7 @@
 
 Fixed top nav (64px height, `bg-black/70` with `backdrop-blur-2xl`):
 - Logo (left): Mark + "NeuroSpect" wordmark → links to `/`
-- Links (right): Compare | Performance | Workflows | Architecture | Pricing | [Join Waitlist] (CTA button)
+- Links (right): Compare | Performance | Course | Research | Workflows | Architecture | Pricing | [Join Waitlist] (CTA button)
 
 ## Pages
 
@@ -59,7 +59,67 @@ Fixed top nav (64px height, `bg-black/70` with `backdrop-blur-2xl`):
 
 ---
 
-### 4. Workflows Page (`/workflows`)
+### 4. Interactive ICT Course (`/course`)
+
+**Purpose:** Free-tier interactive course. Content marketing + lead qualification.
+
+| Section | Component | Content Summary |
+|---|---|---|
+| Hero | `CourseHero.astro` | "Master ICT Concepts. Prove It on the Chart." + curriculum preview |
+| Curriculum | `ModuleOverview.astro` x5 | 5 module cards in vertical timeline/stepper with lock state |
+| What You'll Learn | (inline) | 6-card grid of learning outcomes |
+| Assessment Preview | (inline) | 4 cards previewing quiz, chart ID, scenarios, engagement |
+| CTA | `CourseCTA.astro` | "Join the Waitlist to Start Learning" → `/course/profile` |
+| Waitlist | `WaitlistForm.astro` | Email capture |
+
+**Sub-pages:**
+
+| Page | Purpose |
+|---|---|
+| `/course/profile` | Trading profile questionnaire (4 steps: experience, style, struggles, goals) → personalized path |
+| `/course/module-1` through `/course/module-5` | Lesson content + 4 assessments per module |
+| `/course/entry-models` | Capstone: 7 entry model deep-dives (unlocked after 5 modules) |
+
+**Interactive elements:**
+- `ConceptQuiz.astro` — Multiple choice with explanations
+- `ChartIdentification.astro` — Click on candlestick chart to identify ICT patterns (lightweight-charts)
+- `ScenarioEngine.astro` — Branching "what would you do?" with A+/B/C/F grading
+- `EngagementTest.astro` — Drag-to-match, sequencing, time-pressure chart ID
+- `GradingPanel.astro` — Pass/fail with study assignments on failure
+- `ProgressTracker.astro` — Module + assessment completion tracking (localStorage)
+
+**Design spec:** See `09-course.md` for full wireframes, assessment designs, chart specs, and data requirements.
+
+---
+
+### 5. EdgeLab Research Studio (`/research`)
+
+**Purpose:** Interactive demo of EdgeLab's three research engines. Flagship technical credibility page.
+
+| Section | Component | Content Summary |
+|---|---|---|
+| Hero | `ResearchHero.astro` | "Your Trading Edge, Engineered" + launch terminal CTA |
+| Engine Overview | `EngineCards.astro` | 3 neon cards: Feature Discovery, Regime Optimization, NSLM Studio |
+| Feature Discovery | `FeatureDiscovery.astro` | Before/after model comparison + 10-row feature table |
+| Regime Optimization | `RegimeOptimization.astro` | 6 regime cards + parameter adjustment table + dynamic condition modifiers |
+| NSLM Feature Studio | `FeatureStudio.astro` | **INTERACTIVE TERMINAL** — Add features, run simulations, compare results, parameter sweeps |
+| Feature Library | `FeatureLibrary.astro` | Searchable/filterable feature catalog (20+ features) |
+| CTA | `ResearchCTA.astro` | "Stop guessing. Start engineering." + waitlist |
+| Waitlist | `WaitlistForm.astro` | Email capture |
+
+**Interactive elements:**
+- Feature injection (add/remove features with sliders and toggles)
+- Simulation runner (pre-computed results, animated display)
+- Parameter sweep (table + chart showing optimal zones)
+- Run comparison (side-by-side metrics table)
+- Dynamic condition selectors (regime, day, news, SMT, liquidity, price cycle)
+- NSLM reasoning sample with feature suggestion
+
+**Design spec:** See `10-edgelab-studio.md` for full wireframes, terminal layout, and data requirements.
+
+---
+
+### 6. Workflows Page (`/workflows`)
 
 **Purpose:** Show how NeuroSpect serves 4 trader profiles, from beginner to automated.
 
@@ -74,7 +134,7 @@ Fixed top nav (64px height, `bg-black/70` with `backdrop-blur-2xl`):
 
 ---
 
-### 5. Architecture Page (`/architecture`)
+### 7. Architecture Page (`/architecture`)
 
 **Purpose:** Technical credibility. Show the 6-component system and how data flows.
 
@@ -88,7 +148,7 @@ Fixed top nav (64px height, `bg-black/70` with `backdrop-blur-2xl`):
 
 ---
 
-### 6. Pricing Page (`/pricing`)
+### 8. Pricing Page (`/pricing`)
 
 **Purpose:** Clear tier comparison. Drive waitlist signups.
 

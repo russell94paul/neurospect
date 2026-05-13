@@ -1106,11 +1106,22 @@ The product must use **educational and research language** throughout:
   - Landing page with waitlist capture (`/`)
   - Compare page — competitive differentiation (`/compare`)
   - Performance Lab — illustrative trader performance data (`/performance`)
+  - Interactive ICT Course (`/course`) — 5 modules, 18 lessons, 4 assessment types per module
+    - Trading profile questionnaire (experience, goals, struggles)
+    - Concept quizzes, interactive chart identification (candlestick charts), scenario engine, engagement tests
+    - Grading system: pass to advance, fail = study assignment based on mistakes
+    - Content sourced from `wiki/concepts/course/` and `wiki/concepts/entry-models/`
+  - EdgeLab Research Studio (`/research`) — interactive demo of 3 research engines
+    - Feature Discovery Engine: analyzes trade outcomes, auto-engineers features
+    - Regime-Adaptive Optimization: 6 market regimes, auto-tunes parameters + dynamic conditions
+    - NSLM Feature Studio: inject features into prompts, run simulations, sweep parameters
+    - Interactive terminal: add features → run sim → compare results → parameter sweep
+    - Feature Library: 20+ features, searchable/filterable catalog
   - Workflows page — trader tier profiles (`/workflows`)
   - Architecture page — system diagram (`/architecture`)
   - Pricing page — tier comparison (`/pricing`)
 
-**Exit criteria:** RAG prototype returns relevant passages for 80%+ of test questions. Marketing site live with waitlist capturing signups.
+**Exit criteria:** RAG prototype returns relevant passages for 80%+ of test questions. Marketing site live with waitlist capturing signups and course engagement data.
 
 ### Phase 1: Knowledge Base & RAG MVP (Weeks 4-9)
 
