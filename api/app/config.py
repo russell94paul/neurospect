@@ -80,5 +80,14 @@ class Settings(BaseSettings):
     # Debug mode — enables /auth/debug/token; never true in prod
     debug: bool = False
 
+    # Linear (project tracking)
+    linear_api_key: str = ""
+
+    # Stripe billing (Phase 3) — empty = billing disabled
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_price_mentor_id: str = ""   # Stripe Price ID for Mentor tier
+    stripe_price_trader_id: str = ""   # Stripe Price ID for Trader tier
+
 
 settings = Settings()  # type: ignore[call-arg]

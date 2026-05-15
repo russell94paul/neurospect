@@ -105,14 +105,119 @@ TEMPLATES: Dict[str, str] = {
     ),
 }
 
+COMMANDS_DIR = REPO_ROOT / ".claude" / "commands"
+
+
+def _read_file_safe(path: Path, max_chars: int = 12000) -> Optional[str]:
+    if not path.exists():
+        return None
+    try:
+        text = path.read_text(encoding="utf-8")
+        if len(text) > max_chars:
+            text = text[:max_chars] + f"\n\n... (truncated at {max_chars} chars)"
+        return text
+    except OSError:
+        return None
+
+
 def _build_prompt(session: Dict[str, Any]) -> str:
+    """Build a rich autonomous prompt by injecting the full slash command + boot files."""
     template_key = session.get("template", "implement")
     template_text = TEMPLATES.get(template_key, TEMPLATES["implement"])
     user_prompt = session.get("prompt", "").strip()
+    command = session.get("command", "")
+    phase_id = session.get("phase_id", "")
+
     parts = [template_text]
+
+    # 1. Load the slash command file (the full phase spec)
+    cmd_file = _find_command_file(command, phase_id)
+    if cmd_file:
+        cmd_content = _read_file_safe(cmd_file, max_chars=15000)
+        if cmd_content:
+            parts.append(f"# Phase Specification\n\n{cmd_content}")
+
+            # 2. Read boot procedure files referenced in the command
+            boot_files = _extract_boot_files(cmd_content)
+            boot_context = []
+            for bf in boot_files[:8]:
+                content = _read_file_safe(Path(bf), max_chars=8000)
+                if content:
+                    boot_context.append(f"## File: {bf}\n\n{content}")
+            if boot_context:
+                parts.append("# Boot Procedure Context\n\n" + "\n\n---\n\n".join(boot_context))
+
+    # 3. Always include root CLAUDE.md for project context
+    claude_md = _read_file_safe(REPO_ROOT / "CLAUDE.md", max_chars=10000)
+    if claude_md:
+        parts.append(f"# Project Context (CLAUDE.md)\n\n{claude_md}")
+
+    # 4. Include user prompt if provided
     if user_prompt:
-        parts.append(f"## Task\n{user_prompt}")
+        ctx_marker = "\n--- CONTEXT ---\n"
+        if ctx_marker in user_prompt:
+            user_prompt = user_prompt[:user_prompt.index(ctx_marker)].strip()
+        if user_prompt:
+            parts.append(f"# Additional Instructions\n\n{user_prompt}")
+
+    # 5. Autonomous execution instructions
+    parts.append("""# Execution Mode: Autonomous
+
+You are running autonomously in a git worktree. Work through ALL deliverables in the phase specification above.
+
+For each deliverable:
+1. Read existing code to understand current patterns
+2. Implement the deliverable following the constraints
+3. Write tests where specified
+4. Commit your work with a descriptive message referencing the phase and deliverable
+
+When ALL deliverables are complete:
+- Run any tests you wrote
+- Verify the acceptance criteria
+- Create a final summary commit
+
+Do not ask questions. Make reasonable decisions and document assumptions in code comments.
+Do not skip deliverables. Work through them in order.
+Commit after each major deliverable, not all at once.""")
+
     return "\n\n".join(parts)
+
+
+def _find_command_file(command: str, phase_id: str) -> Optional[Path]:
+    """Find the .claude/commands/ file for a phase."""
+    if command:
+        slug = command.lstrip("/")
+        candidate = COMMANDS_DIR / f"{slug}.md"
+        if candidate.exists():
+            return candidate
+    for f in COMMANDS_DIR.glob("ns-phase*.md"):
+        if str(phase_id) in f.stem:
+            return f
+    return None
+
+
+def _extract_boot_files(cmd_content: str) -> List[str]:
+    """Extract file paths from Boot Procedure section."""
+    import re
+    files = []
+    in_boot = False
+    for line in cmd_content.split("\n"):
+        if "Boot Procedure" in line:
+            in_boot = True
+            continue
+        if in_boot and line.startswith("##"):
+            break
+        if in_boot:
+            paths = re.findall(r'`(C:\\[^`]+|[a-zA-Z]/[^`]+)`', line)
+            for p in paths:
+                files.append(p)
+            md_paths = re.findall(r'Read\s+(.+\.(?:md|py|ts|json))', line)
+            for p in md_paths:
+                p = p.strip().strip('`')
+                if not p.startswith("C:"):
+                    p = str(REPO_ROOT / p)
+                files.append(p)
+    return files
 
 def _extract_usage(session: Dict[str, Any], event: Dict[str, Any]) -> None:
     if "total_cost_usd" in event:

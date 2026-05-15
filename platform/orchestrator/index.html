@@ -44,61 +44,118 @@
       border-radius: 50%; pointer-events: none; z-index: 0;
     }
 
-    /* Nav */
-    .nav {
-      position: sticky; top: 0; z-index: 50;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(24px) saturate(1.2);
+    /* Floating dock nav */
+    .dock {
+      position: fixed; left: 12px; top: 50%; transform: translateY(-50%); z-index: 60;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 8px 6px; border-radius: 16px;
+      background: rgba(12,12,18,0.8); border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px) saturate(1.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 1px rgba(255,255,255,0.1);
+      width: 48px; transition: width 0.25s cubic-bezier(0.16,1,0.3,1);
+      overflow: hidden;
     }
-    .nav-inner {
-      max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
-      height: 64px; display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-left { display: flex; align-items: center; gap: 12px; }
-    .nav-logo-mark {
-      width: 34px; height: 34px; border-radius: 8px;
+    .dock:hover { width: 180px; }
+    .dock-logo {
+      width: 32px; height: 32px; border-radius: 8px; margin-bottom: 4px;
       background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: 800; font-size: 1rem;
+      color: #fff; font-weight: 800; font-size: 0.75rem;
       font-family: 'Orbitron', var(--font-sans);
-      box-shadow: 0 0 14px rgba(6,182,212,0.4), 0 0 40px rgba(6,182,212,0.12);
-      position: relative;
+      box-shadow: 0 0 12px rgba(6,182,212,0.3);
+      flex-shrink: 0;
     }
-    .nav-logo-mark::after {
-      content: ''; position: absolute; inset: -1px; border-radius: 9px;
-      border: 1px solid rgba(6,182,212,0.5);
-      animation: logo-pulse 3s ease-in-out infinite;
+    .dock-sep { width: 24px; height: 1px; background: rgba(255,255,255,0.06); margin: 4px 0; flex-shrink: 0; }
+    .dock-item {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 6px 8px; border-radius: 8px;
+      cursor: pointer; transition: all 0.15s; border: none; background: none;
+      font-family: var(--font-sans); color: var(--text-dim); flex-shrink: 0;
     }
-    @keyframes logo-pulse {
-      0%, 100% { border-color: rgba(6,182,212,0.3); }
-      50% { border-color: rgba(6,182,212,0.7); box-shadow: 0 0 18px rgba(6,182,212,0.25); }
+    .dock-item:hover { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+    .dock-item.active { background: rgba(6,182,212,0.1); color: var(--cyan-light); }
+    .dock-item.active .dock-icon { color: var(--cyan); opacity: 1; }
+    .dock-icon {
+      width: 32px; height: 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem; opacity: 0.5; flex-shrink: 0;
     }
-    .nav-logo-text {
-      font-family: 'Orbitron', var(--font-sans);
-      font-weight: 700; font-size: 1.05rem; letter-spacing: 0.06em; text-transform: uppercase;
-      background: linear-gradient(90deg, #e0f7ff, var(--cyan-light), var(--cyan));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 8px rgba(6,182,212,0.35));
+    .dock-label {
+      font-size: 0.6875rem; font-weight: 500; white-space: nowrap;
+      opacity: 0; transition: opacity 0.2s 0.1s;
     }
-    .nav-badge {
-      font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500;
-      padding: 0.25rem 0.625rem; border-radius: 100px;
-      border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); color: var(--text-muted);
+    .dock:hover .dock-label { opacity: 1; }
+    .dock-stats {
+      margin-top: 4px; display: flex; flex-direction: column; gap: 2px; width: 100%;
     }
-    .nav-right { display: flex; gap: 2px; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 3px; border: 1px solid var(--card-border); }
-    .view-btn {
-      padding: 0.375rem 0.875rem; border: none; border-radius: 6px;
-      background: transparent; color: var(--text-muted); cursor: pointer;
-      font-size: 0.8125rem; font-weight: 500; font-family: var(--font-sans); transition: all 0.2s;
+    .dock-stat {
+      display: flex; align-items: center; gap: 6px;
+      padding: 3px 8px; font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-faint);
     }
-    .view-btn.active { background: rgba(6,182,212,0.12); color: var(--cyan-light); }
-    .view-btn:hover:not(.active) { color: var(--text-secondary); }
+    .dock-stat-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .dock-stat-val { color: var(--text-muted); font-weight: 600; }
+    .dock-stat-label { white-space: nowrap; opacity: 0; transition: opacity 0.2s 0.1s; }
+    .dock:hover .dock-stat-label { opacity: 1; }
+    .dock-kbd {
+      margin-top: 2px; padding: 4px 8px; font-family: var(--font-mono); font-size: 0.5rem;
+      color: var(--text-faint); cursor: pointer; border: none; background: none;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .dock-kbd:hover { color: var(--text-muted); }
+    .dock-kbd-key {
+      padding: 1px 4px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.5rem;
+    }
+    .dock-kbd-label { white-space: nowrap; opacity: 0; transition: opacity 0.2s 0.1s; }
+    .dock:hover .dock-kbd-label { opacity: 1; }
 
-    /* Stats ticker */
-    .stats-bar {
-      border-bottom: 1px solid var(--card-border); background: rgba(255,255,255,0.01);
-      padding: 1rem 0;
+    /* Content offset for dock */
+    .main { margin-left: 64px; }
+
+    /* Command palette */
+    .cmd-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+      align-items: flex-start; justify-content: center; padding-top: 14vh;
     }
+    .cmd-overlay.open { display: flex; }
+    .cmd-palette {
+      width: 520px; max-width: 90vw; border-radius: 14px;
+      background: rgba(12,12,18,0.98); border: 1px solid rgba(6,182,212,0.15);
+      box-shadow: 0 0 60px rgba(6,182,212,0.06), 0 25px 80px rgba(0,0,0,0.5);
+      overflow: hidden; animation: cmdIn 0.15s ease;
+    }
+    @keyframes cmdIn { from{transform:scale(0.96) translateY(-8px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+    .cmd-input-wrap {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cmd-chevron { color: var(--cyan); font-family: var(--font-mono); font-size: 0.875rem; }
+    .cmd-input {
+      flex: 1; border: none; background: transparent; outline: none;
+      color: #fff; font-size: 0.875rem; font-family: var(--font-sans);
+    }
+    .cmd-input::placeholder { color: var(--text-faint); }
+    .cmd-hint { font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-faint); }
+    .cmd-list { max-height: 380px; overflow-y: auto; padding: 0.25rem; }
+    .cmd-group-label {
+      font-size: 0.5625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-faint); padding: 0.625rem 0.75rem 0.25rem;
+    }
+    .cmd-item {
+      display: flex; align-items: center; gap: 0.625rem;
+      padding: 0.4375rem 0.75rem; border-radius: 8px; cursor: pointer;
+      transition: background 0.08s; color: var(--text-secondary); font-size: 0.8125rem;
+    }
+    .cmd-item:hover, .cmd-item.focused { background: rgba(6,182,212,0.08); color: #fff; }
+    .cmd-item-icon { font-size: 0.8125rem; width: 1.25rem; text-align: center; opacity: 0.5; }
+    .cmd-item-label { flex: 1; }
+    .cmd-item-desc { font-size: 0.625rem; color: var(--text-faint); }
+    .cmd-item-active { color: var(--cyan); }
+    /* Keep .view-btn hidden — palette is the nav now */
+    .view-btn { display: none; }
+
+    /* Stats ticker (hidden — topbar has stats, each view has its own KPIs) */
+    .stats-bar { display: none; }
     .stats-inner {
       max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
       display: flex; gap: 2rem; align-items: center;
@@ -529,45 +586,163 @@
     .mkt-phase-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.375rem; line-height: 1.5; }
 
     /* Pipeline view */
-    .pipeline-container { display: grid; grid-template-columns: 1fr 380px; gap: 1rem; min-height: calc(100vh - 200px); }
-    .pipeline-graph { position: relative; overflow: auto; min-height: 600px; }
-    .pipeline-sidebar {
-      background: rgba(30,30,35,0.85); border: 1px solid var(--card-border);
-      border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;
+    .pipe-wrapper {
+      display: flex; flex-direction: column; gap: 0;
+      min-height: calc(100vh - 200px);
+      background: radial-gradient(ellipse at 50% 30%, rgba(6,40,60,0.25), transparent 70%);
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--card-border);
     }
-    .sidebar-header { padding: 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
-    .sidebar-title { font-size: 0.8125rem; font-weight: 600; color: #fff; }
-    .sidebar-body { flex: 1; overflow-y: auto; padding: 0.75rem; }
 
-    /* Pipeline nodes */
+    /* Command header */
+    .pipe-cmd-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.625rem 1rem; border-bottom: 1px solid var(--card-border);
+      background: rgba(0,0,0,0.3);
+    }
+    .pipe-cmd-left { display: flex; align-items: center; gap: 0.75rem; }
+    .pipe-cmd-title {
+      font-family: 'Orbitron', var(--font-sans); font-size: 0.875rem;
+      font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      background: linear-gradient(90deg, #e0f7ff, var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .pipe-exec-badge {
+      font-family: var(--font-mono); font-size: 0.5625rem; font-weight: 600;
+      padding: 0.125rem 0.5rem; border-radius: 100px;
+      background: rgba(6,182,212,0.1); color: var(--cyan); border: 1px solid rgba(6,182,212,0.2);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .pipe-running-count {
+      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--cyan);
+    }
+    .pipe-filters { display: flex; gap: 2px; background: rgba(255,255,255,0.03); border-radius: 6px; padding: 2px; }
+    .pipe-filter-btn {
+      padding: 0.25rem 0.625rem; border: none; border-radius: 4px;
+      background: transparent; color: var(--text-muted); cursor: pointer;
+      font-size: 0.6875rem; font-weight: 500; font-family: var(--font-sans); transition: all 0.2s;
+    }
+    .pipe-filter-btn.active { background: rgba(6,182,212,0.12); color: var(--cyan-light); }
+    .pipe-filter-btn:hover:not(.active) { color: var(--text-secondary); }
+
+    /* KPI strip */
+    .pipe-kpi-strip {
+      display: flex; gap: 0; border-bottom: 1px solid var(--card-border);
+      background: rgba(0,0,0,0.15); overflow-x: auto;
+    }
+    .pipe-kpi {
+      flex: 1; min-width: 100px; padding: 0.625rem 0.875rem;
+      border-right: 1px solid rgba(255,255,255,0.04);
+      display: flex; flex-direction: column; gap: 0.125rem;
+    }
+    .pipe-kpi:last-child { border-right: none; }
+    .pipe-kpi-label {
+      font-family: var(--font-mono); font-size: 0.5625rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-dim);
+    }
+    .pipe-kpi-value {
+      font-family: var(--font-mono); font-size: 1.125rem; font-weight: 700; color: #fff;
+    }
+    .pipe-kpi-value.cyan { color: var(--cyan); }
+    .pipe-kpi-value.emerald { color: var(--positive); }
+    .pipe-kpi-value.rose { color: var(--negative); }
+    .pipe-kpi-value.amber { color: var(--warning); }
+    .pipe-kpi-ring {
+      width: 36px; height: 36px; display: inline-block; vertical-align: middle;
+    }
+
+    /* Main area grid: canvas + inspector */
+    .pipe-main {
+      display: grid; grid-template-columns: 1fr 340px; flex: 1; min-height: 0;
+    }
+
+    /* Pipeline canvas */
+    .pipe-canvas {
+      padding: 1.25rem; overflow: auto; position: relative;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(6,40,60,0.18), transparent 60%),
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.015) 59px, rgba(255,255,255,0.015) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.015) 59px, rgba(255,255,255,0.015) 60px);
+    }
+    .pipe-canvas-inner { position: relative; min-height: 100%; }
+    .pipe-grid {
+      display: flex; flex-direction: column; gap: 0.75rem; position: relative; z-index: 2;
+    }
+    .pipe-row {
+      display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* Pipeline node cards */
     .pipe-node {
-      position: absolute; width: 180px; border-radius: 12px;
-      background: rgba(30,30,35,0.9); border: 2px solid rgba(255,255,255,0.08);
-      padding: 0.75rem; cursor: pointer; transition: all 0.3s; z-index: 2;
-      backdrop-filter: blur(8px);
+      width: 220px; border-radius: 12px;
+      background: rgba(20,24,35,0.85); border: 1.5px solid rgba(255,255,255,0.08);
+      padding: 0.75rem; cursor: pointer; transition: all 0.3s ease;
+      backdrop-filter: blur(12px); position: relative; flex-shrink: 0;
     }
-    .pipe-node:hover { transform: scale(1.03); }
-    .pipe-node.idle { border-color: rgba(255,255,255,0.08); }
-    .pipe-node.queued { border-color: rgba(251,191,36,0.4); }
-    .pipe-node.running { border-color: rgba(6,182,212,0.6); box-shadow: 0 0 20px rgba(6,182,212,0.15), 0 0 40px rgba(6,182,212,0.05); }
-    .pipe-node.paused { border-color: rgba(251,146,60,0.5); box-shadow: 0 0 15px rgba(251,146,60,0.1); }
-    .pipe-node.done { border-color: rgba(52,211,153,0.5); }
-    .pipe-node.failed { border-color: rgba(248,113,113,0.5); }
-    .pipe-node.blocked { opacity: 0.4; cursor: not-allowed; }
+    .pipe-node:hover { transform: translateY(-2px); }
+    .pipe-node.idle { border-color: #4a5e80; }
+    .pipe-node.running {
+      border-color: rgba(6,182,212,0.6);
+      box-shadow: 0 0 20px rgba(6,182,212,0.12), 0 0 50px rgba(6,182,212,0.06),
+                  inset 0 0 20px rgba(6,182,212,0.03);
+      animation: nodePulse 2.5s ease-in-out infinite;
+    }
+    .pipe-node.paused {
+      border-color: rgba(245,158,11,0.5);
+      box-shadow: 0 0 15px rgba(245,158,11,0.1);
+      animation: pausePulse 2s ease-in-out infinite;
+    }
+    .pipe-node.done { border-color: rgba(52,211,153,0.4); border-left: 3px solid var(--positive); }
+    .pipe-node.failed { border-color: rgba(248,113,113,0.5); border-left: 3px solid var(--negative); }
+    .pipe-node.blocked { opacity: 0.5; cursor: not-allowed; }
+    .pipe-node.selected {
+      border-color: rgba(6,182,212,0.7);
+      box-shadow: 0 4px 20px rgba(6,182,212,0.15), 0 0 40px rgba(6,182,212,0.08);
+      transform: translateY(-2px);
+    }
+    .pipe-node.hidden-by-filter { display: none; }
 
-    .pipe-node-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.375rem; }
-    .pipe-node-id { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; }
-    .pipe-node.idle .pipe-node-id { color: var(--text-dim); }
-    .pipe-node.running .pipe-node-id { color: var(--cyan); }
+    .pipe-node-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem; }
+    .pipe-node-id {
+      font-family: 'Orbitron', var(--font-sans); font-size: 0.9375rem; font-weight: 700;
+    }
+    .pipe-node.idle .pipe-node-id { color: #4a5e80; }
+    .pipe-node.running .pipe-node-id { color: var(--cyan); text-shadow: 0 0 8px rgba(6,182,212,0.4); }
     .pipe-node.done .pipe-node-id { color: var(--positive); }
     .pipe-node.paused .pipe-node-id { color: var(--warning); }
-    .pipe-node-status { font-size: 0.5rem; width: 8px; height: 8px; border-radius: 50%; }
+    .pipe-node.failed .pipe-node-id { color: var(--negative); }
+    .pipe-node.blocked .pipe-node-id { color: #3a4555; }
 
-    .pipe-node-name { font-size: 0.75rem; font-weight: 500; color: #fff; margin-bottom: 0.5rem; line-height: 1.3; }
+    .pipe-node-status-badge {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      font-size: 0.5625rem; font-weight: 600; padding: 0.0625rem 0.375rem;
+      border-radius: 100px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .pipe-node-status-badge.idle { background: rgba(74,94,128,0.15); color: #4a5e80; }
+    .pipe-node-status-badge.running { background: rgba(6,182,212,0.12); color: var(--cyan); }
+    .pipe-node-status-badge.paused { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .pipe-node-status-badge.done { background: rgba(52,211,153,0.12); color: var(--positive); }
+    .pipe-node-status-badge.failed { background: rgba(248,113,113,0.12); color: var(--negative); }
+    .pipe-node-status-badge.blocked { background: rgba(58,69,85,0.15); color: #3a4555; }
+
+    .pipe-node-name { font-size: 0.75rem; font-weight: 600; color: #fff; margin-bottom: 0.375rem; line-height: 1.3; }
     .pipe-node.blocked .pipe-node-name { color: var(--text-dim); }
 
+    .pipe-node-badges { display: flex; gap: 0.25rem; flex-wrap: wrap; margin-bottom: 0.375rem; }
+    .pipe-badge {
+      font-size: 0.5625rem; font-family: var(--font-mono); font-weight: 600;
+      padding: 0.0625rem 0.3125rem; border-radius: 4px;
+    }
+    .pipe-badge-component { background: rgba(139,92,246,0.12); color: var(--purple); }
+    .pipe-badge-effort.S { background: rgba(52,211,153,0.12); color: var(--positive); }
+    .pipe-badge-effort.M { background: rgba(6,182,212,0.12); color: var(--cyan); }
+    .pipe-badge-effort.L { background: rgba(251,146,60,0.12); color: var(--warning); }
+    .pipe-badge-effort.XL { background: rgba(248,113,113,0.12); color: var(--negative); }
+    .pipe-badge-revenue { background: rgba(52,211,153,0.08); color: var(--positive); border: 1px solid rgba(52,211,153,0.12); }
+    .pipe-badge-compliance { color: var(--warning); font-size: 0.6875rem; cursor: help; }
+
     /* Animated progress bar inside node */
-    .pipe-progress { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .pipe-progress { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06); overflow: hidden; margin-bottom: 0.25rem; }
     .pipe-progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
     .pipe-progress-fill.animated {
       background: linear-gradient(90deg, var(--cyan-dark), var(--cyan), var(--cyan-light), var(--cyan));
@@ -575,42 +750,110 @@
       animation: shimmer 1.5s linear infinite;
     }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .pipe-pct-label {
+      font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-dim);
+      text-align: right; margin-bottom: 0.125rem;
+    }
 
-    .pipe-node-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 0.375rem; }
+    .pipe-node-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.25rem; }
+    .pipe-node-deliverables { font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-faint); }
     .pipe-node-elapsed { font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-dim); }
     .pipe-node-action {
-      font-size: 0.5625rem; font-weight: 600; padding: 0.125rem 0.375rem; border-radius: 4px;
+      font-size: 0.5625rem; font-weight: 600; padding: 0.1875rem 0.5rem; border-radius: 4px;
       background: rgba(6,182,212,0.12); color: var(--cyan); cursor: pointer; border: none;
       font-family: var(--font-sans); transition: all 0.2s;
     }
     .pipe-node-action:hover { background: rgba(6,182,212,0.25); }
     .pipe-node-action.start { background: rgba(6,182,212,0.12); color: var(--cyan); }
-    .pipe-node-action.pause { background: rgba(251,191,36,0.12); color: var(--warning); }
+    .pipe-node-action.pause { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .pipe-node-action.danger { background: rgba(248,113,113,0.12); color: var(--negative); }
 
     /* Pulse animation for running nodes */
     @keyframes nodePulse {
-      0%,100% { box-shadow: 0 0 15px rgba(6,182,212,0.1); }
-      50% { box-shadow: 0 0 30px rgba(6,182,212,0.25), 0 0 60px rgba(6,182,212,0.08); }
+      0%,100% { box-shadow: 0 0 15px rgba(6,182,212,0.08), inset 0 0 20px rgba(6,182,212,0.02); }
+      50% { box-shadow: 0 0 30px rgba(6,182,212,0.2), 0 0 60px rgba(6,182,212,0.06), inset 0 0 30px rgba(6,182,212,0.04); }
     }
-    .pipe-node.running { animation: nodePulse 2s ease-in-out infinite; }
-
-    /* Pause pulse */
     @keyframes pausePulse {
-      0%,100% { box-shadow: 0 0 10px rgba(251,146,60,0.1); }
-      50% { box-shadow: 0 0 25px rgba(251,146,60,0.2); }
+      0%,100% { box-shadow: 0 0 10px rgba(245,158,11,0.08); }
+      50% { box-shadow: 0 0 25px rgba(245,158,11,0.18); }
     }
-    .pipe-node.paused { animation: pausePulse 1.5s ease-in-out infinite; }
 
     /* Lock overlay for blocked nodes */
     .pipe-lock {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      font-size: 1.25rem; opacity: 0.4; z-index: 3; pointer-events: none;
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      font-size: 0.875rem; opacity: 0.5; z-index: 3; pointer-events: none;
     }
 
-    /* SVG flow lines */
-    .pipe-svg { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    /* SVG overlay for dependency lines */
+    .pipe-svg-overlay {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: visible;
+    }
     @keyframes flowDash { to { stroke-dashoffset: -20; } }
     .flow-active { animation: flowDash 1s linear infinite; }
+
+    /* Inspector panel */
+    .pipe-inspector {
+      background: rgba(15,18,25,0.9); border-left: 1px solid var(--card-border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .pipe-insp-header {
+      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pipe-insp-title { font-size: 0.8125rem; font-weight: 600; color: #fff; }
+    .pipe-insp-tabs {
+      display: flex; border-bottom: 1px solid var(--card-border); padding: 0 0.75rem;
+    }
+    .pipe-insp-tab {
+      padding: 0.5rem 0; margin-right: 1rem; border: none; background: transparent;
+      color: var(--text-muted); cursor: pointer; font-size: 0.6875rem; font-weight: 500;
+      border-bottom: 2px solid transparent; transition: all 0.2s; font-family: var(--font-sans);
+    }
+    .pipe-insp-tab.active { color: #fff; border-bottom-color: var(--cyan); }
+    .pipe-insp-tab:hover:not(.active) { color: var(--text-secondary); }
+    .pipe-insp-body { flex: 1; overflow-y: auto; padding: 0.875rem; }
+    .pipe-insp-content { display: none; }
+    .pipe-insp-content.active { display: block; }
+
+    /* Inspector overview items */
+    .pipe-insp-section-title {
+      font-size: 0.625rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--cyan); margin: 0.75rem 0 0.5rem;
+      padding-bottom: 0.25rem; border-bottom: 1px solid rgba(6,182,212,0.12);
+    }
+    .pipe-insp-section-title:first-child { margin-top: 0; }
+    .pipe-insp-kv { display: flex; justify-content: space-between; padding: 0.3125rem 0; font-size: 0.75rem; }
+    .pipe-insp-kv-label { color: var(--text-muted); }
+    .pipe-insp-kv-value { color: #fff; font-weight: 500; font-family: var(--font-mono); font-size: 0.6875rem; }
+    .pipe-insp-del-item {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.3125rem 0;
+      font-size: 0.75rem; color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .pipe-insp-del-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .pipe-insp-del-dot.done { background: var(--positive); }
+    .pipe-insp-del-dot.pending { background: var(--text-dim); }
+    .pipe-insp-del-text.done { color: var(--text-dim); text-decoration: line-through; }
+    .pipe-insp-recommend {
+      padding: 0.625rem; border-radius: 8px; margin-top: 0.5rem;
+      background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.12);
+      font-size: 0.75rem; color: var(--cyan-light);
+    }
+    .pipe-insp-blocked-item {
+      display: flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0;
+      font-size: 0.6875rem; color: var(--text-muted);
+    }
+    .pipe-insp-cmd {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      padding: 0.5rem 0.75rem; border-radius: 6px;
+      background: rgba(6,182,212,0.06); color: var(--cyan-light);
+      border: 1px solid rgba(6,182,212,0.12); margin-top: 0.25rem;
+    }
+    .pipe-insp-compliance {
+      padding: 0.5rem 0.625rem; border-radius: 6px; margin-top: 0.375rem;
+      background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.12);
+      font-size: 0.6875rem; color: var(--warning);
+    }
 
     /* Q&A Popup */
     .qa-popup {
@@ -659,12 +902,12 @@
 
     /* Activity log in sidebar */
     .activity-item {
-      padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: 0.75rem; display: flex; gap: 0.5rem;
+      padding: 0.375rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.6875rem; display: flex; gap: 0.375rem;
     }
-    .activity-time { font-family: var(--font-mono); font-size: 0.625rem; color: var(--text-faint); min-width: 50px; }
-    .activity-icon { font-size: 0.75rem; width: 16px; text-align: center; }
-    .activity-text { color: var(--text-muted); flex: 1; }
+    .activity-time { font-family: var(--font-mono); font-size: 0.5625rem; color: var(--text-faint); min-width: 46px; }
+    .activity-icon { font-size: 0.6875rem; width: 14px; text-align: center; }
+    .activity-text { color: var(--text-muted); flex: 1; line-height: 1.4; }
     .activity-text strong { color: var(--text-secondary); }
 
     /* Sessions split view */
@@ -909,32 +1152,41 @@
 <div class="bg-glow-tl"></div>
 <div class="bg-glow-br"></div>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <div class="nav-left">
-      <div class="nav-logo-mark">N</div>
-      <span class="nav-logo-text">NeuroSpect</span>
-      <span class="nav-badge">Orchestrator v3</span>
-    </div>
-    <div class="nav-right">
-      <button class="view-btn active" onclick="setView('dashboard')">Dashboard</button>
-      <button class="view-btn" onclick="setView('board')">Board</button>
-      <button class="view-btn" onclick="setView('roadmap')">Roadmap</button>
-      <button class="view-btn" onclick="setView('architecture')">Architecture</button>
-      <button class="view-btn" onclick="setView('maturity')">Maturity</button>
-      <button class="view-btn" onclick="setView('strategies')">Strategies</button>
-      <button class="view-btn" onclick="setView('calculator')">Calculator</button>
-      <button class="view-btn" onclick="setView('report')">Report</button>
-      <button class="view-btn" onclick="setView('marketing')">Marketing</button>
-      <button class="view-btn" onclick="setView('pipeline')">Pipeline</button>
-      <button class="view-btn" onclick="setView('timeline')">Timeline</button>
-      <button class="view-btn" onclick="setView('deps')">Dependencies</button>
-    </div>
+<div class="dock" id="dock">
+  <div class="dock-logo">N</div>
+  <div class="dock-sep"></div>
+  <button class="dock-item active" data-view="dashboard" onclick="dockNav('dashboard',this)"><span class="dock-icon">◉</span><span class="dock-label">Dashboard</span></button>
+  <button class="dock-item" data-view="board" onclick="dockNav('board',this)"><span class="dock-icon">▦</span><span class="dock-label">Board</span></button>
+  <button class="dock-item" data-view="pipeline" onclick="dockNav('pipeline',this)"><span class="dock-icon">▶</span><span class="dock-label">Pipeline</span></button>
+  <button class="dock-item" data-view="roadmap" onclick="dockNav('roadmap',this)"><span class="dock-icon">☰</span><span class="dock-label">Roadmap</span></button>
+  <div class="dock-sep"></div>
+  <button class="dock-item" data-view="architecture" onclick="dockNav('architecture',this)"><span class="dock-icon">◇</span><span class="dock-label">Architecture</span></button>
+  <button class="dock-item" data-view="strategies" onclick="dockNav('strategies',this)"><span class="dock-icon">♟</span><span class="dock-label">Strategies</span></button>
+  <button class="dock-item" data-view="calculator" onclick="dockNav('calculator',this)"><span class="dock-icon">⊞</span><span class="dock-label">Calculator</span></button>
+  <div class="dock-sep"></div>
+  <button class="dock-item" data-view="maturity" onclick="dockNav('maturity',this)"><span class="dock-icon">◎</span><span class="dock-label">Maturity</span></button>
+  <button class="dock-item" data-view="timeline" onclick="dockNav('timeline',this)"><span class="dock-icon">═</span><span class="dock-label">Timeline</span></button>
+  <button class="dock-item" data-view="deps" onclick="dockNav('deps',this)"><span class="dock-icon">⤷</span><span class="dock-label">Dependencies</span></button>
+  <div class="dock-sep"></div>
+  <button class="dock-item" data-view="report" onclick="dockNav('report',this)"><span class="dock-icon">▤</span><span class="dock-label">Report</span></button>
+  <button class="dock-item" data-view="marketing" onclick="dockNav('marketing',this)"><span class="dock-icon">◈</span><span class="dock-label">Marketing</span></button>
+  <div class="dock-sep"></div>
+  <div class="dock-stats">
+    <div class="dock-stat"><span class="dock-stat-dot" style="background:var(--positive)"></span><span class="dock-stat-val" id="topbar-phases">0</span><span class="dock-stat-label">/13 done</span></div>
+    <div class="dock-stat"><span class="dock-stat-dot" style="background:var(--cyan)"></span><span class="dock-stat-val" id="topbar-running">0</span><span class="dock-stat-label"> running</span></div>
   </div>
-</nav>
+  <button class="dock-kbd" onclick="openCmdPalette()"><span class="dock-kbd-key">⌘K</span><span class="dock-kbd-label">Search</span></button>
+</div>
 
-<div class="stats-bar">
-  <div class="stats-inner" id="stats-bar"></div>
+<div class="cmd-overlay" id="cmd-overlay" onclick="if(event.target===this)closeCmdPalette()">
+  <div class="cmd-palette">
+    <div class="cmd-input-wrap">
+      <span class="cmd-chevron">&#9656;</span>
+      <input class="cmd-input" id="cmd-input" placeholder="Search views..." oninput="filterCmdItems()" autofocus>
+      <span class="cmd-hint">esc to close</span>
+    </div>
+    <div class="cmd-list" id="cmd-list"></div>
+  </div>
 </div>
 
 <div class="main">
@@ -1846,78 +2098,167 @@ function canStart(phaseId){
 
 function getPipeStatus(phaseId){return _pipeState[phaseId]||{status:'idle',progress:0,started:null,model:null};}
 
-// Pipeline layout positions
-const pipePositions={0:[400,10],1:[400,100],2:[160,200],3:[160,310],4:[640,200],5:[640,310],6:[400,200],7:[640,420],8:[160,420],9:[160,520],10:[400,520],11:[640,520]};
+// Pipeline layout: rows define the grid layout for the canvas
+const pipeRows=[
+  [0],        // Row 1: Phase 0 (Demo)
+  [1,2],      // Row 2: Phase 1 (Data) -> Phase 2 (Workspace)
+  [3,12,4],   // Row 3: Phase 3 (Prop Shield) | Phase 3-NG (NeuroGraph) | Phase 4 (Events)
+  [5,6],      // Row 4: Phase 5 (EdgeLab) | Phase 6 (AI/RAG)
+  [7,8,9],    // Row 5: Phase 7 (Forensics) | Phase 8 (Score) | Phase 9 (Fund)
+  [10,11],    // Row 6: Phase 10 (Allocation) | Phase 11 (ML)
+];
+let _pipeFilter='all';
+let _pipeSelectedNode=null;
 
 function renderPipeline(){
-  const W=900,H=620,nW=180,nH=80;
-  // Build SVG flow lines
-  let svgLines='';
-  _data.phases.forEach(p=>{
-    const to=pipePositions[p.id];if(!to)return;
-    p.depends_on.forEach(d=>{
-      const from=pipePositions[d];if(!from)return;
-      const ps=getPipeStatus(d);
-      const active=ps.status==='done';
-      const running=getPipeStatus(p.id).status==='running';
-      const color=active?'rgba(52,211,153,0.4)':running?'rgba(6,182,212,0.3)':'rgba(255,255,255,0.06)';
-      const cls=running?'flow-active':'';
-      svgLines+=`<line x1="${from[0]+nW/2}" y1="${from[1]+nH}" x2="${to[0]+nW/2}" y2="${to[1]}" stroke="${color}" stroke-width="2" stroke-dasharray="${running?'6 4':active?'none':'4 4'}" class="${cls}"/>`;
+  const phases=_data.phases;
+  const runningCount=Object.values(_pipeState).filter(s=>s.status==='running').length;
+  const blockedCount=phases.filter(p=>!canStart(p.id)&&getPipeStatus(p.id).status==='idle').length;
+  const doneCount=Object.values(_pipeState).filter(s=>s.status==='done').length;
+  const totalPhases=phases.length;
+  const totalDel=phases.reduce((s,p)=>s+(p.deliverables?.length||0),0);
+  const doneDel=phases.reduce((s,p)=>s+(p.deliverables?.filter(d=>d.done).length||0),0);
+  const overallPct=totalPhases>0?Math.round(doneCount/totalPhases*100):0;
+  const sessionSpend=Object.values(_pipeState).reduce((s,ps)=>s+(ps.cost_usd||0),0);
+
+  // Build node cards for each row
+  let canvasHtml='';
+  pipeRows.forEach(row=>{
+    let rowHtml='';
+    row.forEach(phaseId=>{
+      const p=phases.find(x=>x.id===phaseId);
+      if(!p)return;
+      const ps=getPipeStatus(p.id);
+      const blocked=!canStart(p.id)&&ps.status==='idle';
+      const cls=blocked?'blocked':ps.status;
+      const pct=ps.progress||0;
+      const elapsed=ps.started?formatElapsed(ps.started,ps.status==='done'||ps.status==='failed'?ps.ended:null):'';
+      const delDone=p.deliverables?.filter(d=>d.done).length||0;
+      const delTotal=p.deliverables?.length||0;
+      const selected=_pipeSelectedNode===p.id;
+
+      // Status icon
+      const statusIcons={idle:'●',running:'▶',paused:'⏸',done:'✓',failed:'✕',blocked:'🔒'};
+      const statusIcon=blocked?statusIcons.blocked:(statusIcons[ps.status]||statusIcons.idle);
+
+      // Filter logic
+      let filterClass='';
+      if(_pipeFilter==='running'&&ps.status!=='running')filterClass='hidden-by-filter';
+      else if(_pipeFilter==='blocked'&&!blocked)filterClass='hidden-by-filter';
+      else if(_pipeFilter==='ready'&&(blocked||ps.status!=='idle'))filterClass='hidden-by-filter';
+      else if(_pipeFilter==='done'&&ps.status!=='done')filterClass='hidden-by-filter';
+
+      // Action button
+      let actionHtml='';
+      if(!blocked){
+        if(ps.status==='idle') actionHtml=`<button class="pipe-node-action start" onclick="event.stopPropagation();startPipePhase(${p.id})">▶ Start</button>`;
+        else if(ps.status==='running') actionHtml=`<span style="display:flex;gap:0.25rem">
+          <button class="pipe-node-action pause" onclick="event.stopPropagation();pausePipePhase(${p.id})">⏸</button>
+          <button class="pipe-node-action danger" onclick="event.stopPropagation();cancelPipePhase(${p.id})">✕</button></span>`;
+        else if(ps.status==='paused') actionHtml=`<span style="display:flex;gap:0.25rem">
+          <button class="pipe-node-action start" onclick="event.stopPropagation();resumePipePhase(${p.id})">▶</button>
+          <button class="pipe-node-action danger" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺</button></span>`;
+        else if(ps.status==='done') actionHtml=`<button class="pipe-node-action" style="background:rgba(245,158,11,0.12);color:var(--warning)" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺ Restart</button>`;
+        else if(ps.status==='failed') actionHtml=`<span style="display:flex;gap:0.25rem">
+          <button class="pipe-node-action start" onclick="event.stopPropagation();startPipePhase(${p.id})">▶ Retry</button>
+          <button class="pipe-node-action" style="background:rgba(245,158,11,0.12);color:var(--warning)" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺</button></span>`;
+      }
+
+      // Progress bar color
+      const progressColor=ps.status==='done'?'var(--positive)':ps.status==='running'?'':ps.status==='failed'?'var(--negative)':'var(--text-faint)';
+      const progressStyle=ps.status==='running'?'':`background:${progressColor}`;
+
+      rowHtml+=`<div class="pipe-node ${cls}${selected?' selected':''} ${filterClass}" data-phase-id="${p.id}" onclick="selectPipeNode(${p.id})">
+        ${blocked?'<div class="pipe-lock">🔒</div>':''}
+        <div class="pipe-node-header">
+          <span class="pipe-node-id">${p.id}</span>
+          <span class="pipe-node-status-badge ${cls}">${statusIcon} ${blocked?'blocked':ps.status}</span>
+        </div>
+        <div class="pipe-node-name">${p.name}</div>
+        <div class="pipe-node-badges">
+          ${p.component?`<span class="pipe-badge pipe-badge-component">${p.component}</span>`:''}
+          <span class="pipe-badge pipe-badge-effort ${p.effort}">${p.effort}</span>
+          ${p.revenue?`<span class="pipe-badge pipe-badge-revenue">$${p.revenue}</span>`:''}
+          ${p.compliance_gate?`<span class="pipe-badge-compliance" title="${p.compliance_gate.replace(/"/g,'&quot;')}">⚠</span>`:''}
+        </div>
+        <div class="pipe-pct-label">${pct}%</div>
+        <div class="pipe-progress"><div class="pipe-progress-fill ${ps.status==='running'?'animated':''}" style="width:${pct}%;${progressStyle}"></div></div>
+        <div class="pipe-node-footer">
+          <span class="pipe-node-deliverables">${delDone}/${delTotal} del</span>
+          <span class="pipe-node-elapsed">${elapsed}</span>
+          ${actionHtml}
+        </div>
+      </div>`;
     });
+    canvasHtml+=`<div class="pipe-row">${rowHtml}</div>`;
   });
 
-  // Build HTML nodes
-  let nodes='';
-  _data.phases.forEach(p=>{
-    const pos=pipePositions[p.id];if(!pos)return;
-    const ps=getPipeStatus(p.id);
-    const blocked=!canStart(p.id)&&ps.status==='idle';
-    const cls=blocked?'blocked':ps.status;
-    const pct=ps.progress||0;
-    const elapsed=ps.started?formatElapsed(ps.started,ps.status==='done'||ps.status==='failed'?ps.ended:null):'';
+  // KPI mini ring SVG
+  const ringR=14,ringC=2*Math.PI*ringR;
+  const ringSvg=`<svg class="pipe-kpi-ring" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="${ringR}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3"/>
+    <circle cx="20" cy="20" r="${ringR}" fill="none" stroke="var(--cyan)" stroke-width="3"
+      stroke-dasharray="${ringC}" stroke-dashoffset="${ringC*(1-overallPct/100)}"
+      stroke-linecap="round" transform="rotate(-90 20 20)"/>
+    <text x="20" y="20" text-anchor="middle" dominant-baseline="central"
+      fill="#fff" font-size="9" font-family="var(--font-mono)" font-weight="700">${overallPct}%</text>
+  </svg>`;
 
-    let actionHtml='';
-    if(blocked) actionHtml=`<span style="font-size:0.5625rem;color:var(--text-faint)">🔒 Blocked</span>`;
-    else if(ps.status==='idle') actionHtml=`<button class="pipe-node-action start" onclick="event.stopPropagation();startPipePhase(${p.id})">▶ Start</button>`;
-    else if(ps.status==='running') actionHtml=`<span style="display:flex;gap:0.25rem">
-      <button class="pipe-node-action pause" onclick="event.stopPropagation();pausePipePhase(${p.id})">⏸</button>
-      <button class="pipe-node-action" style="background:rgba(248,113,113,0.12);color:var(--negative)" onclick="event.stopPropagation();cancelPipePhase(${p.id})">✕</button></span>`;
-    else if(ps.status==='paused') actionHtml=`<span style="display:flex;gap:0.25rem">
-      <button class="pipe-node-action start" onclick="event.stopPropagation();resumePipePhase(${p.id})">▶</button>
-      <button class="pipe-node-action" style="background:rgba(248,113,113,0.12);color:var(--negative)" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺</button></span>`;
-    else if(ps.status==='done') actionHtml=`<button class="pipe-node-action" style="background:rgba(251,191,36,0.12);color:var(--warning)" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺ Restart</button>`;
-    else if(ps.status==='failed') actionHtml=`<span style="display:flex;gap:0.25rem">
-      <button class="pipe-node-action start" onclick="event.stopPropagation();startPipePhase(${p.id})">▶ Retry</button>
-      <button class="pipe-node-action" style="background:rgba(251,191,36,0.12);color:var(--warning)" onclick="event.stopPropagation();resetPipePhase(${p.id})">↺</button></span>`;
+  // Inspector content
+  const inspHtml=renderPipeInspector();
 
-    nodes+=`<div class="pipe-node ${cls}" style="left:${pos[0]}px;top:${pos[1]}px" onclick="selectPipeNode(${p.id})">
-      ${blocked?'<div class="pipe-lock">🔒</div>':''}
-      <div class="pipe-node-header">
-        <span class="pipe-node-id">Phase ${p.id}</span>
-        <span class="pipe-node-status" style="background:${ps.status==='running'?'var(--cyan)':ps.status==='done'?'var(--positive)':ps.status==='paused'?'var(--warning)':ps.status==='failed'?'var(--negative)':'var(--text-faint)'}"></span>
-      </div>
-      <div class="pipe-node-name">${p.name}</div>
-      <div class="pipe-progress"><div class="pipe-progress-fill ${ps.status==='running'?'animated':''}" style="width:${pct}%;background:${ps.status==='done'?'var(--positive)':ps.status==='running'?'var(--cyan)':'var(--text-faint)'}"></div></div>
-      <div class="pipe-node-meta"><span class="pipe-node-elapsed">${elapsed}</span>${actionHtml}</div>
-    </div>`;
-  });
-
-  // Activity sidebar
-  let actHtml=_pipeActivity.slice(0,20).map(a=>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-icon">${a.icon}</span><span class="activity-text">${a.text}</span></div>`).join('');
+  // Activity log
+  let actHtml=_pipeActivity.slice(0,30).map(a=>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-icon">${a.icon}</span><span class="activity-text">${a.text}</span></div>`).join('');
   if(!actHtml) actHtml='<div style="color:var(--text-dim);font-size:0.75rem;padding:1rem;text-align:center">No activity yet. Click ▶ Start on a phase to begin.</div>';
 
   document.getElementById('pipeline-view').innerHTML=`
-    <div class="pipeline-container">
-      <div class="pipeline-graph">
-        <svg class="pipe-svg" viewBox="0 0 ${W} ${H}" style="width:${W}px;height:${H}px">${svgLines}</svg>
-        ${nodes}
-      </div>
-      <div class="pipeline-sidebar">
-        <div class="sidebar-header">
-          <span class="sidebar-title">Activity Log</span>
-          <span style="font-family:var(--font-mono);font-size:0.625rem;color:var(--cyan)">${Object.values(_pipeState).filter(s=>s.status==='running').length} running · autonomous</span>
+    <div class="pipe-wrapper">
+      <div class="pipe-cmd-header">
+        <div class="pipe-cmd-left">
+          <span class="pipe-cmd-title">Build Pipeline</span>
+          <span class="pipe-exec-badge">autonomous</span>
+          <span class="pipe-running-count">${runningCount} running</span>
         </div>
-        <div class="sidebar-body" id="pipe-activity">${actHtml}</div>
+        <div class="pipe-filters">
+          <button class="pipe-filter-btn ${_pipeFilter==='all'?'active':''}" onclick="setPipeFilter('all')">All</button>
+          <button class="pipe-filter-btn ${_pipeFilter==='running'?'active':''}" onclick="setPipeFilter('running')">Running</button>
+          <button class="pipe-filter-btn ${_pipeFilter==='blocked'?'active':''}" onclick="setPipeFilter('blocked')">Blocked</button>
+          <button class="pipe-filter-btn ${_pipeFilter==='ready'?'active':''}" onclick="setPipeFilter('ready')">Ready</button>
+          <button class="pipe-filter-btn ${_pipeFilter==='done'?'active':''}" onclick="setPipeFilter('done')">Done</button>
+          <span style="width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 0.25rem"></span>
+          <button class="pipe-filter-btn" onclick="launchParallel()" style="color:var(--cyan);font-weight:600" title="Launch all ready phases in parallel">▶▶ Run Ready (${_data.phases.filter(p=>canStart(p.id)&&getPipeStatus(p.id).status==='idle').length})</button>
+          <button class="pipe-filter-btn" onclick="resetAllPipeline()" style="color:var(--negative)" title="Reset all pipeline state">↺ Reset All</button>
+        </div>
+      </div>
+      <div class="pipe-kpi-strip">
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Progress</span>${ringSvg}</div>
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Phases</span><span class="pipe-kpi-value emerald">${doneCount}<span style="color:var(--text-dim);font-size:0.75rem">/${totalPhases}</span></span></div>
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Deliverables</span><span class="pipe-kpi-value">${doneDel}<span style="color:var(--text-dim);font-size:0.75rem">/${totalDel}</span></span></div>
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Running</span><span class="pipe-kpi-value cyan">${runningCount}</span></div>
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Blocked</span><span class="pipe-kpi-value ${blockedCount>0?'amber':''}">${blockedCount}</span></div>
+        <div class="pipe-kpi"><span class="pipe-kpi-label">Spend</span><span class="pipe-kpi-value">$${sessionSpend.toFixed(2)}</span></div>
+      </div>
+      <div class="pipe-main">
+        <div class="pipe-canvas">
+          <div class="pipe-canvas-inner">
+            <div class="pipe-grid">${canvasHtml}</div>
+          </div>
+        </div>
+        <div class="pipe-inspector">
+          <div class="pipe-insp-header">
+            <span class="pipe-insp-title">${_pipeSelectedNode!==null?'Phase '+_pipeSelectedNode:'Inspector'}</span>
+          </div>
+          <div class="pipe-insp-tabs">
+            <button class="pipe-insp-tab active" onclick="switchPipeInspTab(this,'overview')">Overview</button>
+            <button class="pipe-insp-tab" onclick="switchPipeInspTab(this,'phase')">Phase</button>
+            <button class="pipe-insp-tab" onclick="switchPipeInspTab(this,'activity')">Activity</button>
+          </div>
+          <div class="pipe-insp-body">
+            <div class="pipe-insp-content active" id="pipe-insp-overview">${inspHtml.overview}</div>
+            <div class="pipe-insp-content" id="pipe-insp-phase">${inspHtml.phase}</div>
+            <div class="pipe-insp-content" id="pipe-insp-activity">${actHtml}</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="qa-popup" id="qa-popup">
@@ -1938,6 +2279,120 @@ function renderPipeline(){
   // Start tick timer
   if(_pipeTimer) clearInterval(_pipeTimer);
   _pipeTimer=setInterval(pipelineTick,2000);
+}
+
+function setPipeFilter(f){_pipeFilter=f;renderPipeline();}
+
+function switchPipeInspTab(btn,tab){
+  btn.parentElement.querySelectorAll('.pipe-insp-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pipe-insp-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('pipe-insp-'+tab).classList.add('active');
+}
+
+function renderPipeInspector(){
+  const phases=_data.phases;
+  let overview='', phase='';
+
+  // Overview tab: project summary, next recommended, blocked, what unlocks
+  const readyPhases=phases.filter(p=>{const ps=getPipeStatus(p.id);return ps.status==='idle'&&canStart(p.id);});
+  const blockedPhases=phases.filter(p=>{const ps=getPipeStatus(p.id);return ps.status==='idle'&&!canStart(p.id);});
+  const runningPhases=phases.filter(p=>getPipeStatus(p.id).status==='running');
+  const donePhases=phases.filter(p=>getPipeStatus(p.id).status==='done');
+
+  overview+=`<div class="pipe-insp-section-title">Project Summary</div>`;
+  overview+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Total phases</span><span class="pipe-insp-kv-value">${phases.length}</span></div>`;
+  overview+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Done</span><span class="pipe-insp-kv-value" style="color:var(--positive)">${donePhases.length}</span></div>`;
+  overview+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Running</span><span class="pipe-insp-kv-value" style="color:var(--cyan)">${runningPhases.length}</span></div>`;
+  overview+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Ready</span><span class="pipe-insp-kv-value">${readyPhases.length}</span></div>`;
+  overview+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Blocked</span><span class="pipe-insp-kv-value" style="color:var(--warning)">${blockedPhases.length}</span></div>`;
+
+  if(readyPhases.length>0){
+    const next=readyPhases[0];
+    overview+=`<div class="pipe-insp-section-title">Recommended Next</div>`;
+    overview+=`<div class="pipe-insp-recommend">Phase ${next.id}: ${next.name}${next.revenue?' — '+next.revenue:''}</div>`;
+  }
+
+  if(blockedPhases.length>0){
+    overview+=`<div class="pipe-insp-section-title">Blocked Phases</div>`;
+    blockedPhases.forEach(bp=>{
+      const unmetDeps=bp.depends_on.filter(d=>getPipeStatus(d).status!=='done');
+      overview+=`<div class="pipe-insp-blocked-item">🔒 Phase ${bp.id}: ${bp.name} <span style="color:var(--text-faint);margin-left:0.25rem">needs ${unmetDeps.map(d=>'P'+d).join(', ')}</span></div>`;
+    });
+  }
+
+  // What unlocks next
+  const almostDone=runningPhases.concat(readyPhases);
+  if(almostDone.length>0){
+    overview+=`<div class="pipe-insp-section-title">Completing These Unlocks</div>`;
+    almostDone.slice(0,5).forEach(ap=>{
+      const unlocks=phases.filter(p=>p.depends_on.includes(ap.id));
+      if(unlocks.length>0){
+        overview+=`<div class="pipe-insp-blocked-item" style="color:var(--text-secondary)">P${ap.id} → unlocks ${unlocks.map(u=>'P'+u.id).join(', ')}</div>`;
+      }
+    });
+  }
+
+  // Phase tab
+  if(_pipeSelectedNode!==null){
+    const p=phases.find(x=>x.id===_pipeSelectedNode);
+    if(p){
+      const ps=getPipeStatus(p.id);
+      const blocked=!canStart(p.id)&&ps.status==='idle';
+      phase+=`<div class="pipe-insp-section-title">Details</div>`;
+      phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Status</span><span class="pipe-insp-kv-value">${blocked?'blocked':ps.status}</span></div>`;
+      phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Effort</span><span class="pipe-insp-kv-value">${p.effort}</span></div>`;
+      phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Assigned</span><span class="pipe-insp-kv-value">${p.assigned||'unassigned'}</span></div>`;
+      if(p.component) phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Component</span><span class="pipe-insp-kv-value">${p.component}</span></div>`;
+      if(p.revenue) phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Revenue</span><span class="pipe-insp-kv-value" style="color:var(--positive)">${p.revenue}</span></div>`;
+      if(ps.started) phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Elapsed</span><span class="pipe-insp-kv-value">${formatElapsed(ps.started,ps.ended)}</span></div>`;
+      if(ps.model) phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Model</span><span class="pipe-insp-kv-value">${ps.model}</span></div>`;
+      if(ps.sessionId) phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Session</span><span class="pipe-insp-kv-value">${ps.sessionId}</span></div>`;
+
+      if(p.command){
+        phase+=`<div class="pipe-insp-section-title">Command</div>`;
+        phase+=`<div class="pipe-insp-cmd">${p.command}</div>`;
+      }
+
+      if(p.depends_on.length>0){
+        phase+=`<div class="pipe-insp-section-title">Dependencies</div>`;
+        p.depends_on.forEach(d=>{
+          const dp=phases.find(x=>x.id===d);
+          const met=getPipeStatus(d).status==='done';
+          phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">Phase ${d}${dp?' — '+dp.name:''}</span><span class="pipe-insp-kv-value" style="color:${met?'var(--positive)':'var(--warning)'}">${met?'✓ met':'○ unmet'}</span></div>`;
+        });
+      }
+
+      if(p.deliverables&&p.deliverables.length>0){
+        const delDone=p.deliverables.filter(d=>d.done).length;
+        phase+=`<div class="pipe-insp-section-title">Deliverables (${delDone}/${p.deliverables.length})</div>`;
+        p.deliverables.forEach(d=>{
+          phase+=`<div class="pipe-insp-del-item"><span class="pipe-insp-del-dot ${d.done?'done':'pending'}"></span><span class="${d.done?'pipe-insp-del-text done':''}">${d.title}</span></div>`;
+        });
+      }
+
+      if(p.compliance_gate){
+        phase+=`<div class="pipe-insp-section-title">Compliance Gate</div>`;
+        phase+=`<div class="pipe-insp-compliance">⚠ ${p.compliance_gate}</div>`;
+      }
+
+      if(p.sub_phases){
+        phase+=`<div class="pipe-insp-section-title">Sub-phases</div>`;
+        phase+=`<div style="display:flex;gap:0.25rem;flex-wrap:wrap">${p.sub_phases.map(sp=>`<span style="font-size:0.625rem;font-family:var(--font-mono);padding:0.125rem 0.375rem;border-radius:4px;background:rgba(139,92,246,0.12);color:var(--purple)">${sp}</span>`).join('')}</div>`;
+      }
+
+      if(p.tickets&&p.tickets.length>0){
+        phase+=`<div class="pipe-insp-section-title">Tickets</div>`;
+        p.tickets.forEach(t=>{
+          phase+=`<div class="pipe-insp-kv"><span class="pipe-insp-kv-label">${t.id}</span><span class="pipe-insp-kv-value">${t.title} <span style="color:${t.status==='done'?'var(--positive)':t.status==='in_progress'?'var(--cyan)':'var(--text-dim)'};font-size:0.5625rem">${t.status}</span></span></div>`;
+        });
+      }
+    }
+  } else {
+    phase='<div style="color:var(--text-dim);font-size:0.75rem;padding:1rem;text-align:center">Click a phase node to see details.</div>';
+  }
+
+  return {overview, phase};
 }
 
 function startPipePhase(id){
@@ -2040,6 +2495,83 @@ function resetPipePhase(id){
   renderPipeline();
 }
 
+function launchParallel(){
+  const ready=_data.phases.filter(p=>canStart(p.id)&&getPipeStatus(p.id).status==='idle');
+  if(!ready.length){showToast('No phases ready to launch','info');return;}
+
+  const maxParallel=4;
+  const running=Object.values(_pipeState).filter(ps=>ps.status==='running').length;
+  const slots=maxParallel-running;
+  if(slots<=0){showToast(`Already running ${running} sessions (max ${maxParallel})`,'info');return;}
+
+  const toLaunch=ready.slice(0,slots);
+  const names=toLaunch.map(p=>`P${p.id}`).join(', ');
+  if(!confirm(`Launch ${toLaunch.length} phases in parallel?\n\n${toLaunch.map(p=>`Phase ${p.id}: ${p.name}`).join('\n')}\n\nModel: sonnet | Mode: autonomous | Max budget: $5 each`)) return;
+
+  toLaunch.forEach(p=>{
+    _pipeState[p.id]={status:'running',progress:0,started:new Date().toISOString(),ended:null,model:'sonnet',exec_mode:'autonomous'};
+    savePipe();
+    pipeLog('🚀',`<strong>Phase ${p.id}</strong> launched — ${p.name}`);
+
+    const body={phase_id:p.id,phase_name:p.name,command:p.command,
+      prompt:`Implement Phase ${p.id}: ${p.name}. Follow the boot procedure, implement all deliverables, meet acceptance criteria.`,
+      model:'sonnet',template:'implement',budget_usd:5,timeout_min:60,exec_mode:'autonomous'};
+    fetch('/api/sessions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
+      .then(s=>{
+        _pipeState[p.id].sessionId=s.id;savePipe();
+        pipeLog('⚡',`<strong>Session ${s.id}</strong> spawned for Phase ${p.id}`);
+      })
+      .catch(e=>{
+        pipeLog('❌',`<strong>Phase ${p.id}</strong> launch failed: ${e.message}`);
+        _pipeState[p.id].status='failed';_pipeState[p.id].error='Launch failed';savePipe();
+      });
+  });
+
+  startSessionPolling();
+  showToast(`${toLaunch.length} phases launched: ${names}`,'success');
+  renderPipeline();
+}
+
+function resetAllPipeline(){
+  if(!confirm('Reset ALL pipeline state? This clears all session tracking, progress, and activity log. Phase deliverables in phases.json are not affected.')) return;
+  // Cancel any running API sessions
+  Object.values(_pipeState).forEach(ps=>{
+    if(ps.sessionId&&(ps.status==='running'||ps.status==='queued')){
+      fetch(`/api/sessions/${ps.sessionId}/cancel`,{method:'POST'}).catch(()=>{});
+    }
+  });
+  _pipeState={};
+  _pipeActivity=[];
+  localStorage.removeItem('ns_pipe');
+  localStorage.removeItem('ns_pipe_log');
+  // Reset deliverable checkboxes to unchecked
+  _data.phases.forEach(p=>{if(p.deliverables)p.deliverables.forEach(d=>{d.done=false;});});
+  showToast('Pipeline reset — all state cleared','info');
+  pipeLog('🔄','Pipeline reset by user');
+  renderPipeline();
+}
+
+function autoCheckDeliverables(phaseId, filesChanged){
+  const p=_data.phases.find(x=>x.id===phaseId);if(!p||!p.deliverables)return;
+  const files=filesChanged.join(' ').toLowerCase();
+  p.deliverables.forEach(d=>{
+    if(d.done)return;
+    const title=d.title.toLowerCase();
+    // Match deliverable keywords against changed files
+    const keywords=title.split(/[\s()\/,]+/).filter(w=>w.length>3);
+    const matches=keywords.filter(k=>files.includes(k));
+    // If 40%+ of keywords match changed files, auto-check
+    if(keywords.length>0&&matches.length/keywords.length>=0.4){
+      d.done=true;
+      pipeLog('✅',`<strong>P${phaseId}</strong> deliverable: ${d.title.substring(0,60)}`);
+    }
+  });
+  // Also check by file pattern heuristics
+  if(files.includes('migration')||files.includes('alembic')) p.deliverables.forEach(d=>{if(d.title.toLowerCase().includes('migration'))d.done=true;});
+  if(files.includes('test_')||files.includes('_test.py')) p.deliverables.forEach(d=>{if(d.title.toLowerCase()==='tests')d.done=true;});
+}
+
 function completePipePhase(id){
   const ps=_pipeState[id];if(!ps)return;
   ps.status='done';ps.progress=100;ps.ended=new Date().toISOString();savePipe();
@@ -2056,42 +2588,61 @@ function completePipePhase(id){
 }
 
 function selectPipeNode(id){
-  const p=_data.phases.find(x=>x.id===id);if(!p)return;
-  openSlideout(id);
+  _pipeSelectedNode=id;
+  // Update selected visual without full re-render
+  document.querySelectorAll('.pipe-node').forEach(n=>n.classList.remove('selected'));
+  const node=document.querySelector(`.pipe-node[data-phase-id="${id}"]`);
+  if(node)node.classList.add('selected');
+  // Update inspector
+  const inspHtml=renderPipeInspector();
+  const titleEl=document.querySelector('.pipe-insp-title');
+  if(titleEl)titleEl.textContent='Phase '+id;
+  const overviewEl=document.getElementById('pipe-insp-overview');
+  if(overviewEl)overviewEl.innerHTML=inspHtml.overview;
+  const phaseEl=document.getElementById('pipe-insp-phase');
+  if(phaseEl)phaseEl.innerHTML=inspHtml.phase;
+  // Auto-switch to phase tab
+  const tabs=document.querySelectorAll('.pipe-insp-tab');
+  const contents=document.querySelectorAll('.pipe-insp-content');
+  if(tabs.length>=2&&contents.length>=2){
+    tabs.forEach(t=>t.classList.remove('active'));
+    contents.forEach(c=>c.classList.remove('active'));
+    tabs[1].classList.add('active');
+    contents[1].classList.add('active');
+  }
+  // Also open slideout for full detail if user double-clicks or wants it
 }
 
 // Simulation tick — advances running phases, triggers Q&A
 function pipelineTick(){
-  let changed=false;
-  Object.entries(_pipeState).forEach(([id,ps])=>{
-    if(ps.status!=='running')return;
-    // Simulate progress
-    const increment=Math.random()*3+1;
-    ps.progress=Math.min(ps.progress+increment,100);
-    changed=true;
-
-    // Auto-complete at 100% (simulation fallback when API not tracking)
-    if(ps.progress>=100){
-      completePipePhase(parseInt(id));
-    }
-  });
-  if(changed){savePipe();updatePipeNodes();}
+  // Only updates elapsed time displays — progress comes from real API polling via pollSessions()
+  // Phases complete only when the API session reports status=succeeded
+  let anyRunning=Object.values(_pipeState).some(ps=>ps.status==='running');
+  if(anyRunning) updatePipeNodes();
 }
 
 function updatePipeNodes(){
-  // Lightweight update — just progress bars and elapsed times
+  // Lightweight update — just progress bars, elapsed times, and KPIs
   _data.phases.forEach(p=>{
     const ps=getPipeStatus(p.id);
-    const node=document.querySelector(`.pipe-node[onclick="selectPipeNode(${p.id})"]`);
+    const node=document.querySelector(`.pipe-node[data-phase-id="${p.id}"]`);
     if(!node)return;
     const fill=node.querySelector('.pipe-progress-fill');
     const elapsed=node.querySelector('.pipe-node-elapsed');
-    if(fill)fill.style.width=ps.progress+'%';
+    const pctLabel=node.querySelector('.pipe-pct-label');
+    if(fill)fill.style.width=(ps.progress||0)+'%';
     if(elapsed&&ps.started)elapsed.textContent=formatElapsed(ps.started,ps.status==='done'?ps.ended:null);
+    if(pctLabel)pctLabel.textContent=Math.round(ps.progress||0)+'%';
   });
-  // Update sidebar running count
-  const countEl=document.querySelector('.sidebar-header span:last-child');
+  // Update running count in header
+  const countEl=document.querySelector('.pipe-running-count');
   if(countEl)countEl.textContent=Object.values(_pipeState).filter(s=>s.status==='running').length+' running';
+  // Update activity panel
+  const actEl=document.getElementById('pipe-insp-activity');
+  if(actEl){
+    const actHtml=_pipeActivity.slice(0,30).map(a=>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-icon">${a.icon}</span><span class="activity-text">${a.text}</span></div>`).join('');
+    actEl.innerHTML=actHtml||'<div style="color:var(--text-dim);font-size:0.75rem;padding:1rem;text-align:center">No activity yet.</div>';
+  }
 }
 
 // Q&A system
@@ -2177,14 +2728,23 @@ function pollSessions(){
       if(s.status==='running'){
         anyRunning=true;
         ps.status='running';
-        // Estimate progress from tokens
-        if(s.tokens_out>0) ps.progress=Math.min(Math.round(s.tokens_out/500*100),95);
+        ps.cost=s.cost_usd||0;
+        ps.tokens_in=s.tokens_in||0;
+        ps.tokens_out=s.tokens_out||0;
+        // Estimate progress from output volume (real work, not fake timer)
+        if(s.output_lines>0) ps.progress=Math.min(Math.round(s.output_lines/80*100),95);
       }else if(s.status==='succeeded'){
         if(ps.status!=='done'){
+          ps.cost=s.cost_usd||0;
+          ps.tokens_out=s.tokens_out||0;
+          // Check files changed to auto-mark deliverables
+          if(s.files_changed&&s.files_changed.length>0){
+            autoCheckDeliverables(phaseId, s.files_changed);
+          }
           completePipePhase(phaseId);
         }
       }else if(s.status==='failed'||s.status==='cancelled'||s.status==='timeout'){
-        ps.status='failed';ps.ended=s.ended_at;
+        ps.status='failed';ps.ended=s.ended_at;ps.cost=s.cost_usd||0;
         pipeLog('❌',`<strong>Phase ${phaseId}</strong> failed: ${s.error||s.status}`);
       }
     });
@@ -2220,9 +2780,9 @@ function pollSessionOutput(){
           }
         }catch{}
       });
-      // Update activity sidebar
-      const actEl=document.getElementById('pipe-activity');
-      if(actEl) actEl.innerHTML=_pipeActivity.slice(0,25).map(a=>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-icon">${a.icon}</span><span class="activity-text">${a.text}</span></div>`).join('');
+      // Update activity panel in inspector
+      const actEl=document.getElementById('pipe-insp-activity');
+      if(actEl) actEl.innerHTML=_pipeActivity.slice(0,30).map(a=>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-icon">${a.icon}</span><span class="activity-text">${a.text}</span></div>`).join('');
     }).catch(()=>{});
   });
 }
@@ -2258,8 +2818,8 @@ function renderDeps() {
 
 function setView(view) {
   _currentView=view;
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
+  // Sync dock
+  document.querySelectorAll('.dock-item').forEach(d=>d.classList.toggle('active',d.dataset?.view===view));
   const views=['dashboard','board','roadmap','architecture','maturity','strategies','calculator','report','marketing','pipeline','timeline','deps'];
   const displays={board:'grid',timeline:'flex'};
   views.forEach(v=>{const el=document.getElementById(v+'-view');if(el)el.style.display=v===view?(displays[v]||'block'):'none';});
@@ -2267,6 +2827,7 @@ function setView(view) {
     maturity:renderMaturity,strategies:renderStrategies,calculator:renderCalculator,report:renderReport,
     marketing:renderMarketing,pipeline:renderPipeline,timeline:renderTimeline,deps:renderDeps};
   if(renderers[view])renderers[view]();
+  updateTopbarStats();
 }
 
 function openSlideout(id) {
@@ -2520,10 +3081,92 @@ function showToast(message, type='info') {
   setTimeout(()=>{if(toast.parentNode)toast.remove();},3000);
 }
 
+// Command palette
+const cmdViews=[
+  {id:'dashboard',label:'Dashboard',icon:'◉',group:'Build',desc:'KPIs, progress rings, revenue milestones'},
+  {id:'board',label:'Board',icon:'▦',group:'Build',desc:'Kanban: Not Started / In Progress / Review / Done'},
+  {id:'pipeline',label:'Pipeline',icon:'▶',group:'Build',desc:'Real-time dependency-aware build execution'},
+  {id:'roadmap',label:'Roadmap',icon:'☰',group:'Build',desc:'Expandable phase cards with health indicators'},
+  {id:'architecture',label:'Architecture',icon:'◇',group:'Research',desc:'Interactive SVG component diagram'},
+  {id:'strategies',label:'Strategies',icon:'♟',group:'Research',desc:'7 ICT strategy cards with scoring'},
+  {id:'calculator',label:'Calculator',icon:'⊞',group:'Research',desc:'Infra cost projection sliders'},
+  {id:'maturity',label:'Maturity',icon:'◎',group:'Ops',desc:'Component readiness matrix + integration health'},
+  {id:'timeline',label:'Timeline',icon:'═',group:'Ops',desc:'Table view with progress bars'},
+  {id:'deps',label:'Dependencies',icon:'⤷',group:'Ops',desc:'Phase dependency graph'},
+  {id:'report',label:'Report',icon:'📋',group:'Reporting',desc:'Stakeholder-ready progress report'},
+  {id:'marketing',label:'Marketing',icon:'📣',group:'Reporting',desc:'Audience segments, channels, playbook'},
+];
+let _cmdFocusIdx=0;
+
+function openCmdPalette(){
+  document.getElementById('cmd-overlay').classList.add('open');
+  const inp=document.getElementById('cmd-input');
+  inp.value='';inp.focus();
+  renderCmdList(cmdViews);
+}
+function closeCmdPalette(){
+  document.getElementById('cmd-overlay').classList.remove('open');
+}
+function filterCmdItems(){
+  const q=document.getElementById('cmd-input').value.toLowerCase();
+  const filtered=q?cmdViews.filter(v=>v.label.toLowerCase().includes(q)||v.desc.toLowerCase().includes(q)||v.group.toLowerCase().includes(q)):cmdViews;
+  _cmdFocusIdx=0;
+  renderCmdList(filtered);
+}
+function renderCmdList(items){
+  const groups={};
+  items.forEach(v=>{if(!groups[v.group])groups[v.group]=[];groups[v.group].push(v);});
+  let html='';let idx=0;
+  for(const[group,views]of Object.entries(groups)){
+    html+=`<div class="cmd-group-label">${group}</div>`;
+    views.forEach(v=>{
+      const active=v.id===_currentView;
+      html+=`<div class="cmd-item ${idx===_cmdFocusIdx?'focused':''} ${active?'cmd-item-active':''}" onclick="selectCmdItem('${v.id}')" data-cmd-idx="${idx}">
+        <span class="cmd-item-icon">${v.icon}</span>
+        <span class="cmd-item-label">${v.label}</span>
+        <span class="cmd-item-desc">${v.desc}</span>
+      </div>`;
+      idx++;
+    });
+  }
+  document.getElementById('cmd-list').innerHTML=html;
+}
+function dockNav(viewId,btn){
+  document.querySelectorAll('.dock-item').forEach(d=>d.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  setView(viewId);
+}
+function selectCmdItem(viewId){
+  closeCmdPalette();
+  setView(viewId);
+  // Sync dock active state
+  document.querySelectorAll('.dock-item').forEach(d=>{
+    d.classList.toggle('active',d.dataset.view===viewId);
+  });
+}
+function updateTopbarStats(){
+  const done=_data.phases.filter(p=>p.status==='complete').length;
+  const running=Object.values(_pipeState).filter(ps=>ps.status==='running').length;
+  const dEl=document.getElementById('topbar-phases');if(dEl)dEl.textContent=done;
+  const rEl=document.getElementById('topbar-running');if(rEl)rEl.textContent=running;
+}
+
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeSlideout();closeLaunchModal();}
+  if(e.key==='Escape'){
+    if(document.getElementById('cmd-overlay').classList.contains('open')){closeCmdPalette();return;}
+    closeSlideout();closeLaunchModal();
+  }
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openCmdPalette();}
+  // Arrow nav in palette
+  if(document.getElementById('cmd-overlay').classList.contains('open')){
+    const items=document.querySelectorAll('.cmd-item');
+    if(e.key==='ArrowDown'){e.preventDefault();_cmdFocusIdx=Math.min(_cmdFocusIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('focused',i===_cmdFocusIdx));}
+    if(e.key==='ArrowUp'){e.preventDefault();_cmdFocusIdx=Math.max(_cmdFocusIdx-1,0);items.forEach((el,i)=>el.classList.toggle('focused',i===_cmdFocusIdx));}
+    if(e.key==='Enter'){e.preventDefault();const focused=items[_cmdFocusIdx];if(focused)focused.click();}
+  }
 });
 init();
+updateTopbarStats();
 </script>
 </body>
 </html>
