@@ -74,6 +74,9 @@ class Settings(BaseSettings):
     tradovate_cid: int = 0
     tradovate_sec: str = ""
 
+    # Sentry error tracking (empty string = disabled)
+    sentry_dsn: str = ""
+
     # Debug mode — enables /auth/debug/token; never true in prod
     debug: bool = False
 

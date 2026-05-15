@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,6 +13,13 @@ from app.routers.screenshots import router as screenshots_router
 from app.routers.trades import router as trades_router
 from app.routers.tradovate import router as tradovate_router
 from app.routers.tv_tokens import router as tv_tokens_router
+
+if settings.sentry_dsn:
+    sentry_sdk.init(
+        dsn=settings.sentry_dsn,
+        traces_sample_rate=0.2,
+        environment="production" if not settings.debug else "development",
+    )
 
 
 @asynccontextmanager
