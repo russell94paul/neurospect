@@ -29,12 +29,12 @@ Default mode is `exec` (execution boot prompt). If `plan` is specified, generate
 
 Read `roadmap/phases/phase-{N}-{slug}/README.md` for the canonical phase definition (goals, scope, exit criteria, status, assignments).
 
-The slug mapping:
-- 0=research, 1=rag-mvp, 2=market-context, 3=product-mvp, 4=evaluation
-- 5=beta, 6=launch, 7=edgelab, 8=neuroquant, 9=neurotrader, 10=advanced
-- 11=content-licensing, 12=regulatory, 13=go-to-market, 14=retention, 15=competitive, 16=team-scaling
+The slug mapping (v3):
+- 0=marketing-demo, 1=data-foundation, 2=trader-workspace, 3=prop-shield
+- 4=ict-events, 5=edgelab-core, 6=ai-trade-review, 7=edge-forensics
+- 8=neuroscore, 9=neurofund-elite, 10=allocation-watchlist, 11=advanced-ml
 
-Phases 11-16 are **Track C (Business & Operations)** — they run parallel to engineering tracks A/B and have cross-track gates documented in their READMEs.
+Compliance/business deliverables are embedded per-phase (no separate Track C). Each phase's `/ns-phaseN` command includes its compliance constraints.
 
 ### 3. Read Upstream Deviations
 
@@ -82,9 +82,8 @@ Identify any commits or branches that relate to Phase N based on ticket IDs or p
 
 | Phase Type | Branch Prefix | Example |
 |---|---|---|
-| Research phases (Phase 0, or any phase with `research` label tickets) | `research/` | `research/phase-0-research`, `research/NEU-6-embedding-eval` |
-| Implementation phases (Phases 1-10) | `feat/` | `feat/phase-1-rag-mvp`, `feat/NEU-10-ingestion-pipeline` |
-| Business/operations phases (Phases 11-16, Track C) | `docs/` | `docs/phase-11-content-licensing` |
+| Research phases (Phase 0, or any phase with `research` label tickets) | `research/` | `research/phase-0-marketing-demo`, `research/NEU-6-embedding-eval` |
+| Implementation phases (Phases 1-11) | `feat/` | `feat/phase-1-data-foundation`, `feat/NEU-10-ingestion-pipeline` |
 
 **Steps:**
 
@@ -105,16 +104,18 @@ Ask the user to confirm before creating the branch. Skip this step for `plan` an
 
 Based on the phase, identify key files that should exist or have been modified:
 
-- Phase 0: `roadmap/`, `research/phase-0-research/`, `site/`, wiki content files
-- Phase 1: `api/app/coach/rag/`, `api/app/models/wiki_chunk.py`, `app/src/pages/chat.tsx`
-- Phase 2: `api/app/coach/tools/`, economic calendar integration
-- Phase 3: `api/app/routers/billing.py`, Stripe integration, landing page
-- Phase 4: `evals/`, `api/app/coach/rag/evaluator.py`
-- Phase 5-6: deployment configs, monitoring
-- Phase 7: `api/app/backtest/`, `api/app/models/backtest_run.py`
-- Phase 8: `api/app/neuroquant/`, `api/app/models/agent_performance.py`
-- Phase 9: `api/app/agent/`, `api/app/models/agent_config.py`
-- Phase 11-16 (Track C): No code artifacts — these are business/operations phases. Report document state: check if deliverable docs exist in wiki/ or roadmap/, and whether gate conditions for downstream engineering phases are met.
+- Phase 0: `roadmap/`, `neurospect-ui/`, `design-handoff/`, `docs/`, CI/CD configs
+- Phase 1: `api/app/models/trade.py`, `api/app/models/broker_credential.py`, `api/app/routers/tradovate.py`
+- Phase 2: `api/app/services/analytics.py`, `api/app/routers/analytics.py`, behavior metrics
+- Phase 3: `api/app/routers/tradovate.py`, prop rule engine, `api/app/routers/billing.py`
+- Phase 4: `api/app/edgelab/detectors/`, `api/app/models/market_event.py`, market data pipeline
+- Phase 5: `api/app/edgelab/engine/`, `api/app/edgelab/strategies/`, `api/app/edgelab/risk/`, `api/app/edgelab/features/`
+- Phase 6: `api/app/coach/rag/`, `api/app/models/wiki_chunk.py`, `api/app/routers/chat.py`, `app/src/pages/chat.tsx`
+- Phase 7: `api/app/edgelab/forensics/`, `api/app/routers/forensics.py`
+- Phase 8: `api/app/services/neuroscore.py`, `api/app/routers/leaderboard.py`
+- Phase 9: NeuroFund Elite eligibility models, admin workflow, compliance-critical copy
+- Phase 10: `api/app/models/allocation_watchlist.py`, `api/app/routers/allocation.py`
+- Phase 11: `api/app/edgelab/nslm/`, `api/app/neuroquant/`, `api/app/agent/`
 
 Check which of these exist and report their state.
 

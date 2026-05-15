@@ -1,51 +1,65 @@
 ---
 tags: [roadmap, status, dashboard]
-updated: 2026-05-10
+updated: 2026-05-15
 ---
 
-# NeuroSpect Roadmap Status
+# NeuroSpect Roadmap Status (v3)
 
-| Phase | Name | Status | Assigned | Tickets | Started | Completed |
-|---|---|---|---|---|---|---|
-| 0 | Research & Validation | in_progress | Paul | 0/6 | 2026-05-10 | — |
-| 1 | Knowledge Base & RAG MVP | not_started | Paul | 0/8 | — | — |
-| 2 | Market Context & Trade Integration | not_started | Paul | 0/2 | — | — |
-| 3 | Product MVP | not_started | Paul | 0/6 | — | — |
-| 4 | Evaluation, Reliability & Prompt Infrastructure | not_started | Paul | 0/1 | — | — |
-| 5 | Private Beta | not_started | — | 0/0 | — | — |
-| 6 | V1 Launch | not_started | — | 0/0 | — | — |
-| 7 | NeuroSpect EdgeLab Foundation | not_started | — | 0/0 | — | — |
-| 8 | Hybrid Model Research + NeuroQuant Promotion | not_started | — | 0/0 | — | — |
-| 9 | NeuroTrader Agent | not_started | — | 0/0 | — | — |
-| 10 | Advanced Features | not_started | — | 0/0 | — | — |
+| Phase | Name | Component | Status | Assigned | Revenue Event | Started | Completed |
+|---|---|---|---|---|---|---|---|
+| 0 | Marketing + Demo | — | in_progress | Paul | Waitlist | 2026-05-10 | — |
+| 1 | Trading Data Foundation | Trader Workspace | not_started | Paul | — | — | — |
+| 2 | Trader Workspace | Trader Workspace | not_started | Paul | — | — | — |
+| 3 | Prop Shield | Prop Shield | not_started | Paul | **Mentor $29 / Trader $99** | — | — |
+| 4 | ICT Event Intelligence | ICT Event Engine | not_started | — | — | — | — |
+| 5 | EdgeLab Core (5A/5B/5C) | EdgeLab | not_started | — | Research $199 | — | — |
+| 6 | AI Trade Review + RAG | Mentor + NeuroCore | not_started | — | Mentor upsell | — | — |
+| 7 | Edge Forensics | Edge Forensics | not_started | — | Research retention | — | — |
+| 8 | NeuroScore + Leaderboard | NeuroScore | not_started | — | Quant $349 | — | — |
+| 9 | NeuroFund Elite Rewards | NeuroFund Elite | not_started | — | Elite retention | — | — |
+| 10 | Allocation Watchlist | NeuroFund Elite | not_started | — | — | — | — |
+| 11 | Advanced ML Research | NSLM + NeuroQuant + NeuroTrader | not_started | — | Quant/Team $499 | — | — |
+| 3-NG | NeuroGraph (Plan → Build) | NeuroGraph | not_started | — | Retention (all tiers) | — | — |
 
-### Track C: Business & Operations
+## Dependency Graph
 
-| Phase | Name | Status | Assigned | Tickets | Started | Completed |
-|---|---|---|---|---|---|---|
-| 11 | Content Licensing & IP Strategy | not_started | — | 0/0 | — | — |
-| 12 | Regulatory & Compliance Framework | not_started | — | 0/0 | — | — |
-| 13 | Go-to-Market & User Acquisition | not_started | — | 0/0 | — | — |
-| 14 | Retention, Analytics & Coaching Quality | not_started | — | 0/0 | — | — |
-| 15 | Competitive Intelligence & Moat Strategy | not_started | — | 0/0 | — | — |
-| 16 | Team Scaling & Org Design | not_started | — | 0/0 | — | — |
+```
+Phase 0 (Marketing)
+  └─> Phase 1 (Data Foundation)
+        ├─> Phase 2 (Workspace) ─> Phase 3 (Prop Shield) ← FIRST REVENUE
+        │                              └─> Phase 8 (NeuroScore)
+        │                                    └─> Phase 9 (NeuroFund Elite)
+        │                                          └─> Phase 10 (Allocation)
+        └─> Phase 4 (ICT Events) ─> Phase 5 (EdgeLab) ← SECOND REVENUE
+                                        ├─> Phase 7 (Edge Forensics)
+                                        └─> Phase 11 (Advanced ML)
+  Phase 6 (AI + RAG) depends on: Phase 1 + Phase 2 + Phase 4
+  Phase 3-NG (NeuroGraph) depends on: Phase 1 + Phase 2
+    └─> Enhances: ALL downstream phases (3-11) — compounds with every interaction
+```
 
-### Cross-Track Dependencies
+## Per-Phase Compliance Gates
 
-| Business Phase | Gates | Parallel With |
-|---|---|---|
-| 11 (Content Licensing) | **Phase 1** (can't ingest without rights) | Phases 0-1 |
-| 12 (Regulatory) | **Phase 3** (ToS/Privacy), **Phase 9** (RIA) | Phases 2-3 |
-| 13 (Go-to-Market) | **Phase 6** (launch requires GTM) | Phases 4-6 |
-| 14 (Retention) | — | Phases 4-6 |
-| 15 (Competitive) | — | Phases 5-7 |
-| 16 (Team Scaling) | — | Phases 6-8 |
+| Phase | Compliance Requirement |
+|---|---|
+| 3 (Prop Shield) | Advisory lockout disclaimer reviewed by counsel |
+| 3-NG (NeuroGraph) | GDPR/privacy — memory deletion support required |
+| 5 (EdgeLab) | Backtesting disclaimers ("past performance is not indicative...") |
+| 6 (AI Trade Review) | Content licensing for private instructor content. ToS + Privacy Policy. "Not financial advice" |
+| 9 (NeuroFund Elite) | Full compliance review. Approved/forbidden language audit. Legal counsel review of marketing copy |
+| 11 (Advanced ML) | RIA determination before any live signal generation |
 
 ## Current Focus
 
-**Phase 0 — Research & Validation** is active. Marketing site built with 6 pages + design handoff package. NEU-27 (live trading simulator) is In Progress. Interactive ICT Course (`/course`) scoped — 5 modules, 4 assessment types, candlestick chart exercises. Next: build course pages, then technical validation (RAG prototype, vector DB, embedding model).
+**Phase 0 — Marketing + Demo** is active. Phase 0A (marketing site, interactive demos, product guide) is substantially complete. Phase 0B (CI/CD, Sentry, data model audit) has not started.
 
-**⚠ Gate Warning:** Phase 11 (Content Licensing) is `not_started` but gates Phase 1 (RAG MVP). Content licensing work should begin before Phase 0 completes.
+**Build order:** `verified data → risk engine → events → backtesting → AI review → forensics → scoring → rewards → ML`
+
+**Critical path to first revenue:** Phase 0 → 1 → 2 → 3 (~16 weeks)
+
+## Phase Execution Commands
+
+Each phase has a slash command: `/ns-phase0` through `/ns-phase11` (plus `/ns-phase5a`, `/ns-phase5b`, `/ns-phase5c`). These are static implementation guides in `.claude/commands/`.
 
 ## Linear Integration
 
@@ -53,8 +67,8 @@ updated: 2026-05-10
 - **Total tickets:** 23 (+ 4 onboarding)
 - **Phase 0:** 5 Todo + 1 In Progress (NEU-27), all assigned to Paul
 - **Phase 1-4:** 17 tickets in Backlog, all assigned to Paul
-- **Phase 5-16:** No tickets yet
-- **Last synced:** 2026-05-11 (ICT Course scoped, Phase 4 lint fix, personal wiki Track C sync)
+- **Phase 5-11:** No tickets yet — create as phases are started
+- **Last synced:** 2026-05-15 (v3 roadmap restructure)
 
 ## Blockers
 
@@ -62,11 +76,10 @@ _None._
 
 ## Notes
 
+- v3 roadmap restructure (2026-05-15): Resequenced from coaching-first to data-foundation-first. Track C (business phases 11-16) eliminated as separate track — compliance embedded per-phase. NeuroFund Elite added as compliance-safe rewards program. Prop Shield added as first paid feature wedge.
+- v2 plan archived — see `initial-plan/` for previous versions
 - NEU-27: Live trading simulator (`/simulator`) — design handoff delivered, build in progress
-- NEU-23 ("Build landing page") is Phase 3 product app landing page, not the marketing site
-- Marketing site build (commit `0cdc3c3`) has no dedicated Linear ticket — tracked as Phase 0 deliverable in README
-- Track C phases (11-16) added 2026-05-10 — business/operations track running parallel to engineering
-- Interactive ICT Course scoped (2026-05-11) — free tier content marketing play. Boot prompt: `boot-prompts/course.md`
+- Marketing site in `neurospect-ui/` (React 18 CDN, replaces deprecated `site/`)
 
 ---
 

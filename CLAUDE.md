@@ -1,28 +1,42 @@
 # NeuroSpect Monorepo
 
-Single repository for the NeuroSpect AI trading platform. Evolving from an ICT trading journal into a full AI coaching, quantitative analysis, and automated trading system.
+Single repository for the NeuroSpect AI trading intelligence platform. Data-foundation-first architecture: verified trading data → risk protection → ICT event detection → backtesting → AI coaching → forensics → scoring → rewards → advanced ML.
 
 ## Product Hierarchy
 
 ```
 NeuroSpect (company / product brand)
-├── NeuroSpect Mentor   — Consumer-facing AI coaching product
-├── NeuroCore          — Knowledge/retrieval layer
-├── NSLM                — NeuroSpect Language Model (ICT-aware model family)
-├── NeuroSpect EdgeLab  — Research, backtesting, and model experimentation engine
-├── NeuroQuant          — Production model layer
-└── NeuroTrader Agent   — Automated trading agent
+├── Trader Workspace         — Journal, analytics, behavior metrics, trader profile
+├── Prop Shield              — Prop firm rule tracking, tilt lockouts, Tradovate protection
+├── ICT Event Engine         — Programmable ICT market event detection primitives
+├── EdgeLab                  — Event-driven backtesting, feature engineering, experiments
+├── NeuroSpect Mentor        — AI coaching, RAG citations, structured trade review
+├── Edge Forensics           — Loss pattern mining → testable hypothesis generation
+├── NeuroCore                — Knowledge/retrieval layer (hybrid 3-signal search)
+├── NSLM                     — NeuroSpect Language Model (ICT-aware model family)
+├── NeuroGraph               — Persistent trading intelligence graph (compounds with every interaction)
+├── NeuroScore               — Risk-adjusted trader ranking and verification
+├── NeuroFund Elite          — Company-sponsored rewards/eligibility (NOT pooled capital)
+├── NeuroQuant               — Production model layer (promoted from EdgeLab)
+└── NeuroTrader Agent        — Automated trading agent (shadow → paper → live)
 ```
 
 | Component | Description |
 |---|---|
-| **NeuroSpect** | Company and product brand. AI trading research and coaching platform for traders and educators. |
-| **NeuroSpect Mentor** | Consumer-facing AI coaching product. RAG + ICT knowledge + trade journal + personalized coaching with source-grounded citations and deterministic rule validation. |
-| **NeuroCore** | Knowledge/retrieval layer. Hybrid 3-signal search (keyword + semantic + entity) across all knowledge sources. Powers coaching RAG, cross-wiki intelligence, and agent reasoning. Source-grounded ICT memory. |
-| **NSLM** | NeuroSpect Language Model. ICT-aware LLM/model family trained and adapted from private mentorship content, wiki content, structured ICT playbooks, and evaluation feedback. Prompt-versioned, model-versioned, evaluated through EdgeLab. |
-| **NeuroSpect EdgeLab** | Event-driven research, backtesting, quant feature engineering, NSLM prompt/model experimentation, and hybrid model evaluation engine. Tests strategies, evaluates NSLM versions, ranks features, promotes validated models to NeuroQuant. |
+| **NeuroSpect** | Company and product brand. AI trading intelligence platform for traders and educators. |
+| **Trader Workspace** | Core trading data, journal, analytics, behavior metrics (tilt, discipline, consistency), trader profile. The daily-use engagement layer. |
+| **Prop Shield** | Prop firm rule tracking, trailing drawdown monitoring, tilt lockouts, daily loss limits, Tradovate protection. The first paid feature wedge. |
+| **ICT Event Engine** | Programmable ICT market event detection. FVGs, sweeps, order blocks, market structure, sessions as queryable events. Foundation for backtesting and forensics. |
+| **EdgeLab** | Event-driven backtesting, quant feature engineering, strategy compilation from YAML, Monte Carlo, walk-forward optimization, experiment registry. |
+| **NeuroSpect Mentor** | AI coaching with RAG citations, structured trade review (setup/execution/risk/psychology/rules/improvement), grounded in wiki content and user trade data. |
+| **Edge Forensics** | Loss pattern mining, mistake taxonomy, hypothesis generation. Turns repeated losses into testable improvement hypotheses connected to EdgeLab backtests. |
+| **NeuroCore** | Knowledge/retrieval layer. Hybrid 3-signal search (keyword + semantic + entity) across wiki, transcripts, playbooks, trade journal. Powers coaching RAG and agent reasoning. |
+| **NSLM** | NeuroSpect Language Model. ICT-aware LLM/model family. Prompt-versioned, model-versioned, evaluated through EdgeLab. Produces setup classifications and features. |
+| **NeuroGraph** | Persistent trading intelligence graph. Nodes = trades, events, features, setups, patterns, concepts. Edges = relationships. Seeded with wiki corpus + ICT models on build, compounds with every trade/coaching/experiment. Temporal/regime-aware with confidence decay and reinforcement. Queried by all components. The compounding moat. |
+| **NeuroScore** | Risk-adjusted trader ranking. Considers performance, drawdown discipline, rule adherence, consistency, tilt control, execution quality. Broker-verified trades only. |
+| **NeuroFund Elite** | Company-sponsored rewards and eligibility program funded from NeuroSpect revenue. Premium opt-in. NOT pooled user capital, NOT an investment vehicle. |
 | **NeuroQuant** | Production model layer. Consumes validated features and models promoted from EdgeLab. Regime-aware scoring, model ensembles, confluence decisions. |
-| **NeuroTrader Agent** | Automated trading agent. Shadow → Paper → Live progression. 5-layer safety architecture. Gated by EdgeLab evidence and NeuroQuant scoring. |
+| **NeuroTrader Agent** | Automated trading agent. Shadow → Paper → Live progression. 5-layer safety architecture. Gated by EdgeLab null test and NeuroQuant scoring. |
 
 ## Directory Structure
 
@@ -36,6 +50,13 @@ NeuroSpect (company / product brand)
 - `prompts/` — Engineering, product, and meta-prompts used to build and operate NeuroSpect. Organized by phase and ad-hoc. Graduates to a versioning module in Phase 4. Read `prompts/CLAUDE.md`.
 - `research/` — Engineering research artifacts (benchmarks, evaluations, prototype findings). Organized by phase. NOT product content — that goes in `wiki/`. Read `research/README.md`.
 - `initial-plan/` — Historical archive of original plan versions (read-only).
+
+### Marketing & Demo
+- `neurospect-ui/` — React 18 interactive marketing site. Primary marketing codebase (replaces `site/`). No build step — CDN-loaded React + Babel.
+- `site/` — **Deprecated.** Original Astro SSG marketing site. Being replaced by `neurospect-ui/`.
+- `design-handoff/` — Design specification documents for marketing site pages and components.
+- `docs/` — Product documentation (product overview & user guide).
+- `prompts/` — Prompt library for external LLM tools (ChatGPT design prompts, etc.).
 
 ### Personal Wikis (Obsidian Vaults)
 - `vlad-wiki/` — Vlad's personal working wiki.
@@ -64,29 +85,27 @@ Both personal wikis share identical structure:
 
 They are **personal working memory** — drafts, research-in-progress, daily notes. Mature content gets promoted to `wiki/` via `promote: true` frontmatter tag.
 
-## Roadmap Phases
+## Roadmap Phases (v3)
 
-| Phase | Name | Track |
-|---|---|---|
-| 0 | Research & Validation | A (Coaching) |
-| 1 | Knowledge Base & RAG MVP | A |
-| 2 | Market Context & Trade Integration | A |
-| 3 | Product MVP | A |
-| 4 | Evaluation, Reliability & Prompt Infrastructure | A |
-| 5 | Private Beta | A |
-| 6 | V1 Launch | A |
-| 7 | NeuroSpect EdgeLab Foundation | B (Trading Intelligence) |
-| 8 | Hybrid Model Research + NeuroQuant Promotion | B |
-| 9 | NeuroTrader Agent | B |
-| 10 | Advanced Features | B |
-| 11 | Content Licensing & IP Strategy | C (Business & Operations) |
-| 12 | Regulatory & Compliance Framework | C |
-| 13 | Go-to-Market & User Acquisition | C |
-| 14 | Retention, Analytics & Coaching Quality | C |
-| 15 | Competitive Intelligence & Moat Strategy | C |
-| 16 | Team Scaling & Org Design | C |
+| Phase | Name | Component | Revenue Event |
+|---|---|---|---|
+| 0 | Marketing + Demo | — | Waitlist |
+| 1 | Trading Data Foundation | Trader Workspace | — |
+| 2 | Trader Workspace | Trader Workspace | — |
+| 3 | Prop Shield | Prop Shield | **FIRST REVENUE** (Mentor $29 / Trader $99) |
+| 4 | ICT Event Intelligence | ICT Event Engine | — |
+| 5 | EdgeLab Core (5A/5B/5C) | EdgeLab | Research $199 |
+| 6 | AI Trade Review + RAG | Mentor + NeuroCore | Mentor upsell |
+| 7 | Edge Forensics | Edge Forensics | Research retention |
+| 8 | NeuroScore + Leaderboard | NeuroScore | Quant $349 |
+| 9 | NeuroFund Elite Rewards | NeuroFund Elite | Elite retention |
+| 10 | Allocation Watchlist | NeuroFund Elite | — |
+| 11 | Advanced ML Research (11A/11B/11C) | NSLM + NeuroQuant + NeuroTrader | Quant/Team $499 |
+| 3-NG | NeuroGraph (Plan → Build) | NeuroGraph | Retention (all tiers) |
 
-Track C phases run **parallel** to engineering tracks and have cross-track gates (e.g., Phase 11 gates Phase 1; Phase 12 gates Phases 3 and 9).
+**Build order:** `verified data → risk engine → events → backtesting → AI review → forensics → scoring → rewards → ML`
+
+Compliance/business deliverables are embedded per-phase (no separate Track C). Each phase's `/ns-phaseN` slash command includes its compliance constraints.
 
 ### Where Phase Information Lives
 
@@ -170,14 +189,40 @@ Several patterns proven in production elsewhere should be replicated independent
 
 ## Skills (Slash Commands)
 
-Four skills power the project workflow. Skills generate context at runtime — they read live state, not cached instructions.
+### Workflow Skills
+
+Runtime skills that generate context from live state. Located in `.claude/skills/`.
 
 | Skill | Purpose |
 |---|---|
 | `/phase N [plan\|exec]` | Load Phase N boot prompt. Generated from roadmap definition + upstream deviations + Linear tickets + git state + cross-wiki content. Default mode is `exec`. Use `/phase status` to see all phases. |
-| `/sync` | End-of-session sync. Updates Linear tickets, regenerates boot prompts, captures deviations, flags cross-wiki content, checks Track C gates, suggests which `/phase` to run next. **Must be offered before every session ends.** |
+| `/sync` | End-of-session sync. Updates Linear tickets, regenerates boot prompts, captures deviations, flags cross-wiki content, suggests which `/phase` to run next. **Must be offered before every session ends.** |
 | `/lint` | Cross-artifact consistency check. Detects drift between CLAUDE.md files, roadmap phases, status dashboard, plan.md, skill mappings, and product naming. **Must be offered before every session ends.** |
 | `/crossref [query]` | Search across all wikis for content relevant to current work or a specific topic. Surfaces notes from the other engineer, canonical wiki definitions, and roadmap deviations. |
+
+### Phase Execution Commands
+
+Static implementation guides for each phase. Located in `.claude/commands/`. Run these when starting implementation work on a phase.
+
+| Command | Phase |
+|---|---|
+| `/ns-phase0` | Marketing + Demo (0A/0B sub-phases) |
+| `/ns-phase1` | Trading Data Foundation |
+| `/ns-phase2` | Trader Workspace (Journal + Analytics + Behavior Metrics) |
+| `/ns-phase3` | Prop Shield (Prop Risk + Tradovate Protection) — **FIRST REVENUE** |
+| `/ns-phase4` | ICT Event Intelligence |
+| `/ns-phase5a` | EdgeLab Core — Engine + Data Pipeline |
+| `/ns-phase5b` | EdgeLab Core — Detectors + Stats + Features |
+| `/ns-phase5c` | EdgeLab Core — Dashboard + Null Test |
+| `/ns-phase6` | AI Trade Review + RAG (NeuroCore + Mentor) |
+| `/ns-phase7` | Edge Forensics |
+| `/ns-phase8` | NeuroScore + Verified Leaderboard |
+| `/ns-phase9` | NeuroFund Elite Rewards MVP (compliance-critical) |
+| `/ns-phase10` | Allocation Watchlist Pipeline |
+| `/ns-phase11` | Advanced ML Research (NSLM + NeuroQuant + NeuroTrader) |
+| `/ns-phase3-neurograph` | NeuroGraph Planning (Data Sources + Schema Design) |
+
+**Workflow:** Run `/phase N exec` first (for live context), then `/ns-phaseN` (for implementation guide).
 
 ### How Boot Prompts Work
 
@@ -210,7 +255,7 @@ Before ending this session:
 2. Regenerate boot prompts for active phases
 3. Update `roadmap/status.md`
 4. Capture any deviations from this session
-5. Check Track C cross-track gates
+5. Check per-phase compliance gates
 6. Flag cross-wiki content
 7. Suggest which `/phase` to run next
 
@@ -219,7 +264,7 @@ Before ending this session:
 2. Check phase directories are complete (README, deviations, boot-prompts)
 3. Detect product/component naming drift across documents
 4. Validate frontmatter on all phase READMEs
-5. Verify cross-track gate declarations are consistent
+5. Verify per-phase compliance gates are documented
 6. Check file references and wikilinks resolve
 7. Flag stale artifacts that may need updating
 

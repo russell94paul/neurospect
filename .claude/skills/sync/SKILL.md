@@ -158,17 +158,9 @@ For each phase in `roadmap/phases/`:
   - Has assigned tickets but none started → `planning`
   - No tickets → `not_started`
 
-**Track C phases (11-16):**
-Track C phases may not have Linear tickets. Determine status from:
-- README frontmatter `status` field (manually maintained or updated via sync prompts)
-- Existence of gate deliverables (documents, agreements) referenced in the README
-- Whether the gated engineering phase is approaching
-
-For Track C phases with status `in_progress`, check deliverable completion from the README's deliverable table and prompt the user for progress updates.
-
 **All phases:**
 - Update `roadmap/phases/phase-{N}-{slug}/README.md` frontmatter (including `assigned` field with engineer names)
-- Update `roadmap/status.md` dashboard table (include Assigned column). Track C phases go in their own table section.
+- Update `roadmap/status.md` dashboard table (include Assigned column).
 - Update personal wiki phase READMEs with synced status fields
 
 ### 5. Regenerate Boot Prompts
@@ -256,48 +248,29 @@ Cross-wiki: Vlad updated vlad-wiki/research/fvg-edge-cases.md
 2 days ago — may be relevant to your FVG detector work in Phase 7.
 ```
 
-### 8. Cross-Track Gate Check (Track C)
+### 8. Per-Phase Compliance Gate Check
 
-Track C phases (11-16) are business/operations phases that gate engineering phases. Check whether any upcoming engineering phase is blocked by an incomplete Track C gate.
+Each phase has embedded compliance gates (no separate Track C). Check whether approaching phases have unresolved compliance requirements.
 
-**Gate dependencies:**
+**Gate dependencies (v3):**
 
-| Business Phase | Gate Condition | Blocks Engineering Phase |
+| Phase | Compliance Gate | Check |
 |---|---|---|
-| 11 (Content Licensing) | Signed content agreement exists | Phase 1 (RAG MVP) |
-| 12 (Regulatory) | ToS + Privacy Policy deployed | Phase 3 (Product MVP) |
-| 12 (Regulatory) | RIA determination made | Phase 9 (NeuroTrader) |
-| 13 (Go-to-Market) | Launch playbook documented | Phase 6 (V1 Launch) |
+| 3 (Prop Shield) | Advisory lockout disclaimer reviewed by counsel | Look for legal review doc in `wiki/` or `roadmap/` |
+| 3-NG (NeuroGraph) | GDPR/privacy — memory deletion support | Architecture must include deletion API |
+| 5 (EdgeLab) | Backtesting disclaimers | "Past performance..." language in UI/docs |
+| 6 (AI Trade Review) | Content licensing for private content. ToS + Privacy Policy | Look for agreements, ToS draft |
+| 9 (NeuroFund Elite) | Full compliance review. Approved/forbidden language audit | Grep for forbidden language patterns |
+| 11 (Advanced ML) | RIA determination before live signal generation | Legal memo required |
 
 **For each gate:**
-1. Check if the business phase has the required deliverable completed (look for documents in `wiki/`, `roadmap/`, or personal wikis; check Linear tickets labeled with the phase)
-2. Check if the gated engineering phase is approaching (status is `planning` or `in_progress`, or the previous phase is nearly complete)
-3. If an engineering phase is approaching but the gate is not cleared, emit a warning:
-
-```
-⚠ Gate Warning: Phase 1 (RAG MVP) requires a signed content agreement 
-  (Phase 11 deliverable), but Phase 11 is not_started.
-  Action needed: Start Phase 11 before Phase 1 ingestion begins.
-```
-
-**Track C status tracking:**
-
-Track C phases often don't have Linear tickets or code artifacts. Their status is tracked by:
-- Document existence (agreements, legal memos, playbooks in wiki/ or roadmap/)
-- Frontmatter fields in the phase README (`status`, `tickets_done`)
-- Manual updates via `/sync` prompts
-
-When syncing, for each Track C phase that is `in_progress`, ask:
-```
-Phase 11 (Content Licensing) — any progress on deliverables?
-Current: [list uncompleted deliverables from README]
-```
-
-Update the phase README frontmatter accordingly.
+1. Check if the phase is approaching (status is `planning` or `in_progress`)
+2. Check if the compliance deliverable exists
+3. If approaching but gate not cleared, emit a warning
 
 ### 9. Suggest Next Skills
 
-Based on everything above (including Track C gate warnings), suggest what to run in the next session:
+Based on everything above, suggest what to run in the next session:
 
 ```
 Next session suggestions:
@@ -307,7 +280,7 @@ Next session suggestions:
 ```
 
 Prioritize:
-1. **Track C gate warnings** — if an engineering phase is approaching but a business gate is uncleared, suggest starting the business phase first
+1. **Compliance gate warnings** — if an approaching phase has an unresolved compliance gate
 2. Active phases with open tickets assigned to the current engineer
 3. Phases affected by upstream deviations that haven't been incorporated
 4. Cross-wiki content that hasn't been reviewed
