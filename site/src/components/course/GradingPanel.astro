@@ -1,0 +1,133 @@
+---
+/**
+ * GradingPanel — rendered client-side based on quiz/scenario/engagement results.
+ * The component is a shell; JS populates it based on data attributes set by the parent assessment.
+ *
+ * Usage: Include once per assessment. The assessment JS calls showGradingPanel() with results.
+ */
+interface Props {
+  panelId: string;
+}
+
+const { panelId } = Astro.props;
+---
+
+<div id={panelId} class="grading-panel hidden">
+  <div class="border rounded-2xl p-8 text-center transition-all" data-panel-card>
+    <!-- Icon -->
+    <div class="flex justify-center mb-4" data-panel-icon></div>
+
+    <!-- Score -->
+    <div class="text-4xl font-extrabold mb-2" data-panel-score></div>
+    <p class="text-sm text-slate-400 mb-6" data-panel-subtitle></p>
+
+    <!-- Strong / Weak areas -->
+    <div class="text-left mb-8 space-y-4" data-panel-areas></div>
+
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3" data-panel-actions></div>
+  </div>
+</div>
+
+<script>
+  interface GradingResult {
+    panelId: string;
+    passed: boolean;
+    score: number;
+    total: number;
+    percentage: number;
+    strongAreas?: string[];
+    weakAreas?: string[];
+    lessonLinks?: { title: string; lessonId: string }[];
+    continueAction?: () => void;
+    retryAction?: () => void;
+    reviewAction?: () => void;
+  }
+
+  (window as any).showGradingPanel = function(result: GradingResult) {
+    const panel = document.getElementById(result.panelId);
+    if (!panel) return;
+
+    panel.classList.remove('hidden');
+
+    const card = panel.querySelector('[data-panel-card]') as HTMLElement;
+    const iconEl = panel.querySelector('[data-panel-icon]') as HTMLElement;
+    const scoreEl = panel.querySelector('[data-panel-score]') as HTMLElement;
+    const subtitleEl = panel.querySelector('[data-panel-subtitle]') as HTMLElement;
+    const areasEl = panel.querySelector('[data-panel-areas]') as HTMLElement;
+    const actionsEl = panel.querySelector('[data-panel-actions]') as HTMLElement;
+
+    if (result.passed) {
+      card.className = 'border rounded-2xl p-8 text-center transition-all border-emerald-500/30 bg-emerald-500/5 shadow-lg shadow-emerald-500/10';
+      iconEl.innerHTML = '<div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center"><svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>';
+      scoreEl.className = 'text-4xl font-extrabold mb-2 text-emerald-400';
+      scoreEl.textContent = result.percentage + '%';
+      subtitleEl.textContent = result.score + ' of ' + result.total + ' correct — Assessment passed!';
+    } else {
+      card.className = 'border rounded-2xl p-8 text-center transition-all border-amber-500/30 bg-amber-500/5 shadow-lg shadow-amber-500/10';
+      iconEl.innerHTML = '<div class="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center"><svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 0v.008H12V12.75zm0 0h.008H12zm9 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>';
+      scoreEl.className = 'text-4xl font-extrabold mb-2 text-amber-400';
+      scoreEl.textContent = result.percentage + '%';
+      subtitleEl.textContent = result.score + ' of ' + result.total + ' correct — Keep studying, you\'re getting there!';
+    }
+
+    // Areas
+    let areasHtml = '';
+    if (result.strongAreas && result.strongAreas.length > 0) {
+      areasHtml += '<div><p class="text-xs text-emerald-400 font-medium uppercase tracking-wider mb-2">Strong Areas</p><div class="flex flex-wrap gap-2">';
+      result.strongAreas.forEach(a => {
+        areasHtml += '<span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">' + a + '</span>';
+      });
+      areasHtml += '</div></div>';
+    }
+    if (result.weakAreas && result.weakAreas.length > 0) {
+      areasHtml += '<div><p class="text-xs text-amber-400 font-medium uppercase tracking-wider mb-2">Areas to Review</p><div class="flex flex-wrap gap-2">';
+      result.weakAreas.forEach(a => {
+        areasHtml += '<span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">' + a + '</span>';
+      });
+      areasHtml += '</div></div>';
+    }
+    if (result.lessonLinks && result.lessonLinks.length > 0 && !result.passed) {
+      areasHtml += '<div><p class="text-xs text-slate-400 font-medium uppercase tracking-wider mb-2">Recommended Review</p><div class="space-y-2">';
+      result.lessonLinks.forEach(link => {
+        areasHtml += '<button class="w-full text-left px-4 py-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-brand-500/30 hover:bg-brand-500/5 text-sm text-slate-300 transition-all lesson-link-btn" data-lesson-id="' + link.lessonId + '">' + link.title + '</button>';
+      });
+      areasHtml += '</div></div>';
+    }
+    areasEl.innerHTML = areasHtml;
+
+    // Buttons
+    let actionsHtml = '';
+    if (result.passed) {
+      actionsHtml += '<button class="grading-continue-btn px-8 py-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Continue</button>';
+    } else {
+      actionsHtml += '<button class="grading-review-btn px-6 py-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] text-slate-300 hover:text-white font-medium text-sm transition-all">Review Lessons</button>';
+      actionsHtml += '<button class="grading-retry-btn px-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Retry</button>';
+    }
+    actionsEl.innerHTML = actionsHtml;
+
+    // Bind buttons
+    const continueBtn = actionsEl.querySelector('.grading-continue-btn');
+    if (continueBtn && result.continueAction) {
+      continueBtn.addEventListener('click', result.continueAction);
+    }
+    const retryBtn = actionsEl.querySelector('.grading-retry-btn');
+    if (retryBtn && result.retryAction) {
+      retryBtn.addEventListener('click', result.retryAction);
+    }
+    const reviewBtn = actionsEl.querySelector('.grading-review-btn');
+    if (reviewBtn && result.reviewAction) {
+      reviewBtn.addEventListener('click', result.reviewAction);
+    }
+
+    // Lesson link buttons
+    areasEl.querySelectorAll('.lesson-link-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lid = (btn as HTMLElement).dataset.lessonId;
+        if (result.reviewAction) result.reviewAction();
+        // Trigger lesson tab switch
+        window.dispatchEvent(new CustomEvent('neurospect-switch-lesson', { detail: { lessonId: lid } }));
+      });
+    });
+  };
+</script>

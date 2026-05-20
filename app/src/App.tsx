@@ -10,6 +10,10 @@ import { DashboardPage } from '@/pages/dashboard';
 import { CoachPage } from '@/pages/coach';
 import { CoachSetupPage } from '@/pages/coach-setup';
 import { BrokerSettingsPage } from '@/pages/settings-broker';
+import { PropShieldPage } from '@/pages/prop-shield';
+import { PropShieldNewPage } from '@/pages/prop-shield-new';
+import { PropShieldDetailPage } from '@/pages/prop-shield-detail';
+import { BillingSettingsPage } from '@/pages/settings-billing';
 
 // ============================================================
 // Protected layout — redirects to /login if not authenticated
@@ -78,12 +82,28 @@ const router = createBrowserRouter([
         element: <CoachSetupPage />,
       },
       {
+        path: '/prop-shield',
+        element: <PropShieldPage />,
+      },
+      {
+        path: '/prop-shield/new',
+        element: <PropShieldNewPage />,
+      },
+      {
+        path: '/prop-shield/:id',
+        element: <PropShieldDetailPage />,
+      },
+      {
         path: '/settings',
         element: <Navigate to="/settings/broker" replace />,
       },
       {
         path: '/settings/broker',
         element: <BrokerSettingsPage />,
+      },
+      {
+        path: '/settings/billing',
+        element: <BillingSettingsPage />,
       },
     ],
   },

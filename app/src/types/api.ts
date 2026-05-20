@@ -313,3 +313,142 @@ export interface TvTokenResponse {
   webhook_url: string;
   created_at: string;
 }
+
+// ============================================================
+// Prop Shield types (mirror backend app/schemas/prop_shield.py)
+// ============================================================
+
+export type AccountType = 'sim' | 'eval' | 'funded';
+
+export type LockoutState = 'none' | 'warning' | 'soft_lock' | 'hard_lock';
+
+export interface PropFirmPreset {
+  preset_id: string;
+  firm_name: string;
+  account_size: string;
+  daily_loss_limit: number | null;
+  trailing_drawdown_limit: number | null;
+  max_contracts: number | null;
+  max_daily_trades: number | null;
+  consistency_rule_pct: number | null;
+  notes: string;
+}
+
+export interface PropRuleConfigCreate {
+  account_label: string;
+  account_type: AccountType;
+  preset?: string | null;
+  account_balance: number;
+  daily_loss_limit?: number | null;
+  trailing_drawdown_limit?: number | null;
+  max_contracts?: number | null;
+  max_daily_trades?: number | null;
+  forbidden_hours_start?: string | null;
+  forbidden_hours_end?: string | null;
+  consistency_rule_pct?: number | null;
+  alert_threshold_pct?: number;
+  discord_webhook_url?: string | null;
+  lockout_enabled?: boolean;
+}
+
+export interface PropRuleConfigUpdate {
+  account_label?: string | null;
+  account_type?: AccountType | null;
+  account_balance?: number | null;
+  daily_loss_limit?: number | null;
+  trailing_drawdown_limit?: number | null;
+  max_contracts?: number | null;
+  max_daily_trades?: number | null;
+  forbidden_hours_start?: string | null;
+  forbidden_hours_end?: string | null;
+  consistency_rule_pct?: number | null;
+  alert_threshold_pct?: number | null;
+  discord_webhook_url?: string | null;
+  lockout_enabled?: boolean | null;
+}
+
+export interface PropRuleConfigResponse {
+  id: string;
+  user_id: string;
+  account_label: string;
+  account_type: string;
+  preset: string | null;
+  account_balance: number;
+  daily_loss_limit: number | null;
+  trailing_drawdown_limit: number | null;
+  max_contracts: number | null;
+  max_daily_trades: number | null;
+  forbidden_hours_start: string | null;
+  forbidden_hours_end: string | null;
+  consistency_rule_pct: number | null;
+  alert_threshold_pct: number;
+  discord_webhook_url: string | null;
+  high_water_mark: number;
+  lockout_enabled: boolean;
+  current_lockout_state: LockoutState;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RuleBreachStatus {
+  rule: string;
+  active: boolean;
+  current_value: number | null;
+  limit: number | null;
+  pct_used: number | null;
+  distance_to_breach: number | null;
+  breached: boolean;
+}
+
+export interface PropShieldStatus {
+  rule_config_id: string;
+  account_label: string;
+  lockout_state: LockoutState;
+  lockout_enabled: boolean;
+  rules: RuleBreachStatus[];
+  disclaimer: string;
+  evaluated_at: string;
+}
+
+export interface LockoutResetRequest {
+  note?: string | null;
+}
+
+export interface PropLockoutEventResponse {
+  id: string;
+  rule_config_id: string;
+  from_state: LockoutState;
+  to_state: LockoutState;
+  trigger_rule: string | null;
+  trigger_value: number | null;
+  trigger_limit: number | null;
+  reset_by_user: boolean;
+  note: string | null;
+  created_at: string;
+}
+
+// ============================================================
+// Billing types (mirror backend app/schemas/billing.py)
+// ============================================================
+
+export type BillingTier = 'free' | 'mentor' | 'trader';
+
+export type SubscriptionStatus = 'active' | 'past_due' | 'canceled' | 'trialing' | 'none';
+
+export interface CheckoutSessionCreate {
+  tier: 'mentor' | 'trader';
+  success_url: string;
+  cancel_url: string;
+}
+
+export interface CheckoutSessionResponse {
+  checkout_url: string;
+  session_id: string;
+}
+
+export interface SubscriptionResponse {
+  tier: BillingTier;
+  status: SubscriptionStatus;
+  current_period_end: string | null;
+  stripe_customer_id: string | null;
+}

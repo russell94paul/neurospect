@@ -63,6 +63,7 @@ Forward-looking product roadmap (horizons: Now / Next / Later / Strategic / Rese
 - [[concepts/architecture/transcript-pipeline]] — transcript ingestion decision doc (manual + Whisper)
 - [[concepts/architecture/phase3-frontend-structure]] — **canonical frontend doc**: React 19 + TS + Vite project layout, route map, key patterns (auth, trade form, screenshot upload, analytics hooks), env vars
 - [[concepts/architecture/phase4-coach-frontend]] — AI Coach frontend: routes, hooks, component tree, polling strategy, TV token UX, Pine asset sync
+- [[concepts/architecture/frontend-codebases]] — Three frontend codebases: neurospect-ui/ (marketing), app/ (product), site/ (deprecated Astro SSG)
 
 ### AI Coach
 

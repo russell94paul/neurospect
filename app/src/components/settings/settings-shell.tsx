@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { Link2 } from 'lucide-react';
+import { Link2, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const SETTINGS_NAV = [
   { to: '/settings/broker', label: 'Broker Connections', icon: Link2 },
+  { to: '/settings/billing', label: 'Billing', icon: CreditCard },
 ];
 
 interface Props {

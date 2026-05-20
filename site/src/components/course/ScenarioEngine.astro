@@ -1,0 +1,253 @@
+---
+import GradingPanel from './GradingPanel.astro';
+import { scenarioDataByModule } from '../../data/quiz-data';
+
+interface Props {
+  moduleSlug: string;
+}
+
+const { moduleSlug } = Astro.props;
+const scenarios = scenarioDataByModule[moduleSlug] || [];
+---
+
+<section id="assessment-scenario" class="hidden">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-xl font-bold text-white">Scenario Assessment</h3>
+        <p class="text-sm text-slate-400 mt-1">75% to pass (4 of 5 with A+ or B)</p>
+      </div>
+      <button class="scenario-close-btn text-slate-500 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-1.5">
+        <span id="scenario-progress-label" class="text-xs text-slate-500">Scenario 1 of {scenarios.length}</span>
+        <span id="scenario-score-label" class="text-xs text-brand-400 font-medium"></span>
+      </div>
+      <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+        <div id="scenario-progress-bar" class="h-full rounded-full bg-brand-400 transition-all duration-300" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Scenario area -->
+    <div id="scenario-question-area">
+      <!-- Context card -->
+      <div id="scenario-context" class="neon-card neon-card-cyan rounded-xl p-6 mb-6">
+        <p class="text-xs text-brand-400 font-medium uppercase tracking-wider mb-2">Market Context</p>
+        <p id="scenario-context-text" class="text-sm text-slate-300 leading-relaxed"></p>
+      </div>
+
+      <!-- Question -->
+      <p id="scenario-question-text" class="text-lg text-white font-medium mb-6"></p>
+
+      <!-- Options -->
+      <div id="scenario-options" class="space-y-3"></div>
+
+      <!-- All explanations (shown after selection) -->
+      <div id="scenario-explanations" class="hidden mt-6 space-y-3"></div>
+
+      <!-- Next button -->
+      <div id="scenario-next-wrapper" class="hidden mt-6 flex justify-end">
+        <button id="scenario-next-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">
+          Next Scenario &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- Grading panel -->
+    <GradingPanel panelId="scenario-grading" />
+  </div>
+
+  <!-- Embed scenario data -->
+  <script type="application/json" id="scenario-data-json" set:html={JSON.stringify(scenarios)} />
+</section>
+
+<script>
+  function initScenario() {
+    const dataEl = document.getElementById('scenario-data-json');
+    if (!dataEl) return;
+    const scenarios = JSON.parse(dataEl.textContent || '[]');
+    if (scenarios.length === 0) return;
+
+    let currentIndex = 0;
+    let goodAnswers = 0; // A+ or B
+    let answered = false;
+    const resultsByLesson: Record<string, string[]> = {};
+
+    const questionArea = document.getElementById('scenario-question-area')!;
+    const contextText = document.getElementById('scenario-context-text')!;
+    const questionText = document.getElementById('scenario-question-text')!;
+    const optionsContainer = document.getElementById('scenario-options')!;
+    const explanationsContainer = document.getElementById('scenario-explanations')!;
+    const nextWrapper = document.getElementById('scenario-next-wrapper')!;
+    const nextBtn = document.getElementById('scenario-next-btn')!;
+    const progressLabel = document.getElementById('scenario-progress-label')!;
+    const scoreLabel = document.getElementById('scenario-score-label')!;
+    const progressBar = document.getElementById('scenario-progress-bar')!;
+
+    const gradeColors: Record<string, { border: string; bg: string; text: string }> = {
+      'A+': { border: 'border-emerald-500/50', bg: 'bg-emerald-500/5', text: 'text-emerald-400' },
+      'B':  { border: 'border-brand-500/50', bg: 'bg-brand-500/5', text: 'text-brand-400' },
+      'C':  { border: 'border-amber-500/50', bg: 'bg-amber-500/5', text: 'text-amber-400' },
+      'F':  { border: 'border-red-500/50', bg: 'bg-red-500/5', text: 'text-red-400' },
+    };
+
+    function renderScenario() {
+      answered = false;
+      const s = scenarios[currentIndex];
+
+      progressLabel.textContent = 'Scenario ' + (currentIndex + 1) + ' of ' + scenarios.length;
+      progressBar.style.width = ((currentIndex / scenarios.length) * 100) + '%';
+
+      contextText.textContent = s.context;
+      questionText.textContent = s.question;
+      explanationsContainer.classList.add('hidden');
+      explanationsContainer.innerHTML = '';
+      nextWrapper.classList.add('hidden');
+
+      optionsContainer.innerHTML = '';
+      s.options.forEach((option: any, idx: number) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left border border-white/[0.06] bg-white/[0.02] rounded-xl p-4 cursor-pointer hover:border-white/[0.12] transition-all text-sm text-slate-300';
+        btn.textContent = option.text;
+        btn.dataset.index = String(idx);
+        btn.addEventListener('click', () => handleAnswer(idx));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedIdx: number) {
+      if (answered) return;
+      answered = true;
+
+      const s = scenarios[currentIndex];
+      const selectedGrade = s.options[selectedIdx].grade;
+      const isGood = selectedGrade === 'A+' || selectedGrade === 'B';
+      if (isGood) goodAnswers++;
+
+      // Track per-lesson
+      if (!resultsByLesson[s.lessonRef]) resultsByLesson[s.lessonRef] = [];
+      resultsByLesson[s.lessonRef].push(selectedGrade);
+
+      // Reveal all grades on option cards
+      const allBtns = optionsContainer.querySelectorAll('button');
+      allBtns.forEach((btn: Element, idx: number) => {
+        const opt = s.options[idx];
+        const colors = gradeColors[opt.grade] || gradeColors['C'];
+        (btn as HTMLElement).style.pointerEvents = 'none';
+
+        const isSelected = idx === selectedIdx;
+        const ring = isSelected ? ' ring-2 ring-white/20' : '';
+
+        btn.className = 'w-full text-left border ' + colors.border + ' ' + colors.bg + ' rounded-xl p-4 text-sm transition-all' + ring;
+        btn.innerHTML = '<div class="flex items-center justify-between"><span class="' + (isSelected ? 'text-white font-medium' : 'text-slate-300') + '">' + opt.text + '</span><span class="text-xs font-bold ' + colors.text + '">' + opt.grade + '</span></div>';
+      });
+
+      // Show explanations for ALL options
+      explanationsContainer.classList.remove('hidden');
+      s.options.forEach((opt: any) => {
+        const colors = gradeColors[opt.grade] || gradeColors['C'];
+        const div = document.createElement('div');
+        div.className = 'border-l-4 ' + colors.border + ' bg-white/[0.02] rounded-r-xl p-4';
+        div.innerHTML = '<div class="flex items-center gap-2 mb-1"><span class="text-xs font-bold ' + colors.text + '">' + opt.grade + '</span><span class="text-xs text-slate-500">—</span></div><p class="text-sm text-slate-300">' + opt.explanation + '</p>';
+        explanationsContainer.appendChild(div);
+      });
+
+      nextWrapper.classList.remove('hidden');
+      scoreLabel.textContent = goodAnswers + ' good answers (A+ or B)';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < scenarios.length) {
+        renderScenario();
+      } else {
+        questionArea.classList.add('hidden');
+        progressBar.style.width = '100%';
+
+        const percentage = Math.round((goodAnswers / scenarios.length) * 100);
+        const passed = percentage >= 75;
+
+        const strongAreas: string[] = [];
+        const weakAreas: string[] = [];
+        const lessonLinks: { title: string; lessonId: string }[] = [];
+
+        Object.entries(resultsByLesson).forEach(([lesson, grades]) => {
+          const goodCount = grades.filter(g => g === 'A+' || g === 'B').length;
+          if (goodCount === grades.length) {
+            strongAreas.push(lesson);
+          } else {
+            weakAreas.push(lesson);
+            const match = lesson.match(/Lesson (\d+\.\d+)/);
+            if (match) lessonLinks.push({ title: lesson, lessonId: match[1] });
+          }
+        });
+
+        // Save to localStorage
+        const STORAGE_KEY = 'neurospect-course-progress';
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            const progress = JSON.parse(raw);
+            if (progress.modules && progress.modules['module-1']) {
+              progress.modules['module-1'].scenarioScore = percentage;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+              window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+            }
+          } catch (e) { /* ignore */ }
+        }
+
+        (window as any).showGradingPanel({
+          panelId: 'scenario-grading',
+          passed,
+          score: goodAnswers,
+          total: scenarios.length,
+          percentage,
+          strongAreas,
+          weakAreas,
+          lessonLinks,
+          continueAction: () => {
+            document.getElementById('assessment-scenario')?.classList.add('hidden');
+            window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+          },
+          retryAction: () => {
+            currentIndex = 0;
+            goodAnswers = 0;
+            Object.keys(resultsByLesson).forEach(k => delete resultsByLesson[k]);
+            questionArea.classList.remove('hidden');
+            document.getElementById('scenario-grading')!.classList.add('hidden');
+            renderScenario();
+          },
+          reviewAction: () => {
+            document.getElementById('assessment-scenario')?.classList.add('hidden');
+          },
+        });
+      }
+    });
+
+    document.querySelector('.scenario-close-btn')?.addEventListener('click', () => {
+      document.getElementById('assessment-scenario')?.classList.add('hidden');
+    });
+
+    renderScenario();
+  }
+
+  const scenarioSection = document.getElementById('assessment-scenario');
+  if (scenarioSection) {
+    const observer = new MutationObserver(() => {
+      if (!scenarioSection.classList.contains('hidden')) {
+        initScenario();
+        observer.disconnect();
+      }
+    });
+    observer.observe(scenarioSection, { attributes: true, attributeFilter: ['class'] });
+  }
+  initScenario();
+</script>

@@ -1102,7 +1102,7 @@ The product must use **educational and research language** throughout:
 - 50 Q&A evaluation pairs
 - Competitive teardown
 - Linear workspace set up
-- Marketing site (Astro + Tailwind, deployed to Cloudflare Pages)
+- Marketing site (React 18 CDN, `neurospect-ui/`, deployed to Cloudflare Pages)
   - Landing page with waitlist capture (`/`)
   - Compare page — competitive differentiation (`/compare`)
   - Performance Lab — illustrative trader performance data (`/performance`)
@@ -1120,6 +1120,8 @@ The product must use **educational and research language** throughout:
   - Workflows page — trader tier profiles (`/workflows`)
   - Architecture page — system diagram (`/architecture`)
   - Pricing page — tier comparison (`/pricing`)
+- Product guide (`docs/neurospect_product_overview_user_guide.md`) — product overview, tier workflows, competitive matrix, glossary
+- App navigation link from product app to marketing site
 
 **Exit criteria:** RAG prototype returns relevant passages for 80%+ of test questions. Marketing site live with waitlist capturing signups and course engagement data.
 

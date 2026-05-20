@@ -1,0 +1,414 @@
+---
+import GradingPanel from './GradingPanel.astro';
+import { engagementDataByModule } from '../../data/quiz-data';
+
+interface Props {
+  moduleSlug: string;
+}
+
+const { moduleSlug } = Astro.props;
+const engagement = engagementDataByModule[moduleSlug];
+---
+
+<section id="assessment-engagement" class="hidden">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-xl font-bold text-white">Engagement Assessment</h3>
+        <p class="text-sm text-slate-400 mt-1">80% to pass across all exercises</p>
+      </div>
+      <button class="engagement-close-btn text-slate-500 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-1.5">
+        <span id="engagement-progress-label" class="text-xs text-slate-500">Exercise 1</span>
+        <span id="engagement-score-label" class="text-xs text-brand-400 font-medium"></span>
+      </div>
+      <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+        <div id="engagement-progress-bar" class="h-full rounded-full bg-brand-400 transition-all duration-300" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Exercise area -->
+    <div id="engagement-exercise-area"></div>
+
+    <!-- Grading panel -->
+    <GradingPanel panelId="engagement-grading" />
+  </div>
+
+  <!-- Embed engagement data -->
+  <script type="application/json" id="engagement-data-json" set:html={JSON.stringify(engagement)} />
+</section>
+
+<script>
+  function initEngagement() {
+    const dataEl = document.getElementById('engagement-data-json');
+    if (!dataEl) return;
+    const engagement = JSON.parse(dataEl.textContent || '{}');
+    if (!engagement.matching && !engagement.sequencing) return;
+
+    const matching = engagement.matching || [];
+    const sequencing = engagement.sequencing || [];
+    const totalExercises = matching.length + sequencing.length;
+    let currentExerciseIdx = 0;
+    let totalCorrect = 0;
+    let totalPossible = 0;
+
+    const exerciseArea = document.getElementById('engagement-exercise-area')!;
+    const progressLabel = document.getElementById('engagement-progress-label')!;
+    const scoreLabel = document.getElementById('engagement-score-label')!;
+    const progressBar = document.getElementById('engagement-progress-bar')!;
+
+    function updateProgress() {
+      progressLabel.textContent = 'Exercise ' + (currentExerciseIdx + 1) + ' of ' + totalExercises;
+      progressBar.style.width = ((currentExerciseIdx / totalExercises) * 100) + '%';
+      if (totalPossible > 0) {
+        scoreLabel.textContent = totalCorrect + ' of ' + totalPossible + ' correct';
+      }
+    }
+
+    // ===== MATCHING EXERCISE =====
+    function renderMatching(matchData: any) {
+      updateProgress();
+      const pairs = matchData.pairs;
+      totalPossible += pairs.length;
+
+      // Shuffle definitions
+      const shuffledDefs = [...pairs].sort(() => Math.random() - 0.5);
+
+      let selectedTerm: number | null = null;
+      let selectedDef: number | null = null;
+      const matches: Record<number, number> = {}; // termIdx -> defIdx
+      const correctMap: Record<number, number> = {}; // termIdx -> correct defIdx in shuffled array
+      pairs.forEach((pair: any, ti: number) => {
+        const defIdx = shuffledDefs.findIndex((d: any) => d.definition === pair.definition);
+        correctMap[ti] = defIdx;
+      });
+
+      let html = '<div class="mb-6">';
+      html += '<p class="text-sm text-slate-400 mb-4">' + matchData.instruction + '</p>';
+      html += '<p class="text-xs text-slate-500 mb-6">Click a term, then click its matching definition.</p>';
+      html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">';
+
+      // Terms column
+      html += '<div class="space-y-2">';
+      html += '<p class="text-xs text-brand-400 font-medium uppercase tracking-wider mb-2">Terms</p>';
+      pairs.forEach((pair: any, idx: number) => {
+        html += '<button class="match-term w-full text-left px-4 py-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-brand-500/30 text-sm text-white font-medium transition-all" data-term-idx="' + idx + '">' + pair.term + '</button>';
+      });
+      html += '</div>';
+
+      // Definitions column
+      html += '<div class="space-y-2">';
+      html += '<p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Definitions</p>';
+      shuffledDefs.forEach((def: any, idx: number) => {
+        html += '<button class="match-def w-full text-left px-4 py-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12] text-sm text-slate-300 transition-all" data-def-idx="' + idx + '">' + def.definition + '</button>';
+      });
+      html += '</div>';
+
+      html += '</div>';
+      html += '<div id="match-check-wrapper" class="hidden mt-6 flex justify-end"><button id="match-check-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Check Answers</button></div>';
+      html += '<div id="match-next-wrapper" class="hidden mt-6 flex justify-end"><button id="match-next-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Next Exercise &rarr;</button></div>';
+      html += '</div>';
+
+      exerciseArea.innerHTML = html;
+
+      const termBtns = exerciseArea.querySelectorAll<HTMLButtonElement>('.match-term');
+      const defBtns = exerciseArea.querySelectorAll<HTMLButtonElement>('.match-def');
+      const checkWrapper = document.getElementById('match-check-wrapper')!;
+      const checkBtn = document.getElementById('match-check-btn')!;
+      const nextWrapper = document.getElementById('match-next-wrapper')!;
+      const nextBtn = document.getElementById('match-next-btn')!;
+
+      function clearSelection() {
+        termBtns.forEach(b => b.classList.remove('ring-2', 'ring-brand-400'));
+        defBtns.forEach(b => b.classList.remove('ring-2', 'ring-brand-400'));
+      }
+
+      function updateMatchDisplay() {
+        // Show matched pairs with visual indicators
+        termBtns.forEach((btn, ti) => {
+          if (matches[ti] !== undefined) {
+            btn.classList.add('border-brand-500/40', 'bg-brand-500/10');
+            const matchedNum = Object.keys(matches).filter(k => parseInt(k) <= ti && matches[parseInt(k)] !== undefined).length;
+            btn.innerHTML = '<span class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 text-xs flex items-center justify-center">' + matchedNum + '</span>' + pairs[ti].term + '</span>';
+          } else {
+            btn.classList.remove('border-brand-500/40', 'bg-brand-500/10');
+            btn.textContent = pairs[ti].term;
+          }
+        });
+
+        defBtns.forEach((btn, di) => {
+          const matchedTermIdx = Object.entries(matches).find(([_, v]) => v === di);
+          if (matchedTermIdx) {
+            btn.classList.add('border-brand-500/40', 'bg-brand-500/10');
+            const ti = parseInt(matchedTermIdx[0]);
+            const matchedNum = Object.keys(matches).filter(k => parseInt(k) <= ti && matches[parseInt(k)] !== undefined).length;
+            btn.innerHTML = '<span class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 text-xs flex items-center justify-center">' + matchedNum + '</span>' + shuffledDefs[di].definition + '</span>';
+          } else {
+            btn.classList.remove('border-brand-500/40', 'bg-brand-500/10');
+            btn.textContent = shuffledDefs[di].definition;
+          }
+        });
+
+        // Show check button when all matched
+        if (Object.keys(matches).length === pairs.length) {
+          checkWrapper.classList.remove('hidden');
+        }
+      }
+
+      termBtns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          // If already matched, unmatch
+          if (matches[idx] !== undefined) {
+            delete matches[idx];
+            updateMatchDisplay();
+            return;
+          }
+          clearSelection();
+          selectedTerm = idx;
+          btn.classList.add('ring-2', 'ring-brand-400');
+
+          if (selectedDef !== null) {
+            matches[selectedTerm] = selectedDef;
+            selectedTerm = null;
+            selectedDef = null;
+            clearSelection();
+            updateMatchDisplay();
+          }
+        });
+      });
+
+      defBtns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          // If already matched to something, unmatch
+          const matchedTerm = Object.entries(matches).find(([_, v]) => v === idx);
+          if (matchedTerm) {
+            delete matches[parseInt(matchedTerm[0])];
+            updateMatchDisplay();
+            return;
+          }
+          clearSelection();
+          selectedDef = idx;
+          btn.classList.add('ring-2', 'ring-brand-400');
+
+          if (selectedTerm !== null) {
+            matches[selectedTerm] = selectedDef;
+            selectedTerm = null;
+            selectedDef = null;
+            clearSelection();
+            updateMatchDisplay();
+          }
+        });
+      });
+
+      checkBtn.addEventListener('click', () => {
+        let correct = 0;
+        // Disable further interaction
+        termBtns.forEach(b => (b as HTMLElement).style.pointerEvents = 'none');
+        defBtns.forEach(b => (b as HTMLElement).style.pointerEvents = 'none');
+        checkWrapper.classList.add('hidden');
+
+        // Check each match
+        Object.entries(matches).forEach(([termIdxStr, defIdx]) => {
+          const termIdx = parseInt(termIdxStr);
+          const isCorrect = correctMap[termIdx] === defIdx;
+          if (isCorrect) {
+            correct++;
+            termBtns[termIdx].className = 'match-term w-full text-left px-4 py-3 rounded-lg border border-emerald-500/40 bg-emerald-500/5 text-sm text-emerald-400 font-medium';
+          } else {
+            termBtns[termIdx].className = 'match-term w-full text-left px-4 py-3 rounded-lg border border-red-500/40 bg-red-500/5 text-sm text-red-400 font-medium';
+          }
+        });
+
+        totalCorrect += correct;
+        nextWrapper.classList.remove('hidden');
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentExerciseIdx++;
+        renderExercise();
+      });
+    }
+
+    // ===== SEQUENCING EXERCISE =====
+    function renderSequencing(seqData: any) {
+      updateProgress();
+      const items = seqData.items;
+      totalPossible += items.length;
+
+      // Create shuffled display order
+      const displayOrder = items.map((_: any, i: number) => i).sort(() => Math.random() - 0.5);
+      const selectedOrder: number[] = [];
+
+      let html = '<div class="mb-6">';
+      html += '<p class="text-sm text-slate-400 mb-4">' + seqData.instruction + '</p>';
+      html += '<p class="text-xs text-slate-500 mb-6">Click items in the correct order. Click a numbered item again to undo.</p>';
+      html += '<div class="space-y-2" id="seq-items">';
+      displayOrder.forEach((origIdx: number) => {
+        html += '<button class="seq-item w-full text-left px-4 py-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12] text-sm text-slate-300 transition-all flex items-center gap-3" data-orig-idx="' + origIdx + '"><span class="seq-badge w-6 h-6 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs flex items-center justify-center text-slate-600 flex-shrink-0"></span><span>' + items[origIdx] + '</span></button>';
+      });
+      html += '</div>';
+      html += '<div id="seq-check-wrapper" class="hidden mt-6 flex justify-end"><button id="seq-check-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Check Order</button></div>';
+      html += '<div id="seq-result" class="hidden mt-4"></div>';
+      html += '<div id="seq-next-wrapper" class="hidden mt-6 flex justify-end"><button id="seq-next-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">Next Exercise &rarr;</button></div>';
+      html += '</div>';
+
+      exerciseArea.innerHTML = html;
+
+      const itemBtns = exerciseArea.querySelectorAll<HTMLButtonElement>('.seq-item');
+      const checkWrapper = document.getElementById('seq-check-wrapper')!;
+      const checkBtn = document.getElementById('seq-check-btn')!;
+      const resultEl = document.getElementById('seq-result')!;
+      const nextWrapper = document.getElementById('seq-next-wrapper')!;
+      const nextBtn = document.getElementById('seq-next-btn')!;
+
+      function updateBadges() {
+        itemBtns.forEach(btn => {
+          const origIdx = parseInt(btn.dataset.origIdx || '0');
+          const badge = btn.querySelector('.seq-badge')!;
+          const orderPos = selectedOrder.indexOf(origIdx);
+          if (orderPos !== -1) {
+            badge.textContent = String(orderPos + 1);
+            badge.className = 'seq-badge w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/30 text-xs flex items-center justify-center text-brand-400 font-bold flex-shrink-0';
+            btn.classList.add('border-brand-500/30', 'bg-brand-500/5');
+          } else {
+            badge.textContent = '';
+            badge.className = 'seq-badge w-6 h-6 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs flex items-center justify-center text-slate-600 flex-shrink-0';
+            btn.classList.remove('border-brand-500/30', 'bg-brand-500/5');
+          }
+        });
+        if (selectedOrder.length === items.length) {
+          checkWrapper.classList.remove('hidden');
+        } else {
+          checkWrapper.classList.add('hidden');
+        }
+      }
+
+      itemBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const origIdx = parseInt(btn.dataset.origIdx || '0');
+          const pos = selectedOrder.indexOf(origIdx);
+          if (pos !== -1) {
+            // Remove this and all after it
+            selectedOrder.splice(pos);
+          } else {
+            selectedOrder.push(origIdx);
+          }
+          updateBadges();
+        });
+      });
+
+      checkBtn.addEventListener('click', () => {
+        itemBtns.forEach(b => (b as HTMLElement).style.pointerEvents = 'none');
+        checkWrapper.classList.add('hidden');
+
+        let correct = 0;
+        itemBtns.forEach(btn => {
+          const origIdx = parseInt(btn.dataset.origIdx || '0');
+          const userPos = selectedOrder.indexOf(origIdx);
+          const correctPos = seqData.correctOrder.indexOf(origIdx);
+          if (userPos === correctPos) {
+            correct++;
+            btn.className = 'seq-item w-full text-left px-4 py-3 rounded-lg border border-emerald-500/40 bg-emerald-500/5 text-sm text-emerald-400 transition-all flex items-center gap-3';
+          } else {
+            btn.className = 'seq-item w-full text-left px-4 py-3 rounded-lg border border-red-500/40 bg-red-500/5 text-sm text-red-400 transition-all flex items-center gap-3';
+          }
+        });
+
+        totalCorrect += correct;
+
+        // Show correct order explanation
+        resultEl.classList.remove('hidden');
+        resultEl.innerHTML = '<div class="border-l-4 border-brand-500 bg-white/[0.02] rounded-r-xl p-4"><p class="text-sm text-slate-300">' + seqData.explanation + '</p></div>';
+
+        nextWrapper.classList.remove('hidden');
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentExerciseIdx++;
+        renderExercise();
+      });
+    }
+
+    // ===== EXERCISE ROUTER =====
+    function renderExercise() {
+      if (currentExerciseIdx < matching.length) {
+        renderMatching(matching[currentExerciseIdx]);
+      } else if (currentExerciseIdx < matching.length + sequencing.length) {
+        renderSequencing(sequencing[currentExerciseIdx - matching.length]);
+      } else {
+        // Done — show grading
+        exerciseArea.innerHTML = '';
+        progressBar.style.width = '100%';
+
+        const percentage = totalPossible > 0 ? Math.round((totalCorrect / totalPossible) * 100) : 0;
+        const passed = percentage >= 80;
+
+        // Save
+        const STORAGE_KEY = 'neurospect-course-progress';
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            const progress = JSON.parse(raw);
+            if (progress.modules && progress.modules['module-1']) {
+              progress.modules['module-1'].engagementScore = percentage;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+              window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+            }
+          } catch (e) { /* ignore */ }
+        }
+
+        (window as any).showGradingPanel({
+          panelId: 'engagement-grading',
+          passed,
+          score: totalCorrect,
+          total: totalPossible,
+          percentage,
+          strongAreas: passed ? ['Concept Matching', 'Sequencing'] : [],
+          weakAreas: !passed ? ['Review term definitions and trading cycle order'] : [],
+          continueAction: () => {
+            document.getElementById('assessment-engagement')?.classList.add('hidden');
+            window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+          },
+          retryAction: () => {
+            currentExerciseIdx = 0;
+            totalCorrect = 0;
+            totalPossible = 0;
+            document.getElementById('engagement-grading')!.classList.add('hidden');
+            renderExercise();
+          },
+          reviewAction: () => {
+            document.getElementById('assessment-engagement')?.classList.add('hidden');
+          },
+        });
+      }
+    }
+
+    // Close button
+    document.querySelector('.engagement-close-btn')?.addEventListener('click', () => {
+      document.getElementById('assessment-engagement')?.classList.add('hidden');
+    });
+
+    renderExercise();
+  }
+
+  const engagementSection = document.getElementById('assessment-engagement');
+  if (engagementSection) {
+    const observer = new MutationObserver(() => {
+      if (!engagementSection.classList.contains('hidden')) {
+        initEngagement();
+        observer.disconnect();
+      }
+    });
+    observer.observe(engagementSection, { attributes: true, attributeFilter: ['class'] });
+  }
+  initEngagement();
+</script>

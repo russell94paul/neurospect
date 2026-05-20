@@ -1,0 +1,252 @@
+---
+import GradingPanel from './GradingPanel.astro';
+import { quizDataByModule } from '../../data/quiz-data';
+
+interface Props {
+  moduleSlug: string;
+}
+
+const { moduleSlug } = Astro.props;
+const questions = quizDataByModule[moduleSlug] || [];
+---
+
+<section id="assessment-quiz" class="hidden">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-xl font-bold text-white">Concept Quiz</h3>
+        <p class="text-sm text-slate-400 mt-1">80% to pass (8 of 10 correct)</p>
+      </div>
+      <button class="quiz-close-btn text-slate-500 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-1.5">
+        <span id="quiz-progress-label" class="text-xs text-slate-500">Question 1 of {questions.length}</span>
+        <span id="quiz-score-label" class="text-xs text-brand-400 font-medium">0 correct</span>
+      </div>
+      <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+        <div id="quiz-progress-bar" class="h-full rounded-full bg-brand-400 transition-all duration-300" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Question area -->
+    <div id="quiz-question-area">
+      <p id="quiz-question-text" class="text-lg text-white font-medium mb-6"></p>
+      <div id="quiz-options" class="space-y-3"></div>
+      <div id="quiz-explanation" class="hidden mt-4 border-l-4 border-brand-500 bg-white/[0.02] rounded-r-xl p-4">
+        <p class="text-sm text-slate-300" id="quiz-explanation-text"></p>
+        <p class="text-xs text-slate-500 mt-2" id="quiz-lesson-ref"></p>
+      </div>
+      <div id="quiz-next-wrapper" class="hidden mt-6 flex justify-end">
+        <button id="quiz-next-btn" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-white font-semibold text-sm transition-all">
+          Next Question &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- Grading panel -->
+    <GradingPanel panelId="quiz-grading" />
+  </div>
+
+  <!-- Embed question data -->
+  <script type="application/json" id="quiz-data-json" set:html={JSON.stringify(questions)} />
+</section>
+
+<script>
+  function initQuiz() {
+    const dataEl = document.getElementById('quiz-data-json');
+    if (!dataEl) return;
+    const questions = JSON.parse(dataEl.textContent || '[]');
+    if (questions.length === 0) return;
+
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    const correctByLesson: Record<string, boolean[]> = {};
+
+    const questionArea = document.getElementById('quiz-question-area')!;
+    const questionText = document.getElementById('quiz-question-text')!;
+    const optionsContainer = document.getElementById('quiz-options')!;
+    const explanationEl = document.getElementById('quiz-explanation')!;
+    const explanationText = document.getElementById('quiz-explanation-text')!;
+    const lessonRef = document.getElementById('quiz-lesson-ref')!;
+    const nextWrapper = document.getElementById('quiz-next-wrapper')!;
+    const nextBtn = document.getElementById('quiz-next-btn')!;
+    const progressLabel = document.getElementById('quiz-progress-label')!;
+    const scoreLabel = document.getElementById('quiz-score-label')!;
+    const progressBar = document.getElementById('quiz-progress-bar')!;
+
+    function renderQuestion() {
+      answered = false;
+      const q = questions[currentIndex];
+
+      progressLabel.textContent = 'Question ' + (currentIndex + 1) + ' of ' + questions.length;
+      scoreLabel.textContent = score + ' correct';
+      progressBar.style.width = ((currentIndex / questions.length) * 100) + '%';
+
+      questionText.textContent = q.question;
+      explanationEl.classList.add('hidden');
+      nextWrapper.classList.add('hidden');
+
+      optionsContainer.innerHTML = '';
+      q.options.forEach((option: string, idx: number) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left border border-white/[0.06] bg-white/[0.02] rounded-xl p-4 cursor-pointer hover:border-white/[0.12] transition-all text-sm text-slate-300';
+        btn.textContent = option;
+        btn.dataset.index = String(idx);
+        btn.addEventListener('click', () => handleAnswer(idx, btn));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedIdx: number, selectedBtn: HTMLButtonElement) {
+      if (answered) return;
+      answered = true;
+
+      const q = questions[currentIndex];
+      const isCorrect = selectedIdx === q.correctIndex;
+
+      // Track per-lesson results
+      if (!correctByLesson[q.lessonRef]) correctByLesson[q.lessonRef] = [];
+      correctByLesson[q.lessonRef].push(isCorrect);
+
+      if (isCorrect) score++;
+
+      // Highlight all options
+      const allBtns = optionsContainer.querySelectorAll('button');
+      allBtns.forEach((btn: Element) => {
+        const bIdx = parseInt((btn as HTMLElement).dataset.index || '');
+        (btn as HTMLElement).style.pointerEvents = 'none';
+        if (bIdx === q.correctIndex) {
+          btn.className = 'w-full text-left border border-emerald-500/50 bg-emerald-500/5 rounded-xl p-4 text-sm text-white transition-all';
+        } else if (bIdx === selectedIdx && !isCorrect) {
+          btn.className = 'w-full text-left border border-red-500/50 bg-red-500/5 rounded-xl p-4 text-sm text-slate-300 transition-all';
+        }
+      });
+
+      // Show explanation
+      explanationText.textContent = q.explanation;
+      lessonRef.textContent = q.lessonRef;
+      explanationEl.classList.remove('hidden');
+      nextWrapper.classList.remove('hidden');
+
+      scoreLabel.textContent = score + ' correct';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        // Show results
+        questionArea.classList.add('hidden');
+        progressBar.style.width = '100%';
+
+        const percentage = Math.round((score / questions.length) * 100);
+        const passed = percentage >= 80;
+
+        // Determine strong / weak areas
+        const strongAreas: string[] = [];
+        const weakAreas: string[] = [];
+        const lessonLinks: { title: string; lessonId: string }[] = [];
+
+        Object.entries(correctByLesson).forEach(([lesson, results]) => {
+          const correct = results.filter(Boolean).length;
+          const total = results.length;
+          if (correct === total) {
+            strongAreas.push(lesson);
+          } else {
+            weakAreas.push(lesson);
+            // Extract lesson ID from ref
+            const match = lesson.match(/Lesson (\d+\.\d+)/);
+            if (match) {
+              lessonLinks.push({ title: lesson, lessonId: match[1] });
+            }
+          }
+        });
+
+        // Save to localStorage
+        const STORAGE_KEY = 'neurospect-course-progress';
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            const progress = JSON.parse(raw);
+            const slug = 'module-1';
+            if (progress.modules && progress.modules[slug]) {
+              progress.modules[slug].quizScore = percentage;
+              progress.modules[slug].attempts = (progress.modules[slug].attempts || 0) + 1;
+              progress.modules[slug].weakAreas = weakAreas;
+              if (passed && !progress.modules[slug].passed) {
+                // Check if all assessments passed
+                const m = progress.modules[slug];
+                const allPassed = m.quizScore >= 80 && m.scenarioScore >= 75 && m.engagementScore >= 80;
+                progress.modules[slug].passed = allPassed;
+              }
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+              window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+            }
+          } catch (e) { /* ignore */ }
+        }
+
+        (window as any).showGradingPanel({
+          panelId: 'quiz-grading',
+          passed,
+          score,
+          total: questions.length,
+          percentage,
+          strongAreas,
+          weakAreas,
+          lessonLinks,
+          continueAction: () => {
+            const section = document.getElementById('assessment-quiz');
+            if (section) section.classList.add('hidden');
+            window.dispatchEvent(new CustomEvent('neurospect-progress-updated'));
+          },
+          retryAction: () => {
+            currentIndex = 0;
+            score = 0;
+            Object.keys(correctByLesson).forEach(k => delete correctByLesson[k]);
+            questionArea.classList.remove('hidden');
+            document.getElementById('quiz-grading')!.classList.add('hidden');
+            renderQuestion();
+          },
+          reviewAction: () => {
+            const section = document.getElementById('assessment-quiz');
+            if (section) section.classList.add('hidden');
+          },
+        });
+      }
+    });
+
+    // Close button
+    document.querySelector('.quiz-close-btn')?.addEventListener('click', () => {
+      const section = document.getElementById('assessment-quiz');
+      if (section) section.classList.add('hidden');
+    });
+
+    // Initialize first question
+    renderQuestion();
+  }
+
+  // Re-init when the section becomes visible
+  const quizSection = document.getElementById('assessment-quiz');
+  if (quizSection) {
+    const observer = new MutationObserver(() => {
+      if (!quizSection.classList.contains('hidden')) {
+        initQuiz();
+        observer.disconnect();
+      }
+    });
+    observer.observe(quizSection, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // Also init if already visible
+  initQuiz();
+</script>

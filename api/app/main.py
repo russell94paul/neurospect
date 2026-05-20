@@ -9,6 +9,8 @@ from app.coach.router import events_router, webhook_router
 from app.config import settings
 from app.database import engine
 from app.routers.analytics import router as analytics_router
+from app.routers.billing import router as billing_router
+from app.routers.prop_shield import router as prop_shield_router
 from app.routers.screenshots import router as screenshots_router
 from app.routers.trades import router as trades_router
 from app.routers.tradovate import router as tradovate_router
@@ -58,6 +60,10 @@ app.include_router(auth_router)
 app.include_router(trades_router)
 app.include_router(screenshots_router)
 app.include_router(analytics_router)
+
+# Prop Shield (Phase 3)
+app.include_router(prop_shield_router)
+app.include_router(billing_router)
 
 # AI Coach
 app.include_router(tv_tokens_router)

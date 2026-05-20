@@ -12,6 +12,10 @@ import type {
   TradeStatus,
   CoachBias,
   Confidence,
+  AccountType,
+  LockoutState,
+  BillingTier,
+  SubscriptionStatus,
 } from '@/types/api';
 
 // ============================================================
@@ -207,3 +211,70 @@ export const COMMON_MISTAKE_TAGS = [
   'chased',
   'moved_stop',
 ];
+
+// ============================================================
+// Prop Shield constants
+// ============================================================
+
+export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
+  sim: 'Sim',
+  eval: 'Evaluation',
+  funded: 'Funded',
+};
+
+export const LOCKOUT_STATE_LABELS: Record<LockoutState, string> = {
+  none: 'Clear',
+  warning: 'Warning',
+  soft_lock: 'Soft Lock',
+  hard_lock: 'Hard Lock',
+};
+
+export const LOCKOUT_STATE_STYLES: Record<LockoutState, string> = {
+  none: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  warning: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+  soft_lock: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
+  hard_lock: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+};
+
+export const RULE_LABELS: Record<string, string> = {
+  daily_loss: 'Daily Loss',
+  trailing_drawdown: 'Trailing Drawdown',
+  max_contracts: 'Max Contracts',
+  max_daily_trades: 'Max Daily Trades',
+  consistency: 'Consistency Rule',
+  forbidden_hours: 'Forbidden Hours',
+};
+
+export const ACCOUNT_TYPE_OPTIONS = (Object.keys(ACCOUNT_TYPE_LABELS) as AccountType[]).map(
+  (v) => ({ value: v, label: ACCOUNT_TYPE_LABELS[v] })
+);
+
+// ============================================================
+// Billing constants
+// ============================================================
+
+export const BILLING_TIER_LABELS: Record<BillingTier, string> = {
+  free: 'Free',
+  mentor: 'Mentor',
+  trader: 'Trader',
+};
+
+export const SUBSCRIPTION_STATUS_LABELS: Record<SubscriptionStatus, string> = {
+  active: 'Active',
+  past_due: 'Past Due',
+  canceled: 'Canceled',
+  trialing: 'Trial',
+  none: 'No Subscription',
+};
+
+export const SUBSCRIPTION_STATUS_STYLES: Record<SubscriptionStatus, string> = {
+  active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  past_due: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+  canceled: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+  trialing: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  none: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
+};
+
+export const BILLING_TIER_OPTIONS = (
+  Object.keys(BILLING_TIER_LABELS) as BillingTier[]
+).filter((t) => t !== 'free').map((v) => ({ value: v, label: BILLING_TIER_LABELS[v] }));

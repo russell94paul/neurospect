@@ -1,0 +1,49 @@
+---
+const assessments = [
+  {
+    title: "Concept Quiz",
+    subtitle: "Multiple choice and true/false",
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18.75h.007v.008H12v-.008z"/><circle cx="12" cy="12" r="10" stroke-linecap="round"/></svg>`,
+  },
+  {
+    title: "Chart Identification",
+    subtitle: "Click on the chart to identify ICT concepts",
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"/></svg>`,
+  },
+  {
+    title: "Scenario Engine",
+    subtitle: "What would you do? Real trading scenarios",
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>`,
+  },
+  {
+    title: "Engagement Tests",
+    subtitle: "Matching, sequencing, and speed rounds",
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.401.604-.401.959v0c0 .333.277.607.61.654a48.24 48.24 0 005.143.356h.044c.355 0 .676-.186.959-.401.29-.221.634-.349 1.003-.349 1.035 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401v0a.656.656 0 01-.658-.663 48.422 48.422 0 00.315-4.907c-1.378.153-2.77.236-4.163.3a.64.64 0 01-.657-.643v0z"/></svg>`,
+  },
+];
+---
+
+<section class="py-24 sm:py-32 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950/50 to-black"></div>
+  <div class="absolute bottom-1/3 left-1/3 w-[500px] h-[500px] bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Assessments</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">4 Ways to Prove You Know It</h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+        Every module includes multiple assessment types. Reading is not enough &mdash; you have to demonstrate understanding.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+      {assessments.map((assessment) => (
+        <div class="animate-on-scroll border border-white/[0.06] bg-white/[0.02] rounded-xl p-6 hover:border-white/[0.1] transition-all group">
+          <div class="text-brand-400 mb-4 group-hover:scale-110 transition-transform" set:html={assessment.icon} />
+          <h3 class="text-white font-semibold text-lg mb-2">{assessment.title}</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">{assessment.subtitle}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

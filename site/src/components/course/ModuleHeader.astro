@@ -1,0 +1,86 @@
+---
+interface Props {
+  moduleId: number;
+  title: string;
+  subtitle: string;
+  lessonCount: number;
+}
+
+const { moduleId, title, subtitle, lessonCount } = Astro.props;
+---
+
+<section class="relative border-b border-white/[0.06] bg-gradient-to-b from-brand-950/20 to-black">
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-12 sm:pt-32 sm:pb-16">
+    <p class="animate-on-scroll text-sm text-slate-500 uppercase tracking-wider mb-3">
+      Module {moduleId} of 5
+    </p>
+
+    <h1 class="animate-on-scroll text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+      {title}
+    </h1>
+
+    <p class="animate-on-scroll text-lg text-slate-400 mb-8 max-w-2xl">
+      {subtitle}
+    </p>
+
+    <div class="animate-on-scroll flex items-center gap-6">
+      <!-- Progress bar -->
+      <div class="flex-1 max-w-md">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs text-slate-500">Progress</span>
+          <span id="module-progress-pct" class="text-xs text-brand-400 font-medium">0%</span>
+        </div>
+        <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+          <div
+            id="module-progress-bar"
+            class="h-full rounded-full bg-brand-400 transition-all duration-500"
+            style="width: 0%"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Lesson count badge -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-xs text-slate-400">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.331 0 4.466.89 6.064 2.346m0-14.304a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.346" />
+        </svg>
+        {lessonCount} lessons
+      </span>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ moduleId }}>
+  function updateProgressBar() {
+    const raw = localStorage.getItem('neurospect-course-progress');
+    let pct = 0;
+    if (raw) {
+      try {
+        const progress = JSON.parse(raw);
+        const slug = 'module-' + moduleId;
+        const mod = progress.modules && progress.modules[slug];
+        if (mod) {
+          // Count completed items: lessons (each worth ~14%), quiz/scenario/engagement (each worth ~14%)
+          // 3 lessons + 4 assessments = 7 items total
+          const lessonsComplete = (mod.lessonsCompleted || []).length;
+          const quizDone = mod.quizScore !== null ? 1 : 0;
+          const scenarioDone = mod.scenarioScore !== null ? 1 : 0;
+          const engagementDone = mod.engagementScore !== null ? 1 : 0;
+          const chartDone = mod.chartIdScore !== null ? 1 : 0;
+          const total = 3 + 4; // 3 lessons + 4 assessments
+          const done = lessonsComplete + quizDone + scenarioDone + engagementDone + chartDone;
+          pct = Math.round((done / total) * 100);
+        }
+      } catch (e) { /* ignore parse errors */ }
+    }
+    const bar = document.getElementById('module-progress-bar');
+    const label = document.getElementById('module-progress-pct');
+    if (bar) bar.style.width = pct + '%';
+    if (label) label.textContent = pct + '%';
+  }
+
+  updateProgressBar();
+  window.addEventListener('neurospect-progress-updated', updateProgressBar);
+</script>

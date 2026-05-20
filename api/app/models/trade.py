@@ -90,6 +90,9 @@ class Trade(Base):
     )
     post_trade_notes: Mapped[str | None] = mapped_column(Text)
 
+    # Dollar P&L from fill sync (populated by Tradovate fill apply; used by Prop Shield rule engine)
+    pnl_usd: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
+
     # Broker fill IDs (set by apply-tradovate-fill in 1c; not patchable directly)
     tradovate_fill_id_entry: Mapped[int | None] = mapped_column(BigInteger)
     tradovate_fill_id_exit: Mapped[int | None] = mapped_column(BigInteger)

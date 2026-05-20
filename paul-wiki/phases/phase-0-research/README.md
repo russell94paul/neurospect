@@ -8,7 +8,7 @@ assigned: [paul]
 tickets_total: 6
 tickets_done: 0
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-13
 ---
 
 # Phase 0: Research & Validation
@@ -41,6 +41,15 @@ Built Compare + Performance Lab pages as part of Phase 0 marketing site work.
 ### NEU-27: Live Simulator (2026-05-10)
 
 Design handoff package delivered (`design-handoff/`). Next: implement `/simulator` page with interactive trading simulation.
+
+### neurospect-ui replaces site/ (2026-05-13)
+
+`neurospect-ui/` (React 18 CDN) is now the primary marketing site, replacing `site/` (Astro SSG).
+- Phase 0 restructured into 0A (Marketing/Demo) and 0B (Technical Validation)
+- Naming reconciliation done: "Sovereign Architect" → "S-Tier Trader", "Adaptive Edge Engine" → "EdgeLab Research Studio"
+- "Launch App" nav link added pointing to product app
+- Product guide tracked as deliverable (`docs/neurospect_product_overview_user_guide.md`)
+- 7 boot prompts now available for Phase 0 (planning, execution, course, edgelab-studio, marketing-site, neurospect-ui, product-guide)
 
 ---
 

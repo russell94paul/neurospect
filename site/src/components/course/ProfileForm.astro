@@ -1,0 +1,414 @@
+---
+
+---
+
+<div id="profile-form" class="animate-on-scroll">
+  <!-- Step indicator -->
+  <div class="flex items-center justify-center gap-0 mb-10">
+    <div class="flex items-center gap-0" id="step-indicators">
+      {[1, 2, 3, 4].map((step, i) => (
+        <div class="flex items-center">
+          <div
+            data-step-dot={step}
+            class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300 border-slate-700 bg-slate-800/50 text-slate-500"
+          >
+            {step}
+          </div>
+          {i < 3 && (
+            <div
+              data-step-line={step}
+              class="w-10 sm:w-14 h-0.5 transition-all duration-300 bg-slate-700"
+            />
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Step 1: Experience -->
+  <div data-step="1" class="step-panel">
+    <h3 class="text-xl font-bold text-white mb-6">Experience</h3>
+
+    <div class="mb-6">
+      <label class="block text-sm text-slate-400 mb-3">How long have you been trading ICT?</label>
+      <div class="grid gap-3" id="ict-time-group">
+        {[
+          { value: "lt6m", label: "Less than 6 months" },
+          { value: "6to12m", label: "6–12 months" },
+          { value: "1to2y", label: "1–2 years" },
+          { value: "2plus", label: "2+ years" },
+        ].map(({ value, label }) => (
+          <button
+            type="button"
+            data-radio="ictTime"
+            data-value={value}
+            class="radio-card border border-white/[0.06] rounded-xl p-4 text-left text-sm text-slate-300 hover:border-white/[0.12] transition-all cursor-pointer"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm text-slate-400 mb-3">What's your trading experience level?</label>
+      <div class="grid gap-3" id="experience-group">
+        {[
+          { value: "beginner", label: "Beginner", desc: "Still learning concepts" },
+          { value: "intermediate", label: "Intermediate", desc: "Know concepts, inconsistent" },
+          { value: "advanced", label: "Advanced", desc: "Consistently profitable" },
+          { value: "prop_firm", label: "Prop firm", desc: "Trading funded accounts" },
+        ].map(({ value, label, desc }) => (
+          <button
+            type="button"
+            data-radio="experience"
+            data-value={value}
+            class="radio-card border border-white/[0.06] rounded-xl p-4 text-left transition-all cursor-pointer hover:border-white/[0.12]"
+          >
+            <span class="text-sm font-medium text-slate-300">{label}</span>
+            <span class="text-xs text-slate-500 ml-2">{desc}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Style & Instruments -->
+  <div data-step="2" class="step-panel hidden">
+    <h3 class="text-xl font-bold text-white mb-6">Style & Instruments</h3>
+
+    <div class="mb-6">
+      <label class="block text-sm text-slate-400 mb-3">What do you trade?</label>
+      <div class="flex flex-wrap gap-2" id="instruments-group">
+        {[
+          { value: "nq", label: "NQ (Nasdaq futures)" },
+          { value: "es", label: "ES (S&P futures)" },
+          { value: "forex", label: "Forex (EUR/USD, GBP/USD, etc.)" },
+          { value: "crypto", label: "Crypto" },
+          { value: "other", label: "Other" },
+        ].map(({ value, label }) => (
+          <button
+            type="button"
+            data-checkbox="instruments"
+            data-value={value}
+            class="pill-btn border border-white/[0.08] bg-white/[0.02] rounded-full px-4 py-2 text-sm text-slate-400 hover:border-white/[0.15] transition-all cursor-pointer"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm text-slate-400 mb-3">How do you trade?</label>
+      <div class="grid gap-3" id="style-group">
+        {[
+          { value: "discretionary", label: "Discretionary", desc: "Pure chart reading" },
+          { value: "quant-curious", label: "Quant-curious", desc: "Interested in data/stats" },
+          { value: "hybrid", label: "Hybrid", desc: "Discretionary + some rules" },
+          { value: "systematic", label: "Systematic", desc: "Mostly rule-based" },
+        ].map(({ value, label, desc }) => (
+          <button
+            type="button"
+            data-radio="style"
+            data-value={value}
+            class="radio-card border border-white/[0.06] rounded-xl p-4 text-left transition-all cursor-pointer hover:border-white/[0.12]"
+          >
+            <span class="text-sm font-medium text-slate-300">{label}</span>
+            <span class="text-xs text-slate-500 ml-2">{desc}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Struggles -->
+  <div data-step="3" class="step-panel hidden">
+    <h3 class="text-xl font-bold text-white mb-2">Struggles</h3>
+    <p class="text-sm text-slate-500 mb-6">Select up to 3 areas you want to improve.</p>
+
+    <div class="flex flex-wrap gap-2" id="struggles-group">
+      {[
+        "Can't identify setups in real-time",
+        "Know concepts but can't execute",
+        "Overtrade / take bad setups",
+        "Can't build a daily bias",
+        "Don't understand market structure",
+        "Struggle with risk management",
+        "Can't backtest my ideas",
+        "Don't know which setups work for me",
+      ].map((label) => (
+        <button
+          type="button"
+          data-multi="struggles"
+          data-value={label}
+          data-max="3"
+          class="pill-btn border border-white/[0.08] bg-white/[0.02] rounded-full px-4 py-2 text-sm text-slate-400 hover:border-white/[0.15] transition-all cursor-pointer"
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Step 4: Goals -->
+  <div data-step="4" class="step-panel hidden">
+    <h3 class="text-xl font-bold text-white mb-2">Goals</h3>
+    <p class="text-sm text-slate-500 mb-6">Select up to 2 goals for this course.</p>
+
+    <div class="flex flex-wrap gap-2" id="goals-group">
+      {[
+        "Pass a prop firm challenge",
+        "Become consistently profitable",
+        "Automate my strategy",
+        "Understand ICT concepts deeply",
+        "Build a systematic trading process",
+      ].map((label) => (
+        <button
+          type="button"
+          data-multi="goals"
+          data-value={label}
+          data-max="2"
+          class="pill-btn border border-white/[0.08] bg-white/[0.02] rounded-full px-4 py-2 text-sm text-slate-400 hover:border-white/[0.15] transition-all cursor-pointer"
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="flex items-center justify-between mt-10 pt-6 border-t border-white/[0.06]">
+    <button
+      type="button"
+      id="btn-back"
+      class="hidden px-6 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.02] text-sm text-slate-400 hover:text-white hover:border-white/[0.15] transition-all"
+    >
+      Back
+    </button>
+    <div></div>
+    <button
+      type="button"
+      id="btn-next"
+      disabled
+      class="px-6 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold transition-all hover:bg-brand-400 hover:shadow-lg hover:shadow-brand-500/25 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-brand-500 disabled:hover:shadow-none"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById("profile-form") as HTMLDivElement;
+  const btnBack = document.getElementById("btn-back") as HTMLButtonElement;
+  const btnNext = document.getElementById("btn-next") as HTMLButtonElement;
+
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  // Form state
+  const state: Record<string, string | string[]> = {
+    ictTime: "",
+    experience: "",
+    instruments: [],
+    style: "",
+    struggles: [],
+    goals: [],
+  };
+
+  // --- Radio buttons ---
+  form.querySelectorAll<HTMLButtonElement>("[data-radio]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const group = btn.dataset.radio!;
+      const value = btn.dataset.value!;
+      state[group] = value;
+
+      // Deselect siblings
+      form.querySelectorAll<HTMLButtonElement>(`[data-radio="${group}"]`).forEach((sibling) => {
+        sibling.classList.remove("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+        sibling.classList.add("border-white/[0.06]");
+      });
+
+      // Select this
+      btn.classList.add("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+      btn.classList.remove("border-white/[0.06]");
+
+      validateStep();
+    });
+  });
+
+  // --- Checkbox (instruments) ---
+  form.querySelectorAll<HTMLButtonElement>("[data-checkbox]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const group = btn.dataset.checkbox!;
+      const value = btn.dataset.value!;
+      const arr = state[group] as string[];
+
+      const idx = arr.indexOf(value);
+      if (idx > -1) {
+        arr.splice(idx, 1);
+        btn.classList.remove("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+        btn.classList.add("border-white/[0.08]", "text-slate-400");
+      } else {
+        arr.push(value);
+        btn.classList.add("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+        btn.classList.remove("border-white/[0.08]", "text-slate-400");
+      }
+
+      validateStep();
+    });
+  });
+
+  // --- Multi-select with max (struggles, goals) ---
+  form.querySelectorAll<HTMLButtonElement>("[data-multi]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const group = btn.dataset.multi!;
+      const value = btn.dataset.value!;
+      const max = parseInt(btn.dataset.max!, 10);
+      const arr = state[group] as string[];
+
+      const idx = arr.indexOf(value);
+      if (idx > -1) {
+        arr.splice(idx, 1);
+        btn.classList.remove("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+        btn.classList.add("border-white/[0.08]", "text-slate-400");
+      } else if (arr.length < max) {
+        arr.push(value);
+        btn.classList.add("border-brand-500/50", "bg-brand-500/10", "text-brand-300");
+        btn.classList.remove("border-white/[0.08]", "text-slate-400");
+      }
+
+      validateStep();
+    });
+  });
+
+  // --- Validation per step ---
+  function validateStep(): boolean {
+    let valid = false;
+
+    switch (currentStep) {
+      case 1:
+        valid = !!state.ictTime && !!state.experience;
+        break;
+      case 2:
+        valid = (state.instruments as string[]).length > 0 && !!state.style;
+        break;
+      case 3:
+        valid = (state.struggles as string[]).length > 0;
+        break;
+      case 4:
+        valid = (state.goals as string[]).length > 0;
+        break;
+    }
+
+    btnNext.disabled = !valid;
+    return valid;
+  }
+
+  // --- Step indicator rendering ---
+  function updateIndicators() {
+    for (let s = 1; s <= totalSteps; s++) {
+      const dot = form.querySelector<HTMLDivElement>(`[data-step-dot="${s}"]`);
+      const line = form.querySelector<HTMLDivElement>(`[data-step-line="${s}"]`);
+
+      if (!dot) continue;
+
+      // Reset
+      dot.className = "w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300";
+
+      if (s < currentStep) {
+        // Completed
+        dot.classList.add("border-brand-400", "bg-brand-500/20", "text-brand-300");
+        dot.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+      } else if (s === currentStep) {
+        // Current — ring animation
+        dot.classList.add("border-brand-400", "bg-brand-500/20", "text-brand-300", "shadow-[0_0_0_4px_rgba(6,182,212,0.15)]");
+        dot.textContent = String(s);
+      } else {
+        // Future
+        dot.classList.add("border-slate-700", "bg-slate-800/50", "text-slate-500");
+        dot.textContent = String(s);
+      }
+
+      if (line) {
+        line.className = "w-10 sm:w-14 h-0.5 transition-all duration-300";
+        line.classList.add(s < currentStep ? "bg-brand-400" : "bg-slate-700");
+      }
+    }
+  }
+
+  // --- Step navigation ---
+  function showStep(step: number) {
+    currentStep = step;
+
+    form.querySelectorAll<HTMLDivElement>(".step-panel").forEach((panel) => {
+      panel.classList.add("hidden");
+    });
+    form.querySelector<HTMLDivElement>(`[data-step="${step}"]`)?.classList.remove("hidden");
+
+    // Back button
+    if (step === 1) {
+      btnBack.classList.add("hidden");
+    } else {
+      btnBack.classList.remove("hidden");
+    }
+
+    // Next button label
+    if (step === totalSteps) {
+      btnNext.textContent = "Build My Learning Path";
+    } else {
+      btnNext.textContent = "Next";
+    }
+
+    updateIndicators();
+    validateStep();
+  }
+
+  btnBack.addEventListener("click", () => {
+    if (currentStep > 1) showStep(currentStep - 1);
+  });
+
+  btnNext.addEventListener("click", () => {
+    if (!validateStep()) return;
+
+    if (currentStep < totalSteps) {
+      showStep(currentStep + 1);
+    } else {
+      submitForm();
+    }
+  });
+
+  // --- Submit ---
+  function submitForm() {
+    const profile = {
+      experience: state.experience as string,
+      ictTime: state.ictTime as string,
+      instruments: state.instruments as string[],
+      style: state.style as string,
+      struggles: state.struggles as string[],
+      goals: state.goals as string[],
+    };
+
+    const progress = {
+      profileCompleted: true,
+      profile,
+      modules: {},
+      entryModelsUnlocked: false,
+      completedAt: null,
+    };
+
+    localStorage.setItem("neurospect-course-progress", JSON.stringify(progress));
+
+    // Hide form, show path
+    form.classList.add("hidden");
+    const pathEl = document.getElementById("personalized-path");
+    if (pathEl) {
+      pathEl.classList.remove("hidden");
+      // Dispatch event so PersonalizedPath can render
+      window.dispatchEvent(new CustomEvent("profile-complete", { detail: profile }));
+    }
+  }
+
+  // Initialize
+  showStep(1);
+</script>

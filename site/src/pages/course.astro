@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import CourseHero from "../components/course/CourseHero.astro";
+import CurriculumOverview from "../components/course/CurriculumOverview.astro";
+import WhatYoullLearn from "../components/course/WhatYoullLearn.astro";
+import AssessmentPreview from "../components/course/AssessmentPreview.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+---
+
+<Base title="NeuroSpect — Interactive ICT Course" description="Free 5-module ICT curriculum with interactive assessments, candlestick chart exercises, and personalized learning paths.">
+  <CourseHero />
+  <section id="curriculum">
+    <CurriculumOverview />
+  </section>
+  <WhatYoullLearn />
+  <AssessmentPreview />
+  <WaitlistForm />
+</Base>

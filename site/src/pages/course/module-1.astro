@@ -1,0 +1,323 @@
+---
+import Base from '../../layouts/Base.astro';
+import ModuleHeader from '../../components/course/ModuleHeader.astro';
+import LessonViewer from '../../components/course/LessonViewer.astro';
+import ConceptQuiz from '../../components/course/ConceptQuiz.astro';
+import ScenarioEngine from '../../components/course/ScenarioEngine.astro';
+import EngagementTest from '../../components/course/EngagementTest.astro';
+import { modules } from '../../data/course-modules';
+
+const module1 = modules.find(m => m.id === 1)!;
+const lessons = module1.lessons;
+---
+
+<Base title="NeuroSpect — Module 1: Foundations" description="Module 1: Liquidity, Fair Value Gaps, and Practice. Learn the foundational ICT concepts that drive every price move.">
+  <ModuleHeader
+    moduleId={1}
+    title="Foundations"
+    subtitle="Liquidity, Fair Value Gaps, and Practice"
+    lessonCount={3}
+  />
+
+  <!-- Lesson navigation tabs -->
+  <section class="border-b border-white/[0.06] bg-black sticky top-16 z-30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <nav class="flex gap-0 -mb-px overflow-x-auto" id="lesson-tabs">
+        {lessons.map((lesson, idx) => (
+          <button
+            class={"lesson-tab px-4 sm:px-6 py-4 text-sm font-medium border-b-2 transition-all whitespace-nowrap " + (idx === 0 ? "text-white border-brand-400" : "text-slate-500 border-transparent hover:text-slate-300 hover:border-slate-700")}
+            data-lesson-idx={idx}
+            data-lesson-id={lesson.id}
+          >
+            <span class="text-brand-400 mr-1.5">{lesson.id}</span>
+            <span class="hidden sm:inline">{lesson.title}</span>
+            <span class="sm:hidden">{lesson.title.split(' ').slice(0, 2).join(' ')}</span>
+            <span class="lesson-tab-check hidden ml-1.5 text-emerald-400">
+              <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <!-- Lesson content panels -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      {lessons.map((lesson, idx) => (
+        <div class={"lesson-panel " + (idx === 0 ? "" : "hidden")} data-lesson-idx={idx}>
+          <LessonViewer
+            lessonId={lesson.id}
+            title={lesson.title}
+            summary={lesson.summary}
+            concepts={lesson.concepts}
+            rules={lesson.rules}
+            workedExample={lesson.workedExample}
+            commonMistakes={lesson.commonMistakes}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Assessments section -->
+  <section class="py-12 sm:py-16 border-t border-white/[0.06]" id="assessments-section">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <!-- Gate message (shown when not all lessons complete) -->
+      <div id="assessments-gate" class="text-center py-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/[0.03] border border-white/[0.06] mb-6">
+          <svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Complete All Lessons First</h3>
+        <p class="text-sm text-slate-400 max-w-md mx-auto">
+          Mark all 3 lessons as complete to unlock the assessments. You've completed
+          <span id="gate-lesson-count" class="text-brand-400 font-medium">0</span> of 3 lessons.
+        </p>
+      </div>
+
+      <!-- Assessment cards (shown when all lessons complete) -->
+      <div id="assessments-unlocked" class="hidden">
+        <div class="text-center mb-10">
+          <p class="text-brand-400 text-sm font-medium tracking-wider uppercase mb-3">Test Your Knowledge</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Module 1 Assessments</h2>
+          <p class="text-slate-400 text-sm max-w-lg mx-auto">
+            Complete all 4 assessments to unlock Module 2. Each has a minimum passing score.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Concept Quiz card -->
+          <button class="assessment-card text-left border border-white/[0.06] bg-white/[0.02] rounded-xl p-6 hover:border-brand-500/30 hover:bg-brand-500/[0.03] transition-all group" data-assessment="quiz">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18.75h.007v.008H12v-.008z" />
+                  <circle cx="12" cy="12" r="10" stroke-linecap="round" />
+                </svg>
+              </div>
+              <span class="assessment-status text-xs px-2 py-1 rounded-full" data-assessment-status="quiz"></span>
+            </div>
+            <h4 class="text-white font-semibold mb-1 group-hover:text-brand-400 transition-colors">Concept Quiz</h4>
+            <p class="text-xs text-slate-400">10 questions &middot; 80% to pass</p>
+          </button>
+
+          <!-- Chart Identification card (placeholder) -->
+          <div class="text-left border border-white/[0.06] bg-white/[0.01] rounded-xl p-6 opacity-60">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-slate-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                </svg>
+              </div>
+              <span class="text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-500 border border-white/[0.06]">Coming soon</span>
+            </div>
+            <h4 class="text-slate-400 font-semibold mb-1">Chart Identification</h4>
+            <p class="text-xs text-slate-500">Interactive chart exercises</p>
+          </div>
+
+          <!-- Scenarios card -->
+          <button class="assessment-card text-left border border-white/[0.06] bg-white/[0.02] rounded-xl p-6 hover:border-brand-500/30 hover:bg-brand-500/[0.03] transition-all group" data-assessment="scenario">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+              </div>
+              <span class="assessment-status text-xs px-2 py-1 rounded-full" data-assessment-status="scenario"></span>
+            </div>
+            <h4 class="text-white font-semibold mb-1 group-hover:text-brand-400 transition-colors">Scenarios</h4>
+            <p class="text-xs text-slate-400">5 scenarios &middot; 75% to pass</p>
+          </button>
+
+          <!-- Engagement card -->
+          <button class="assessment-card text-left border border-white/[0.06] bg-white/[0.02] rounded-xl p-6 hover:border-brand-500/30 hover:bg-brand-500/[0.03] transition-all group" data-assessment="engagement">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.401.604-.401.959v0c0 .333.277.607.61.654a48.24 48.24 0 005.143.356h.044c.355 0 .676-.186.959-.401.29-.221.634-.349 1.003-.349 1.035 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401v0a.656.656 0 01-.658-.663 48.422 48.422 0 00.315-4.907c-1.378.153-2.77.236-4.163.3a.64.64 0 01-.657-.643v0z" />
+                </svg>
+              </div>
+              <span class="assessment-status text-xs px-2 py-1 rounded-full" data-assessment-status="engagement"></span>
+            </div>
+            <h4 class="text-white font-semibold mb-1 group-hover:text-brand-400 transition-colors">Engagement</h4>
+            <p class="text-xs text-slate-400">Matching + Sequencing &middot; 80% to pass</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Assessment containers (hidden until activated) -->
+  <section class="py-12 sm:py-16 border-t border-white/[0.06]" id="assessment-container">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <ConceptQuiz moduleSlug="module-1" />
+      <ScenarioEngine moduleSlug="module-1" />
+      <EngagementTest moduleSlug="module-1" />
+    </div>
+  </section>
+</Base>
+
+<script>
+  const STORAGE_KEY = 'neurospect-course-progress';
+  const LESSON_IDS = ['1.1', '1.2', '1.3'];
+
+  function getProgress() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+
+  function ensureProgress() {
+    let progress = getProgress();
+    if (!progress) {
+      progress = {
+        profileCompleted: false,
+        profile: null,
+        modules: {
+          'module-1': { lessonsCompleted: [], quizScore: null, chartIdScore: null, scenarioScore: null, engagementScore: null, passed: false, attempts: 0, weakAreas: [] },
+          'module-2': { lessonsCompleted: [], quizScore: null, chartIdScore: null, scenarioScore: null, engagementScore: null, passed: false, attempts: 0, weakAreas: [] },
+          'module-3': { lessonsCompleted: [], quizScore: null, chartIdScore: null, scenarioScore: null, engagementScore: null, passed: false, attempts: 0, weakAreas: [] },
+          'module-4': { lessonsCompleted: [], quizScore: null, chartIdScore: null, scenarioScore: null, engagementScore: null, passed: false, attempts: 0, weakAreas: [] },
+          'module-5': { lessonsCompleted: [], quizScore: null, chartIdScore: null, scenarioScore: null, engagementScore: null, passed: false, attempts: 0, weakAreas: [] },
+        },
+        entryModelsUnlocked: false,
+        completedAt: null,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+    return progress;
+  }
+
+  // ===== LESSON TABS =====
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.lesson-tab');
+  const panels = document.querySelectorAll<HTMLElement>('.lesson-panel');
+
+  function switchTab(idx: number) {
+    tabs.forEach((tab, i) => {
+      if (i === idx) {
+        tab.classList.remove('text-slate-500', 'border-transparent');
+        tab.classList.add('text-white', 'border-brand-400');
+      } else {
+        tab.classList.remove('text-white', 'border-brand-400');
+        tab.classList.add('text-slate-500', 'border-transparent');
+      }
+    });
+    panels.forEach((panel, i) => {
+      if (i === idx) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    });
+  }
+
+  tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', () => switchTab(idx));
+  });
+
+  // Handle lesson switch from grading panel
+  window.addEventListener('neurospect-switch-lesson', ((e: CustomEvent) => {
+    const lessonId = e.detail.lessonId;
+    const idx = LESSON_IDS.indexOf(lessonId);
+    if (idx !== -1) switchTab(idx);
+  }) as EventListener);
+
+  // ===== TAB CHECKMARKS =====
+  function updateTabCheckmarks() {
+    const progress = ensureProgress();
+    const mod = progress.modules['module-1'];
+    if (!mod) return;
+
+    tabs.forEach(tab => {
+      const lessonId = tab.dataset.lessonId!;
+      const check = tab.querySelector('.lesson-tab-check');
+      if (check) {
+        if (mod.lessonsCompleted.includes(lessonId)) {
+          check.classList.remove('hidden');
+        } else {
+          check.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  // ===== ASSESSMENT GATING =====
+  function updateAssessmentVisibility() {
+    const progress = ensureProgress();
+    const mod = progress.modules['module-1'];
+    if (!mod) return;
+
+    const completedCount = mod.lessonsCompleted.length;
+    const allComplete = completedCount >= 3;
+
+    const gate = document.getElementById('assessments-gate')!;
+    const unlocked = document.getElementById('assessments-unlocked')!;
+    const gateCount = document.getElementById('gate-lesson-count')!;
+
+    if (allComplete) {
+      gate.classList.add('hidden');
+      unlocked.classList.remove('hidden');
+    } else {
+      gate.classList.remove('hidden');
+      unlocked.classList.add('hidden');
+    }
+
+    gateCount.textContent = String(completedCount);
+
+    // Update assessment status badges
+    updateAssessmentStatus('quiz', mod.quizScore, 80);
+    updateAssessmentStatus('scenario', mod.scenarioScore, 75);
+    updateAssessmentStatus('engagement', mod.engagementScore, 80);
+  }
+
+  function updateAssessmentStatus(type: string, score: number | null, threshold: number) {
+    const badge = document.querySelector<HTMLElement>('[data-assessment-status="' + type + '"]');
+    if (!badge) return;
+
+    if (score === null) {
+      badge.textContent = 'Not started';
+      badge.className = 'assessment-status text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-500 border border-white/[0.06]';
+    } else if (score >= threshold) {
+      badge.textContent = score + '% Passed';
+      badge.className = 'assessment-status text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+    } else {
+      badge.textContent = score + '% — Retry';
+      badge.className = 'assessment-status text-xs px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20';
+    }
+  }
+
+  // ===== ASSESSMENT CARD CLICKS =====
+  document.querySelectorAll<HTMLButtonElement>('.assessment-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const type = card.dataset.assessment;
+      // Hide all assessments
+      document.getElementById('assessment-quiz')?.classList.add('hidden');
+      document.getElementById('assessment-scenario')?.classList.add('hidden');
+      document.getElementById('assessment-engagement')?.classList.add('hidden');
+
+      if (type === 'quiz') {
+        document.getElementById('assessment-quiz')?.classList.remove('hidden');
+      } else if (type === 'scenario') {
+        document.getElementById('assessment-scenario')?.classList.remove('hidden');
+      } else if (type === 'engagement') {
+        document.getElementById('assessment-engagement')?.classList.remove('hidden');
+      }
+
+      // Scroll to the assessment
+      document.getElementById('assessment-container')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ===== INIT =====
+  function refreshAll() {
+    updateTabCheckmarks();
+    updateAssessmentVisibility();
+  }
+
+  refreshAll();
+  window.addEventListener('neurospect-progress-updated', refreshAll);
+</script>
