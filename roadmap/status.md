@@ -1,6 +1,6 @@
 ---
 tags: [roadmap, status, dashboard]
-updated: 2026-05-15
+updated: 2026-05-23
 ---
 
 # NeuroSpect Roadmap Status (v3)
@@ -8,18 +8,18 @@ updated: 2026-05-15
 | Phase | Name | Component | Status | Assigned | Revenue Event | Started | Completed |
 |---|---|---|---|---|---|---|---|
 | 0 | Marketing + Demo | — | in_progress | Paul | Waitlist | 2026-05-10 | — |
-| 1 | Trading Data Foundation | Trader Workspace | not_started | Paul | — | — | — |
-| 2 | Trader Workspace | Trader Workspace | not_started | Paul | — | — | — |
-| 3 | Prop Shield | Prop Shield | not_started | Paul | **Mentor $29 / Trader $99** | — | — |
+| 1 | Trading Data Foundation | Trader Workspace | complete | Paul | — | 2026-05-10 | 2026-05-13 |
+| 2 | Trader Workspace | Trader Workspace | in_progress | Paul | — | 2026-05-10 | — |
+| 3 | Prop Shield | Prop Shield | complete | Paul | **Mentor $29 / Trader $99** | 2026-05-10 | 2026-05-13 |
 | 4 | ICT Event Intelligence | ICT Event Engine | not_started | — | — | — | — |
 | 5 | EdgeLab Core (5A/5B/5C) | EdgeLab | not_started | — | Research $199 | — | — |
-| 6 | AI Trade Review + RAG | Mentor + NeuroCore | not_started | — | Mentor upsell | — | — |
+| 6 | AI Trade Review + RAG | Mentor + NeuroCore | in_progress | Paul | Mentor upsell | 2026-05-10 | — |
 | 7 | Edge Forensics | Edge Forensics | not_started | — | Research retention | — | — |
 | 8 | NeuroScore + Leaderboard | NeuroScore | not_started | — | Quant $349 | — | — |
 | 9 | NeuroFund Elite Rewards | NeuroFund Elite | not_started | — | Elite retention | — | — |
-| 10 | Allocation Watchlist | NeuroFund Elite | not_started | — | — | — | — |
+| 10 | Allocation Watchlist | NeuroFund Elite | in_progress | Paul | — | 2026-05-15 | — |
 | 11 | Advanced ML Research | NSLM + NeuroQuant + NeuroTrader | not_started | — | Quant/Team $499 | — | — |
-| 3-NG | NeuroGraph (Plan → Build) | NeuroGraph | not_started | — | Retention (all tiers) | — | — |
+| 3-NG | NeuroGraph (Plan → Build) | NeuroGraph | in_progress | Paul | Retention (all tiers) | 2026-05-13 | — |
 
 ## Dependency Graph
 
@@ -51,11 +51,21 @@ Phase 0 (Marketing)
 
 ## Current Focus
 
-**Phase 0 — Marketing + Demo** is active. Phase 0A (marketing site, interactive demos, product guide) is substantially complete. Phase 0B (CI/CD, Sentry, data model audit) has not started.
+**Phases 1 and 3 are complete** — Trade data foundation (ORM, CRUD, bulk import, analytics service) and Prop Shield (rule engine, lockout state machine, presets, billing, frontend) are fully implemented.
+
+**Phase 0 (Marketing + Demo)** is active. Phase 0A (marketing site, interactive demos, product guide) is substantially complete. Phase 0B (CI/CD, Sentry, data model audit) has not started.
+
+**Phase 2 (Trader Workspace)** is partially complete — analytics backend and dashboard/trades pages exist, but full journal and behavior metrics dashboard are not yet built.
+
+**Phase 6 (AI Trade Review)** has partial implementation — coach backend with Claude integration, prompt loading, and trade-to-coach pipeline exist. Full RAG retrieval (NeuroCore) not yet started.
+
+**Phase 10 (Allocation Watchlist)** has implementation in a session worktree branch (`session/phase-10-445fccd1`) but is not yet merged to the main development branch.
+
+**Phase 3-NG (NeuroGraph)** has research artifacts (free-data strategy, data source evaluation) but no code implementation yet.
 
 **Build order:** `verified data → risk engine → events → backtesting → AI review → forensics → scoring → rewards → ML`
 
-**Critical path to first revenue:** Phase 0 → 1 → 2 → 3 (~16 weeks)
+**Critical path to first revenue:** Phase 2 (complete workspace) → Phase 3 launch (~8 weeks, down from 16 — Phases 1+3 already built)
 
 ## Phase Execution Commands
 
@@ -76,6 +86,7 @@ _None._
 
 ## Notes
 
+- Status audit (2026-05-23): Updated to reflect actual codebase state. Phases 1+3 were already fully implemented but marked as not_started. Phase 10 work exists in session worktree but not merged. Critical path to revenue shortened from ~16 weeks to ~8 weeks.
 - v3 roadmap restructure (2026-05-15): Resequenced from coaching-first to data-foundation-first. Track C (business phases 11-16) eliminated as separate track — compliance embedded per-phase. NeuroFund Elite added as compliance-safe rewards program. Prop Shield added as first paid feature wedge.
 - v2 plan archived — see `initial-plan/` for previous versions
 - NEU-27: Live trading simulator (`/simulator`) — design handoff delivered, build in progress
